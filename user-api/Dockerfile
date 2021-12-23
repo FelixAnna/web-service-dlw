@@ -1,18 +1,18 @@
 # syntax=docker/dockerfile:1
 
 FROM golang:1.17-alpine
+RUN apk add build-base
 
-RUN mkdir -p /common
-COPY ../common /common
+ENV GIN_MODE release
 
 WORKDIR /app
 
 COPY go.mod ./
 COPY go.sum ./
+
 RUN go mod download
 
-COPY *.go ./
-
+COPY . ./
 
 RUN go build -o /docker-user-api
 

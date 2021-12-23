@@ -3,7 +3,7 @@ module github.com/FelixAnna/web-service-dlw/memo-api
 go 1.17
 
 require (
-	github.com/FelixAnna/web-service-dlw/common v0.0.0-00010101000000-000000000000
+	//github.com/FelixAnna/web-service-dlw/common v0.0.0-00010101000000-000000000000
 	github.com/asim/go-micro/plugins/client/http/v4 v4.0.0-20211210113221-37de747d195c
 	github.com/asim/go-micro/plugins/registry/consul/v4 v4.0.0-20211210113221-37de747d195c
 	github.com/asim/go-micro/plugins/server/http/v4 v4.0.0-20211210113221-37de747d195c
@@ -11,6 +11,8 @@ require (
 	github.com/gin-gonic/gin v1.7.7
 	go-micro.dev/v4 v4.4.0
 )
+
+require github.com/FelixAnna/web-service-dlw/common v0.0.0-20211222162226-5a4d1c2d50bc
 
 require (
 	github.com/Microsoft/go-winio v0.5.0 // indirect
@@ -74,4 +76,4 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
-replace github.com/FelixAnna/web-service-dlw/common => ../common
+//replace github.com/FelixAnna/web-service-dlw/common => ../common

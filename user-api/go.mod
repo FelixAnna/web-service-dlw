@@ -3,7 +3,8 @@ module github.com/FelixAnna/web-service-dlw/user-api
 go 1.14
 
 require (
-	github.com/FelixAnna/web-service-dlw/common v0.0.0-00010101000000-000000000000
+	github.com/FelixAnna/web-service-dlw/common v0.0.0-20211222162226-5a4d1c2d50bc
+	//github.com/FelixAnna/web-service-dlw/common v0.0.0-00010101000000-000000000000
 	github.com/asim/go-micro/plugins/server/http/v4 v4.0.0-20211210113221-37de747d195c
 	github.com/aws/aws-sdk-go v1.42.21
 	github.com/gin-gonic/gin v1.7.7
@@ -12,4 +13,4 @@ require (
 	golang.org/x/oauth2 v0.0.0-20211104180415-d3ed0bb246c8
 )
 
-replace github.com/FelixAnna/web-service-dlw/common => ../common
+//replace github.com/FelixAnna/web-service-dlw/common => ../common

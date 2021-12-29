@@ -10,7 +10,7 @@ docker image ls
 
 ### Tag
 
-docker image tag date-api:latest date-api:v1.0
+docker image tag date-api:latest date-api:1.0.0
 
 ### Run
 

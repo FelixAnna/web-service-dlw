@@ -5,7 +5,7 @@ metadata:
     name: dlw-dev
     labels:
         environment: development
-    resourceVersion : "2"
+    resourceVersion : "4"
     
 ---
 # 2. create ResourceQuota for the namespace
@@ -17,9 +17,9 @@ metadata:
 spec:
   hard:
     requests.cpu: "1"
-    requests.memory: 1Gi
+    requests.memory: 2Gi
     limits.cpu: "2"
-    limits.memory: 4Gi
+    limits.memory: 3Gi
 
 ---
 # 3.1 create roles for access pods
@@ -61,7 +61,7 @@ metadata:
     name: dlw-deployment-dev-date
     namespace: dlw-dev
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: date-api
@@ -77,9 +77,9 @@ spec:
         - containerPort: 8383
         env:
         - name: AWS_ACCESS_KEY_ID
-          value: "xx"
+          value: "abc"
         - name: AWS_SECRET_ACCESS_KEY
-          value: "yy"
+          value: "xyz"
         - name: AWS_REGION
           value: "ap-southeast-1"
         resources:
@@ -98,7 +98,7 @@ metadata:
     name: dlw-deployment-dev-memo
     namespace: dlw-dev
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: memo-api
@@ -114,9 +114,9 @@ spec:
         - containerPort: 8282
         env:
         - name: AWS_ACCESS_KEY_ID
-          value: "xx"
+          value: "abc"
         - name: AWS_SECRET_ACCESS_KEY
-          value: "yy"
+          value: "xyz"
         - name: AWS_REGION
           value: "ap-southeast-1"
         resources:
@@ -135,7 +135,7 @@ metadata:
     name: dlw-deployment-dev-user
     namespace: dlw-dev
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: user-api
@@ -151,9 +151,9 @@ spec:
         - containerPort: 8181
         env:
         - name: AWS_ACCESS_KEY_ID
-          value: "xx"
+          value: "abc"
         - name: AWS_SECRET_ACCESS_KEY
-          value: "yy"
+          value: "xyz"
         - name: AWS_REGION
           value: "ap-southeast-1"
         resources:
@@ -165,11 +165,11 @@ spec:
             cpu: "256m"
                   
 ---
-# 5. create service for with NodePort exposed
+# 5.1 create service for with NodePort exposed
 apiVersion: v1
 kind: Service
 metadata:
-    name: dlw-service
+    name: dlw-service-date
     namespace: dlw-dev
 spec:
   type: NodePort #default is ClusterIP which is only accessible inside kubernetes
@@ -178,7 +178,76 @@ spec:
   ports:
     - name: http
       protocol: TCP
-      port: 8080
+      port: 8383
       targetPort: 8383 # can use port name reference or port number, container name is more flexible as we can change port number
       nodePort: 30080 #default range from: 30000 - 32767
+---
+# 5.2 create service for with NodePort exposed
+apiVersion: v1
+kind: Service
+metadata:
+    name: dlw-service-memo
+    namespace: dlw-dev
+spec:
+  type: ClusterIP #default is ClusterIP which is only accessible inside kubernetes
+  selector:
+    app: memo-api
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8282
+      targetPort: 8282 # can use port name reference or port number, container name is more flexible as we can change port number
       
+---
+# 5.2 create service for with NodePort exposed
+apiVersion: v1
+kind: Service
+metadata:
+    name: dlw-service-user
+    namespace: dlw-dev
+spec:
+  type: ClusterIP #default is ClusterIP which is only accessible inside kubernetes
+  selector:
+    app: user-api
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8181
+      targetPort: 8181 # can use port name reference or port number, container name is more flexible as we can change port number
+
+--- 
+--- 
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-resource-dlw
+  namespace: dlw-dev
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - path: /date/(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: dlw-service-date
+            port:
+              number: 8383
+      - path: /memo/(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: dlw-service-memo
+            port:
+              number: 8282
+      - path: /user/(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: dlw-service-user
+            port:
+              number: 8181
+           

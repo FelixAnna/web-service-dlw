@@ -1,0 +1,35 @@
+--- 
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-resource-dlw
+  namespace: dlw-dev
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - path: /date/(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: dlw-service-date
+            port:
+              number: 8383
+      - path: /memo/(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: dlw-service-memo
+            port:
+              number: 8282
+      - path: /user/(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: dlw-service-user
+            port:
+              number: 8181
+           

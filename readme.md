@@ -6,7 +6,7 @@
 3. date api service
 
 ## local test
-1. set go env: profile=dev
+1. ensure you have docker service install and started (like docker-desktop)
 2. start consul service and client:  https://learn.hashicorp.com/tutorials/consul/docker-container-agents?in=consul/docker
      1. start server
 
@@ -35,11 +35,12 @@
         ```
 3. store your aws credentials in place: https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html
     1. for local recommand: Shared Credentials File
-    2. for docker container not in ecs/eks/ec2: use env
+    2. for docker container not in ecs/eks/ec2: use env passed to container (in yaml or from docker run command)
     3. for docker container in ecs/eks/ec2: use aws role assume
 4. start user-api on port 8181
     1. run in local system: 
         ```bash
+        cd user-api
         profile=dev go run .
         ```
     2. run from local docker container: 
@@ -81,21 +82,22 @@
 
 1. setup ingress-nginx controller by following: https://kubernetes.github.io/ingress-nginx/deploy/#docker-desktop
 2. cd to deployment folder, update the AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY to correct value
-3. start deployment from deployment folder:
+3. make sure you have build docker images for the 3 api services
+4. start deployment from deployment folder:
     ```bash
     kubectl apply -f deployment_dev.yaml
     kubectl apply -f ingress_dev.yaml
     ```
 
-4. wait for the ingress resource ready
+5. wait for the ingress resource ready
     ```bash
     kubectl config set-context --current --namespace=dlw-dev
 
     kubectl describe ingress
     ```
-5. now, you can access from local browser: http://localhost/date/status
+6. now, you can access from local browser: http://localhost/date/status
 
-6. clean resource when you finished the local test:
+7. clean resource when you finished the local test:
      ```bash
     kubectl delete -f ingress_dev.yaml
     kubectl delete -f deployment_dev.yaml

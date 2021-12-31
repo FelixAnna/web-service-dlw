@@ -3,7 +3,7 @@ module github.com/FelixAnna/web-service-dlw/date-api
 go 1.17
 
 require (
-	github.com/FelixAnna/web-service-dlw/common v0.0.0-20211228152933-29d52f28e6b8
+	github.com/FelixAnna/web-service-dlw/common v0.0.0-20211231152311-9d083a2c0544 // indirect
 	github.com/gin-gonic/gin v1.7.7
 	github.com/golang-module/carbon/v2 v2.0.1
 	go-micro.dev/v4 v4.4.0

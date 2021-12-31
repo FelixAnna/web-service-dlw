@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	//github.com/FelixAnna/web-service-dlw/common v0.0.0-00010101000000-000000000000
-	github.com/FelixAnna/web-service-dlw/common v0.0.0-20211228152933-29d52f28e6b8
+	github.com/FelixAnna/web-service-dlw/common v0.0.0-20211231152311-9d083a2c0544
 	github.com/asim/go-micro/plugins/client/http/v4 v4.0.0-20211210113221-37de747d195c
 	github.com/asim/go-micro/plugins/registry/consul/v4 v4.0.0-20211210113221-37de747d195c
 	github.com/asim/go-micro/plugins/server/http/v4 v4.0.0-20211210113221-37de747d195c

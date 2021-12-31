@@ -40,11 +40,11 @@
 4. start user-api on port 8181
     1. run in local system: 
         ```bash
-        go run .
+        profile=dev go run .
         ```
     2. run from local docker container: 
         ```bash
-        docker run -d -e AWS_ACCESS_KEY_ID=xyz -e AWS_SECRET_ACCESS_KEY=abc -e AWS_REGION=ap-southeast-1 --publish 8383:8383 date-api:1.0.0
+        docker run -d -e AWS_ACCESS_KEY_ID=xyz -e AWS_SECRET_ACCESS_KEY=abc -e AWS_REGION=ap-southeast-1 -e profile=dev  --publish 8383:8383 date-api:1.0.0
         ```
 5. start memo-api on port 8282
 6. start date-api on port 8383
@@ -79,22 +79,24 @@
 
 ## kubernete test
 
-1. setup ingress-nginx by following: https://kubernetes.github.io/ingress-nginx/deploy/#docker-desktop
+1. setup ingress-nginx controller by following: https://kubernetes.github.io/ingress-nginx/deploy/#docker-desktop
 2. cd to deployment folder, update the AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY to correct value
 3. start deployment from deployment folder:
     ```bash
     kubectl apply -f deployment_dev.yaml
+    kubectl apply -f ingress_dev.yaml
     ```
 
 4. wait for the ingress resource ready
     ```bash
     kubectl config set-context --current --namespace=dlw-dev
 
-    kubectl get ingress
+    kubectl describe ingress
     ```
 5. now, you can access from local browser: http://localhost/date/status
 
 6. clean resource when you finished the local test:
      ```bash
+    kubectl delete -f ingress_dev.yaml
     kubectl delete -f deployment_dev.yaml
     ```

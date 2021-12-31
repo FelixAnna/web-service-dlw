@@ -20,9 +20,9 @@ docker image ls
 
 docker image tag memo-api:latest memo-api:1.0.0
 
-### Run
+### Run (use consul for service registry and discovery)
 
-docker run -d -e AWS_ACCESS_KEY_ID=xyz -e AWS_SECRET_ACCESS_KEY=abc -e AWS_REGION=ap-southeast-1 --publish 8282:8282 memo-api:1.0.0
+docker run -d -e AWS_ACCESS_KEY_ID=xyz -e AWS_SECRET_ACCESS_KEY=abc -e AWS_REGION=ap-southeast-1 -e profile=dev  --publish 8282:8282 memo-api:1.0.0
 
 ## TODO
 

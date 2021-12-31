@@ -216,7 +216,7 @@ spec:
       targetPort: 8181 # can use port name reference or port number, container name is more flexible as we can change port number
 
 --- 
---- 
+# create ingress 
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:

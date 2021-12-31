@@ -77,9 +77,9 @@ spec:
         - containerPort: 8383
         env:
         - name: AWS_ACCESS_KEY_ID
-          value: "abc"
+          value: "AKIAVKEIRSYCJT2IJRZ6"
         - name: AWS_SECRET_ACCESS_KEY
-          value: "xyz"
+          value: "knjlALvVJIz76x9FdU5HZOtp0uhOJb3lgUwV8+x+"
         - name: AWS_REGION
           value: "ap-southeast-1"
         resources:
@@ -114,9 +114,9 @@ spec:
         - containerPort: 8282
         env:
         - name: AWS_ACCESS_KEY_ID
-          value: "abc"
+          value: "AKIAVKEIRSYCJT2IJRZ6"
         - name: AWS_SECRET_ACCESS_KEY
-          value: "xyz"
+          value: "knjlALvVJIz76x9FdU5HZOtp0uhOJb3lgUwV8+x+"
         - name: AWS_REGION
           value: "ap-southeast-1"
         resources:
@@ -151,9 +151,9 @@ spec:
         - containerPort: 8181
         env:
         - name: AWS_ACCESS_KEY_ID
-          value: "abc"
+          value: "AKIAVKEIRSYCJT2IJRZ6"
         - name: AWS_SECRET_ACCESS_KEY
-          value: "xyz"
+          value: "knjlALvVJIz76x9FdU5HZOtp0uhOJb3lgUwV8+x+"
         - name: AWS_REGION
           value: "ap-southeast-1"
         resources:

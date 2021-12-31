@@ -1,3 +1,11 @@
+# memo api
+
+## functionalities 
+1. save user cared date - memo to db (in Gregorian calendar and Lunar calender)
+2. search memo for user
+3. call date api to calculate recent memo date (MMdd) for given memo
+
+
 ## Docker Guide
 
 ### Build

@@ -1,3 +1,9 @@
+# date api
+
+## functionalities 
+1. calculate distance of 2 given date, support Gregorian calendar and Lunar calender
+2. return month date info for given date (with leap month, lunar date info)
+
 ## Docker Guide
 
 ### Build

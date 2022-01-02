@@ -1,11 +1,11 @@
 # 1. create namespace
-apiVersion: v1
-kind: Namespace
-metadata:
-    name: dlw-dev
-    labels:
-        environment: development
-    resourceVersion : "4"
+# apiVersion: v1
+# kind: Namespace
+# metadata:
+#     name: dlw-dev
+#     labels:
+#         environment: development
+#     #resourceVersion : "4"
     
 ---
 # 2. create ResourceQuota for the namespace
@@ -77,11 +77,20 @@ spec:
         - containerPort: 8383
         env:
         - name: AWS_ACCESS_KEY_ID
-          value: "AKIAVKEIRSYCJT2IJRZ6"
+          valueFrom:
+            secretKeyRef:
+              name: dlw-secret
+              key: aws-access-key-id
         - name: AWS_SECRET_ACCESS_KEY
-          value: "knjlALvVJIz76x9FdU5HZOtp0uhOJb3lgUwV8+x+"
+          valueFrom:
+            secretKeyRef:
+              name: dlw-secret
+              key: aws-secret-access-key
         - name: AWS_REGION
-          value: "ap-southeast-1"
+          valueFrom:
+            configMapKeyRef:
+              name: dlw-config
+              key: aws-region
         resources:
           requests:
             memory: 256Mi
@@ -114,11 +123,20 @@ spec:
         - containerPort: 8282
         env:
         - name: AWS_ACCESS_KEY_ID
-          value: "AKIAVKEIRSYCJT2IJRZ6"
+          valueFrom:
+            secretKeyRef:
+              name: dlw-secret
+              key: aws-access-key-id
         - name: AWS_SECRET_ACCESS_KEY
-          value: "knjlALvVJIz76x9FdU5HZOtp0uhOJb3lgUwV8+x+"
+          valueFrom:
+            secretKeyRef:
+              name: dlw-secret
+              key: aws-secret-access-key
         - name: AWS_REGION
-          value: "ap-southeast-1"
+          valueFrom:
+            configMapKeyRef:
+              name: dlw-config
+              key: aws-region
         resources:
           requests:
             memory: 256Mi
@@ -151,11 +169,20 @@ spec:
         - containerPort: 8181
         env:
         - name: AWS_ACCESS_KEY_ID
-          value: "AKIAVKEIRSYCJT2IJRZ6"
+          valueFrom:
+            secretKeyRef:
+              name: dlw-secret
+              key: aws-access-key-id
         - name: AWS_SECRET_ACCESS_KEY
-          value: "knjlALvVJIz76x9FdU5HZOtp0uhOJb3lgUwV8+x+"
+          valueFrom:
+            secretKeyRef:
+              name: dlw-secret
+              key: aws-secret-access-key
         - name: AWS_REGION
-          value: "ap-southeast-1"
+          valueFrom:
+            configMapKeyRef:
+              name: dlw-config
+              key: aws-region
         resources:
           requests:
             memory: 256Mi
@@ -215,39 +242,4 @@ spec:
       port: 8181
       targetPort: 8181 # can use port name reference or port number, container name is more flexible as we can change port number
 
---- 
-# create ingress 
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: ingress-resource-dlw
-  namespace: dlw-dev
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
-spec:
-  ingressClassName: nginx
-  rules:
-  - http:
-      paths:
-      - path: /date/(.*)
-        pathType: Prefix
-        backend:
-          service:
-            name: dlw-service-date
-            port:
-              number: 8383
-      - path: /memo/(.*)
-        pathType: Prefix
-        backend:
-          service:
-            name: dlw-service-memo
-            port:
-              number: 8282
-      - path: /user/(.*)
-        pathType: Prefix
-        backend:
-          service:
-            name: dlw-service-user
-            port:
-              number: 8181
            

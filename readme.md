@@ -102,3 +102,8 @@
     kubectl delete -f ingress_dev.yaml
     kubectl delete -f deployment_dev.yaml
     ```
+
+## todo
+### create user / serviceaccount for containerd service (service registry need rabc, currently use default user)
+### use helm to organize deployment templete
+### 

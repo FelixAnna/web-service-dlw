@@ -34,7 +34,15 @@ rules:
   verbs: ["get", "list", "patch"] # You can also use ["*"]
   
 ---
-# 3.2 bind role to the default service account in the namespace
+# 3.2 create service account
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: dlw-sericeaccount
+  namespace: dlw-dev
+
+---
+# 3.3 bind role to the default service account in the namespace
 apiVersion: rbac.authorization.k8s.io/v1
 # This role binding allows "jane" to read pods in the "default" namespace.
 # You need to already have a Role named "pod-reader" in that namespace.
@@ -44,9 +52,11 @@ metadata:
   namespace: dlw-dev
 subjects:
 # You can specify more than one "subject"
-- kind: User
-  name: system:serviceaccount:dlw-dev:default # "name" is case sensitive
-  apiGroup: rbac.authorization.k8s.io
+- kind: ServiceAccount
+  #name: system:serviceaccount:dlw-dev:default # "name" is case sensitive
+  name: dlw-sericeaccount
+  namespace: dlw-dev
+  #apiGroup: rbac.authorization.k8s.io
 roleRef:
   # "roleRef" specifies the binding to a Role / ClusterRole
   kind: Role #this must be Role or ClusterRole
@@ -98,7 +108,12 @@ spec:
           limits:
             memory: 512Mi
             cpu: "256m"
-            
+        volumeMounts:
+          - mountPath: /var/run/secrets/tokens
+            name: vault-token
+      serviceAccountName: dlw-sericeaccount
+      volumes:
+      - name: vault-token          
 ---
 # 4.2 create deployment with pod spec for memo-api service
 apiVersion: apps/v1
@@ -144,7 +159,12 @@ spec:
           limits:
             memory: 512Mi
             cpu: "256m"
-            
+        volumeMounts:
+          - mountPath: /var/run/secrets/tokens
+            name: vault-token
+      serviceAccountName: dlw-sericeaccount
+      volumes:
+      - name: vault-token      
 ---
 # 4.3 create deployment with pod spec for user-api service
 apiVersion: apps/v1
@@ -190,7 +210,18 @@ spec:
           limits:
             memory: 512Mi
             cpu: "256m"
-                  
+        volumeMounts:
+          - mountPath: /var/run/secrets/tokens
+            name: vault-token
+      serviceAccountName: dlw-sericeaccount
+      volumes:
+      - name: vault-token
+        projected:
+          sources:
+          - serviceAccountToken:
+              path: vault-token
+              expirationSeconds: 7200
+              audience: vault            
 ---
 # 5.1 create service for with NodePort exposed
 apiVersion: v1

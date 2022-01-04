@@ -12,8 +12,8 @@
 apiVersion: v1
 kind: ResourceQuota
 metadata:
-    name: dlw-dev-quota
-    namespace: dlw-dev
+  name: dlw-dev-quota
+  namespace: dlw-dev
 spec:
   hard:
     requests.cpu: "1"
@@ -68,8 +68,8 @@ roleRef:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-    name: dlw-deployment-dev-date
-    namespace: dlw-dev
+  name: dlw-deployment-dev-date
+  namespace: dlw-dev
 spec:
   replicas: 1
   selector:
@@ -119,8 +119,8 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-    name: dlw-deployment-dev-memo
-    namespace: dlw-dev
+  name: dlw-deployment-dev-memo
+  namespace: dlw-dev
 spec:
   replicas: 1
   selector:
@@ -170,8 +170,8 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-    name: dlw-deployment-dev-user
-    namespace: dlw-dev
+  name: dlw-deployment-dev-user
+  namespace: dlw-dev
 spec:
   replicas: 1
   selector:
@@ -227,8 +227,8 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-    name: dlw-service-date
-    namespace: dlw-dev
+  name: dlw-service-date
+  namespace: dlw-dev
 spec:
   type: NodePort #default is ClusterIP which is only accessible inside kubernetes
   selector:
@@ -244,8 +244,8 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-    name: dlw-service-memo
-    namespace: dlw-dev
+  name: dlw-service-memo
+  namespace: dlw-dev
 spec:
   type: ClusterIP #default is ClusterIP which is only accessible inside kubernetes
   selector:
@@ -261,8 +261,8 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-    name: dlw-service-user
-    namespace: dlw-dev
+  name: dlw-service-user
+  namespace: dlw-dev
 spec:
   type: ClusterIP #default is ClusterIP which is only accessible inside kubernetes
   selector:

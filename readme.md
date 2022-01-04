@@ -81,10 +81,11 @@
 ## kubernete test
 
 1. setup ingress-nginx controller by following: https://kubernetes.github.io/ingress-nginx/deploy/#docker-desktop
-2. cd to deployment folder, update the AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY to correct value
-3. make sure you have build docker images for the 3 api services
+2. cd to deployment\kubernetes folder, update the AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY to correct value in "namespace_config_secret_dev.yaml"
+3. make sure you have build docker images for the 3 api services, and tag them as xxx-api:1.0.0
 4. start deployment from deployment folder:
     ```bash
+	kubectl apply -f namespace_config_secret_dev.yaml
     kubectl apply -f deployment_dev.yaml
     kubectl apply -f ingress_dev.yaml
     ```
@@ -101,9 +102,32 @@
      ```bash
     kubectl delete -f ingress_dev.yaml
     kubectl delete -f deployment_dev.yaml
+	kubectl delete -f namespace_config_secret_dev.yaml
     ```
+## helm test
+1. download and unzip helm, add folder to env PATH, following: https://helm.sh/
 
+2. add helm chart repo: https://helm.sh/docs/intro/quickstart/
+	```bash
+	kubectl create namespace dlw-dev
+	
+	helm repo add bitnami https://charts.bitnami.com/bitnami
+	```
+3. cd to deployment\kubernetes\dlw-helm, update the awsKeyId and awsSecretKey to correct value in "values.yaml"
+4. cd to deployment\kubernetes folder, run:
+	```bash
+	helm install dlw ./dlw-helm/
+	```
+5. after all resources installed, you can access test api from local browser: http://localhost/date/status
+6. update by running:
+	```bash
+	helm upgrade dlw ./dlw-helm/
+	```
+7. remove all by running:
+	```bash
+	helm uninstall dlw
+	```
 ## todo
-### create user / serviceaccount for containerd service (service registry need rabc, currently use default user)
-### use helm to organize deployment templete
+### create user / serviceaccount for containerd service (service registry need rabc, currently use default user) #done at 2022-01-03
+### use helm to organize deployment templete #done at 2022-01-04
 ### 

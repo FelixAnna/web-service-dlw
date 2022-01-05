@@ -15,7 +15,7 @@
         -d \
         -p 8500:8500 \
         -p 8600:8600/udp \
-        --name=badger \
+        --name=shifu \
         consul agent -server -ui -node=server-1 -bootstrap-expect=1 -client=0.0.0.0
         
         ```
@@ -30,7 +30,7 @@
 
         ```bash
         docker run \
-        --name=fox \
+        --name=tuer \
         consul agent -node=client-1 -join=172.17.0.2
         ```
 3. store your aws credentials in place: https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html
@@ -78,6 +78,39 @@
     --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxNjM4MzYzMDY1MDgxIiwiZW1haWwiOiJ5dWVjbnVAaG90bWFpbC5jb20iLCJleHAiOjE2NDAzMjk1MjB9.uOvsu9mLS95Wc9uWONGR-DZx6WPfGxChrHJ6dPaAsag'
     ```
 
+    ```json
+    [
+        {
+            "Id": "1639581432081",
+            "UserId": "1638363065081",
+            "Subject": "Test Item 7",
+            "Description": "Test Description 7",
+            "MonthDay": 1208,
+            "StartYear": 1999,
+            "Lunar": false,
+            "Distance": [
+                -28,
+                337
+            ],
+            "CreateTime": "1639581432"
+        },
+        {
+            "Id": "1639581443887",
+            "UserId": "1638363065081",
+            "Subject": "Test Item 8",
+            "Description": "Test Description 8",
+            "MonthDay": 1208,
+            "StartYear": 1999,
+            "Lunar": true,
+            "Distance": [
+                -32,
+                323
+            ],
+            "CreateTime": "1639581443"
+        }
+    ]
+    ```
+
 ## kubernete test
 
 1. setup ingress-nginx controller by following: https://kubernetes.github.io/ingress-nginx/deploy/#docker-desktop
@@ -105,7 +138,7 @@
 	kubectl delete -f namespace_config_secret_dev.yaml
     ```
 ## helm test
-1. download and unzip helm, add folder to env PATH, following: https://helm.sh/
+1. download and unzip helm, add folder to env PATH, following: https://helm.sh/   https://github.com/helm/helm/releases
 
 2. add helm chart repo: https://helm.sh/docs/intro/quickstart/
 	```bash

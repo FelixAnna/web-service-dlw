@@ -14,8 +14,8 @@ serviceAccount:
   name: "dlw-sericeaccount"
 
 config:
-  awsKeyId: ***
-  awsSecretKey: ***
+  awsKeyId: ===
+  awsSecretKey: ====
   region: ap-southeast-1
 
 quota:

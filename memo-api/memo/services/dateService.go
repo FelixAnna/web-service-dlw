@@ -5,10 +5,9 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/FelixAnna/web-service-dlw/common/mesh"
 	httpClient "github.com/asim/go-micro/plugins/client/http/v4"
-	"github.com/asim/go-micro/plugins/registry/consul/v4"
 	"go-micro.dev/v4/client"
-	"go-micro.dev/v4/registry"
 	"go-micro.dev/v4/selector"
 )
 
@@ -30,9 +29,8 @@ type Distance struct {
 var dateClient client.Client
 
 func init() {
-	consulReg := consul.NewRegistry(registry.Addrs("localhost:8500"))
-	//r := registry.NewRegistry()
-	s := selector.NewSelector(selector.Registry(consulReg))
+	reg := mesh.GetRegistry()
+	s := selector.NewSelector(selector.Registry(reg))
 	// new client
 	dateClient = httpClient.NewClient(client.Selector(s))
 }

@@ -26,13 +26,12 @@ type Distance struct {
 	After     int64
 }
 
-var dateClient client.Client
+var dlwClient client.Client
 
 func init() {
 	reg := mesh.GetRegistry()
 	s := selector.NewSelector(selector.Registry(reg))
-	// new client
-	dateClient = httpClient.NewClient(client.Selector(s))
+	dlwClient = httpClient.NewClient(client.Selector(s))
 }
 
 /*
@@ -56,18 +55,18 @@ Get distance from date-api for given date (Lunar)
 Currently only support POST method
 */
 func getDistance(start, end int, lunar bool) (before, after int) {
-	lunarPath := ""
+	category := "" //default calender
 	if lunar {
-		lunarPath = "/lunar"
+		category = "/lunar"
 	}
 
-	path := fmt.Sprintf("/date/distance%v?start=%v&end=%v", lunarPath, start, end)
+	path := fmt.Sprintf("/date/distance%v?start=%v&end=%v", category, start, end)
 
 	// create request/response
-	request := dateClient.NewRequest(serviceName, path, "", client.WithContentType("application/json"))
+	request := dlwClient.NewRequest(serviceName, path, "", client.WithContentType("application/json"))
 	response := new(Distance)
 	// call service
-	err := dateClient.Call(context.Background(), request, response)
+	err := dlwClient.Call(context.Background(), request, response)
 	log.Printf("err:%v response:%#v\n", err, response)
 
 	return int(response.Before), int(response.After)

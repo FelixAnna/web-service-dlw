@@ -233,7 +233,64 @@ spec:
           - serviceAccountToken:
               path: vault-token
               expirationSeconds: 7200
-              audience: vault            
+              audience: vault    
+---
+# 4.4 create deployment with pod spec for finance-api service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dlw-deployment-dev-finance
+  namespace: dlw-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: finance-api
+  template:
+    metadata:
+      labels:
+        app: finance-api
+    spec:
+      containers:
+      - name: finance-api
+        image: finance-api:1.0.0
+        ports:
+        - containerPort: 8484
+        env:
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: dlw-secret
+              key: aws-access-key-id
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: dlw-secret
+              key: aws-secret-access-key
+        - name: AWS_REGION
+          valueFrom:
+            configMapKeyRef:
+              name: dlw-config
+              key: aws-region
+        resources:
+          requests:
+            memory: 256Mi
+            cpu: "128m"
+          limits:
+            memory: 512Mi
+            cpu: "256m"
+        volumeMounts:
+          - mountPath: /var/run/secrets/tokens
+            name: vault-token
+      serviceAccountName: dlw-sericeaccount
+      volumes:
+      - name: vault-token
+        projected:
+          sources:
+          - serviceAccountToken:
+              path: vault-token
+              expirationSeconds: 7200
+              audience: vault                 
 ---
 # 5.1 create service for with NodePort exposed
 apiVersion: v1
@@ -269,7 +326,7 @@ spec:
       targetPort: 8282 # can use port name reference or port number, container name is more flexible as we can change port number
       
 ---
-# 5.2 create service for with NodePort exposed
+# 5.3 create service for with NodePort exposed
 apiVersion: v1
 kind: Service
 metadata:
@@ -285,4 +342,19 @@ spec:
       port: 8181
       targetPort: 8181 # can use port name reference or port number, container name is more flexible as we can change port number
 
-           
+---
+# 5.4 create service for with NodePort exposed
+apiVersion: v1
+kind: Service
+metadata:
+  name: dlw-service-finance
+  namespace: dlw-dev
+spec:
+  type: ClusterIP #default is ClusterIP which is only accessible inside kubernetes
+  selector:
+    app: finance-api
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8484
+      targetPort: 8484 # can use port name reference or port number, container name is more flexible as we can change port number      

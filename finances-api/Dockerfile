@@ -15,8 +15,8 @@ RUN go mod download
 COPY . ./
 
 RUN go mod tidy
-RUN go build -o /docker-memo-api
+RUN go build -o /docker-finance-api
 
-EXPOSE 8282
+EXPOSE 8484
 
-CMD [ "/docker-memo-api" ]
+CMD [ "/docker-finance-api" ]

@@ -57,6 +57,13 @@ applications:
       limits:
         memory: 256Mi
         cpu: "256m"
-
-
-
+  - name: finance
+    port: 8484
+    image: finance-api:1.0.0
+    resources:
+      requests:
+        memory: 128Mi
+        cpu: "128m"
+      limits:
+        memory: 256Mi
+        cpu: "256m"

@@ -27,7 +27,6 @@ func init() {
 }
 
 type MemoRepoDynamoDB struct {
-	MemoRepo
 }
 
 func (m *MemoRepoDynamoDB) Add(memo *entity.Memo) (*string, error) {

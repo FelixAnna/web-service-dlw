@@ -32,4 +32,11 @@ spec:
             name: dlw-service-user
             port:
               number: 8181
+      - path: /finance/(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: dlw-service-finance
+            port:
+              number: 8484
            

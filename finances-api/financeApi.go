@@ -10,12 +10,12 @@ import (
 
 	"github.com/FelixAnna/web-service-dlw/common/mesh"
 	"github.com/FelixAnna/web-service-dlw/common/middleware"
-	zdj "github.com/FelixAnna/web-service-dlw/finances-api/zdj"
+	zdj "github.com/FelixAnna/web-service-dlw/finance-api/zdj"
 	httpServer "github.com/asim/go-micro/plugins/server/http/v4"
 	"go-micro.dev/v4"
+	"go-micro.dev/v4/server"
 
 	"github.com/gin-gonic/gin"
-	"go-micro.dev/v4/server"
 )
 
 const SERVER_NAME = "finance-api"
@@ -45,6 +45,9 @@ func main() {
 func GetGinRouter() *gin.Engine {
 	router := gin.New()
 
+	// Set a lower memory limit for multipart forms (default is 32 MiB)
+	router.MaxMultipartMemory = 8 << 20 // 8 MiB
+
 	//define middleware before apis
 	initialLogger()
 	router.Use(gin.Logger())
@@ -64,7 +67,9 @@ func defineRoutes(router *gin.Engine) {
 
 	userGroupRouter := router.Group("/zdj", middleware.AuthorizationHandler())
 	{
-		userGroupRouter.PUT("/", zdj.GetAll)
+		userGroupRouter.GET("/", zdj.GetAll)
+		userGroupRouter.POST("/search", zdj.Search)
+		userGroupRouter.POST("/upload", zdj.Upload)
 	}
 }
 

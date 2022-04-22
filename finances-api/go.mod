@@ -1,6 +1,6 @@
-module github.com/FelixAnna/web-service-dlw/finances-api
+module github.com/FelixAnna/web-service-dlw/finance-api
 
-go 1.17
+go 1.18
 
 require (
 	//github.com/FelixAnna/web-service-dlw/common v0.0.0-00010101000000-000000000000
@@ -9,6 +9,8 @@ require (
 	github.com/gin-gonic/gin v1.7.7
 	go-micro.dev/v4 v4.4.0
 )
+
+require github.com/ahmetb/go-linq/v3 v3.2.0
 
 require (
 	github.com/Microsoft/go-winio v0.5.0 // indirect

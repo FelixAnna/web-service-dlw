@@ -1,6 +1,6 @@
 module github.com/FelixAnna/web-service-dlw/date-api
 
-go 1.17
+go 1.18
 
 require (
 	github.com/FelixAnna/web-service-dlw/common v0.0.0-20211231152311-9d083a2c0544

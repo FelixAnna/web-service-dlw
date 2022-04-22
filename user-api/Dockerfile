@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
-FROM golang:1.17-alpine
-RUN apk add build-base
+FROM golang:1.18
+# RUN apk add build-base
 
 ENV GIN_MODE release
 

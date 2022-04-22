@@ -26,4 +26,4 @@ docker run -d -e AWS_ACCESS_KEY_ID=xyz -e AWS_SECRET_ACCESS_KEY=abc -e AWS_REGIO
 
 ## TODO
 
-1. call a api from another docker container
+1. call a api from another docker container #done

@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
-namespace: dlw-dev
+# namespace: dlw-dev
 serviceAccount: 
   # Specifies whether a service account should be created
   create: true
@@ -14,8 +14,8 @@ serviceAccount:
   name: "dlw-sericeaccount"
 
 config:
-  awsKeyId: ===
-  awsSecretKey: ====
+  awsKeyId: ==
+  awsSecretKey: ==
   region: ap-southeast-1
 
 quota:

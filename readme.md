@@ -114,6 +114,9 @@
 ## kubernete test
 
 1. setup ingress-nginx controller by following: https://kubernetes.github.io/ingress-nginx/deploy/#docker-desktop
+    helm upgrade --install ingress-nginx ingress-nginx \
+    --repo https://kubernetes.github.io/ingress-nginx \
+    --namespace ingress-nginx --create-namespace
 2. cd to deployment\kubernetes folder, update the AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY to correct value in "namespace_config_secret_dev.yaml"
 3. make sure you have build docker images for the 3 api services, and tag them as xxx-api:1.0.0
 4. start deployment from deployment folder:
@@ -142,14 +145,12 @@
 
 2. add helm chart repo: https://helm.sh/docs/intro/quickstart/
 	```bash
-	kubectl create namespace dlw-dev
-	
 	helm repo add bitnami https://charts.bitnami.com/bitnami
 	```
 3. cd to deployment\kubernetes\dlw-helm, update the awsKeyId and awsSecretKey to correct value in "values.yaml"
 4. cd to deployment\kubernetes folder, run:
 	```bash
-	helm install dlw ./dlw-helm/
+	helm install dlw ./dlw-helm/ --namespace dlw-dev --create-namespace
 	```
 5. after all resources installed, you can access test api from local browser: http://localhost/date/status
 6. update by running:

@@ -22,8 +22,8 @@ type MyToken struct {
 
 var (
 	mySigningKey = []byte(aws.GetParameterByKey("jwt/signKey"))
-	myIssuer     = aws.GetParameterByKey("/dlf/dev/jwt/issuer")
-	myExpireAt   = aws.GetParameterByKey("/dlf/dev/jwt/expiryAfter")
+	myIssuer     = aws.GetParameterByKey("jwt/issuer")
+	myExpireAt   = aws.GetParameterByKey("jwt/expiryAfter")
 )
 
 func NewToken(id, email string) (*MyToken, error) {

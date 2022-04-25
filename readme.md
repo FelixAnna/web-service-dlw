@@ -4,10 +4,74 @@
 1. user api service
 2. memo api service
 3. date api service
+4. finance api service
+
+# prepare 
+1. register OAuth Apps in https://github.com/settings/developers
+    the Authorization callback URL should be： http://localhost/user/oauth2/github/redirect
+    keep the ClientID and ClientSecret
+    
+2. Add parameters in aws parameter store: https://ap-southeast-1.console.aws.amazon.com/systems-manager/parameters/?region=ap-southeast-1&tab=Table , use KMS customer managed keys if necessary.
+
+3. create Tables in aws DynamoDB:
+    dlf.Memos, dlf.Users
+
+4. start your docker-desktop service, enable kubernetes feature.
+5. setup ingress-nginx controller by following: https://kubernetes.github.io/ingress-nginx/deploy/#docker-desktop
+    helm upgrade --install ingress-nginx ingress-nginx \
+    --repo https://kubernetes.github.io/ingress-nginx \
+    --namespace ingress-nginx --create-namespace
+
+## helm test
+1. download and unzip helm, add folder to env PATH, following: https://helm.sh/   https://github.com/helm/helm/releases
+
+2. add helm chart repo: https://helm.sh/docs/intro/quickstart/
+	```bash
+	helm repo add bitnami https://charts.bitnami.com/bitnami
+	```
+
+3. cd to deployment\kubernetes\dlw-helm, update the awsKeyId and awsSecretKey to correct value in "values.yaml"
+4. cd to deployment\kubernetes folder, run:
+	```bash
+	helm install dlw ./dlw-helm/ --namespace dlw-dev --create-namespace
+	```
+5. after all resources installed, you can access test api from local browser: http://localhost/date/status
+6. update by running:
+	```bash
+	helm upgrade dlw ./dlw-helm/
+	```
+7. remove all by running:
+	```bash
+	helm uninstall dlw
+	```
+
+## kubernete test
+1. cd to deployment\kubernetes folder, update the AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY to correct value in "namespace_config_secret_dev.yaml"
+2. make sure you have build docker images for the 4 api services, and tag them as xxx-api:1.0.0
+3. start deployment from deployment folder:
+    ```bash
+	kubectl apply -f namespace_config_secret_dev.yaml
+    kubectl apply -f deployment_dev.yaml
+    kubectl apply -f ingress_dev.yaml
+    ```
+
+4. wait for the ingress resource ready
+    ```bash
+    kubectl config set-context --current --namespace=dlw-dev
+
+    kubectl describe ingress
+    ```
+5. now, you can access from local browser: http://localhost/date/status
+
+6. clean resource when you finished the local test:
+     ```bash
+    kubectl delete -f ingress_dev.yaml
+    kubectl delete -f deployment_dev.yaml
+	kubectl delete -f namespace_config_secret_dev.yaml
+    ```
 
 ## local test
-1. ensure you have docker service install and started (like docker-desktop)
-2. start consul service and client:  https://learn.hashicorp.com/tutorials/consul/docker-container-agents?in=consul/docker
+1. start consul service and client:  https://learn.hashicorp.com/tutorials/consul/docker-container-agents?in=consul/docker
      1. start server
 
         ```bash
@@ -33,11 +97,11 @@
         --name=tuer \
         consul agent -node=client-1 -join=172.17.0.2
         ```
-3. store your aws credentials in place: https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html
+2. store your aws credentials in place: https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html
     1. for local recommand: Shared Credentials File
     2. for docker container not in ecs/eks/ec2: use env passed to container (in yaml or from docker run command)
     3. for docker container in ecs/eks/ec2: use aws role assume
-4. start user-api on port 8181
+3. start user-api on port 8181
     1. run in local system: 
         ```bash
         cd user-api
@@ -47,8 +111,9 @@
         ```bash
         docker run -d -e AWS_ACCESS_KEY_ID=xyz -e AWS_SECRET_ACCESS_KEY=abc -e AWS_REGION=ap-southeast-1 -e profile=dev  --publish 8383:8383 date-api:1.0.0
         ```
-5. start memo-api on port 8282
-6. start date-api on port 8383
+4. start memo-api on port 8282
+5. start date-api on port 8383
+6. start finance-api on port 8484
 7. test your api works
     1. get github redirectUrl: 
     ```bash
@@ -111,57 +176,8 @@
     ]
     ```
 
-## kubernete test
 
-1. setup ingress-nginx controller by following: https://kubernetes.github.io/ingress-nginx/deploy/#docker-desktop
-    helm upgrade --install ingress-nginx ingress-nginx \
-    --repo https://kubernetes.github.io/ingress-nginx \
-    --namespace ingress-nginx --create-namespace
-2. cd to deployment\kubernetes folder, update the AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY to correct value in "namespace_config_secret_dev.yaml"
-3. make sure you have build docker images for the 3 api services, and tag them as xxx-api:1.0.0
-4. start deployment from deployment folder:
-    ```bash
-	kubectl apply -f namespace_config_secret_dev.yaml
-    kubectl apply -f deployment_dev.yaml
-    kubectl apply -f ingress_dev.yaml
-    ```
-
-5. wait for the ingress resource ready
-    ```bash
-    kubectl config set-context --current --namespace=dlw-dev
-
-    kubectl describe ingress
-    ```
-6. now, you can access from local browser: http://localhost/date/status
-
-7. clean resource when you finished the local test:
-     ```bash
-    kubectl delete -f ingress_dev.yaml
-    kubectl delete -f deployment_dev.yaml
-	kubectl delete -f namespace_config_secret_dev.yaml
-    ```
-## helm test
-1. download and unzip helm, add folder to env PATH, following: https://helm.sh/   https://github.com/helm/helm/releases
-
-2. add helm chart repo: https://helm.sh/docs/intro/quickstart/
-	```bash
-	helm repo add bitnami https://charts.bitnami.com/bitnami
-	```
-3. cd to deployment\kubernetes\dlw-helm, update the awsKeyId and awsSecretKey to correct value in "values.yaml"
-4. cd to deployment\kubernetes folder, run:
-	```bash
-	helm install dlw ./dlw-helm/ --namespace dlw-dev --create-namespace
-	```
-5. after all resources installed, you can access test api from local browser: http://localhost/date/status
-6. update by running:
-	```bash
-	helm upgrade dlw ./dlw-helm/
-	```
-7. remove all by running:
-	```bash
-	helm uninstall dlw
-	```
-## todo
+## TODO
 ### create user / serviceaccount for containerd service (service registry need rabc, currently use default user) #done at 2022-01-03
 ### use helm to organize deployment templete #done at 2022-01-04
 ### 

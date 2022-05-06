@@ -1,4 +1,4 @@
-package filesytem
+package filesystem
 
 import (
 	"bufio"

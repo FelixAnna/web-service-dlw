@@ -1,13 +1,13 @@
 package zdj
 
 import (
-	"bufio"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
 	"time"
 
+	"github.com/FelixAnna/web-service-dlw/common/filesystem"
 	"github.com/FelixAnna/web-service-dlw/finance-api/zdj/entity"
 	"github.com/FelixAnna/web-service-dlw/finance-api/zdj/repository"
 	"github.com/gin-gonic/gin"
@@ -52,7 +52,7 @@ func Upload(c *gin.Context) {
 	c.SaveUploadedFile(file, tempPath)
 	defer os.Remove(tempPath)
 
-	lines := readLines(tempPath)
+	lines := filesystem.ReadLines(tempPath)
 
 	//convert to model list
 	models := parseModel(lines, int(iversion))
@@ -65,23 +65,6 @@ func getTempPath() string {
 	path := os.TempDir() + "\\" + time.Now().Format("20000102132435") + ".txt"
 
 	return path
-}
-
-func readLines(path string) []string {
-	f, err := os.Open(path)
-	if err != nil {
-		log.Println("Invalid file", path)
-	}
-
-	defer f.Close()
-
-	results := make([]string, 0)
-	scanner := bufio.NewScanner(f)
-	for scanner.Scan() {
-		results = append(results, scanner.Text())
-	}
-
-	return results
 }
 
 func parseModel(lines []string, version int) []entity.Zhidaojia {

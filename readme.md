@@ -10,13 +10,14 @@
 1. register OAuth Apps in https://github.com/settings/developers
     the Authorization callback URL should be： http://localhost/user/oauth2/github/redirect
     keep the ClientID and ClientSecret
-    
+
 2. Add parameters in aws parameter store: https://ap-southeast-1.console.aws.amazon.com/systems-manager/parameters/?region=ap-southeast-1&tab=Table , use KMS customer managed keys if necessary.
 
 3. create Tables in aws DynamoDB:
     dlf.Memos, dlf.Users
 
 4. start your docker-desktop service, enable kubernetes feature.
+
 5. setup ingress-nginx controller by following: https://kubernetes.github.io/ingress-nginx/deploy/#docker-desktop
     helm upgrade --install ingress-nginx ingress-nginx \
     --repo https://kubernetes.github.io/ingress-nginx \

@@ -6,7 +6,12 @@
 3. date api service
 4. finance api service
 
-# prepare 
+## deployments
+deployment/kubernetes/*.yaml: no autoscaler configurations in the deployments templements;
+deployment/kubernetes/dlw-helm： no autoscaler configurations in the deployments templements;
+deployment/kubernetes/dlw-helm-minikube： include autoscaler configurations which only supported by kubectl 1.23.* or above, which isn't supported by docker-desktop yet.
+
+## prepare 
 1. register OAuth Apps in https://github.com/settings/developers
     the Authorization callback URL should be： http://localhost/user/oauth2/github/redirect
     keep the ClientID and ClientSecret
@@ -16,12 +21,20 @@
 3. create Tables in aws DynamoDB:
     dlf.Memos, dlf.Users
 
-4. start your docker-desktop service, enable kubernetes feature.
-
-5. setup ingress-nginx controller by following: https://kubernetes.github.io/ingress-nginx/deploy/#docker-desktop
+4. for doker desktop:
+    a. start your docker-desktop service, enable kubernetes feature.
+    b.  setup ingress-nginx controller by following: https://kubernetes.github.io/ingress-nginx/deploy/#docker-desktop
     helm upgrade --install ingress-nginx ingress-nginx \
     --repo https://kubernetes.github.io/ingress-nginx \
     --namespace ingress-nginx --create-namespace
+
+5. for minikube:
+    a. start minikube: minikube start
+    b. minikube addons enable ingress
+    c. eval $(minikube -p minikube docker-env) ## force to use minikube docker deamon in current shell
+    d. docker build -t xxx-api .  # build image use minikube docker deamon so it visible to minikube
+    e. you can use  ./dlw-helm-minikube when deploy by helm install command 
+    f. ssh to minikube container to test the api after installed.
 
 ## helm test
 1. download and unzip helm, add folder to env PATH, following: https://helm.sh/   https://github.com/helm/helm/releases
@@ -39,7 +52,7 @@
 5. after all resources installed, you can access test api from local browser: http://localhost/date/status
 6. update by running:
 	```bash
-	helm upgrade dlw ./dlw-helm/
+	helm upgrade dlw ./dlw-helm/ --namespace dlw-dev
 	```
 7. remove all by running:
 	```bash

@@ -1,7 +1,13 @@
-# memo api
+# finance api
 
 ## functionalities 
 
+a. 深圳住房指导价查询
+
+    1. 上传深圳二手房指导价数据；
+    2. 查询, 过滤小区指导价。
+
+## usage
 1. upload file
 
     example:

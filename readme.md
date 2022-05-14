@@ -8,8 +8,8 @@
 
 ## deployments
 deployment/kubernetes/*.yaml: no autoscaler configurations in the deployments templements;
-deployment/kubernetes/dlw-helm: no autoscaler configurations in the deployments templements;
-deployment/kubernetes/dlw-helm-autoscaling: include autoscaler configurations which only supported by kubectl 1.23.* or above, require latest docker desktop or minikube.
+deployment/kubernetes/dlw-helm: no autoscaler configurations in the deployments templements; only support up to kubectl 1.22.*
+deployment/kubernetes/dlw-helm-autoscaling: include autoscaler configurations which only supported by kubectl 1.23.* or above, requires latest docker desktop or minikube.
 
 ## prepare 
 1. register OAuth Apps in https://github.com/settings/developers
@@ -22,11 +22,9 @@ deployment/kubernetes/dlw-helm-autoscaling: include autoscaler configurations wh
     dlf.Memos, dlf.Users
 
 4. for doker desktop:
-    a. start your docker-desktop service, enable kubernetes feature.
-    b.  setup ingress-nginx controller by following: https://kubernetes.github.io/ingress-nginx/deploy/#docker-desktop
-    helm upgrade --install ingress-nginx ingress-nginx \
-    --repo https://kubernetes.github.io/ingress-nginx \
-    --namespace ingress-nginx --create-namespace
+    a. start your docker-desktop service, enable kubernetes feature (with wsl 2 enbled together).
+    b. setup ingress-nginx controller by following: https://kubernetes.github.io/ingress-nginx/deploy/#docker-desktop
+        or: kubectl apply -f ingress_deployment.yml
 
 5. for minikube:
     a. start minikube: minikube start
@@ -47,12 +45,12 @@ deployment/kubernetes/dlw-helm-autoscaling: include autoscaler configurations wh
 3. cd to deployment\kubernetes\dlw-helm, update the awsKeyId and awsSecretKey to correct value in "values.yaml"
 4. cd to deployment\kubernetes folder, run:
 	```bash
-	helm install dlw ./dlw-helm/ --namespace dlw-dev --create-namespace
+	helm install dlw ./dlw-helm-autoscaling/ --namespace dlw-dev --create-namespace
 	```
 5. after all resources installed, you can access test api from local browser: http://localhost/date/status
 6. update by running:
 	```bash
-	helm upgrade dlw ./dlw-helm/ --namespace dlw-dev
+	helm upgrade dlw ./dlw-helm-autoscaling/ --namespace dlw-dev
 	```
 7. remove all by running:
 	```bash

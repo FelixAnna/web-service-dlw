@@ -9,8 +9,8 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: dlw-deployment-dev-date
-  minReplicas: 2
-  maxReplicas: 5
+  minReplicas: 1
+  maxReplicas: 3
   metrics:
   - type: Resource
     resource:
@@ -48,8 +48,8 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: dlw-deployment-dev-memo
-  minReplicas: 2
-  maxReplicas: 5
+  minReplicas: 1
+  maxReplicas: 3
   metrics:
   - type: Resource
     resource:
@@ -86,8 +86,8 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: dlw-deployment-dev-user
-  minReplicas: 2
-  maxReplicas: 5
+  minReplicas: 1
+  maxReplicas: 3
   metrics:
   - type: Resource
     resource:
@@ -125,8 +125,8 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: dlw-deployment-dev-finance
-  minReplicas: 2
-  maxReplicas: 5
+  minReplicas: 1
+  maxReplicas: 3
   metrics:
   - type: Resource
     resource:

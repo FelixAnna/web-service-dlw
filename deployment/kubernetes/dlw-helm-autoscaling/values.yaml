@@ -3,9 +3,9 @@
 # Declare variables to be passed into your templates.
 
 replica:
-  min: 3
+  min: 1
   #desired: 2
-  max: 5
+  max: 3
 
 # namespace: dlw-dev
 serviceAccount: 
@@ -24,11 +24,11 @@ config:
 
 quota:
   requests:
-    cpu: "4"
-    memory: 6Gi
+    cpu: "2"
+    memory: 2Gi
   limits:
-    cpu: "6"
-    memory: 8Gi
+    cpu: "4"
+    memory: 4Gi
 
 applications:
   - name: user

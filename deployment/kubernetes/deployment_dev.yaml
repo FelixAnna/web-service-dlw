@@ -16,10 +16,10 @@ metadata:
   namespace: dlw-dev
 spec:
   hard:
-    requests.cpu: "4"
-    requests.memory: 6Gi
-    limits.cpu: "6"
-    limits.memory: 8Gi
+    requests.cpu: "2"
+    requests.memory: 4Gi
+    limits.cpu: "4"
+    limits.memory: 6Gi
 
 ---
 # 3.1 create roles for access pods

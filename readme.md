@@ -7,31 +7,51 @@
 4. finance api service
 
 ## deployments
-deployment/kubernetes/*.yaml: no autoscaler configurations in the deployments templements;
-deployment/kubernetes/dlw-helm: no autoscaler configurations in the deployments templements; only support up to kubectl 1.22.*
-deployment/kubernetes/dlw-helm-autoscaling: include autoscaler configurations which only supported by kubectl 1.23.* or above, requires latest docker desktop or minikube.
+### kubectl
+`deployment/kubernetes/*.yaml`: pure kubernetes deployments templements;
+
+### helm
+`deployment/kubernetes/dlw-helm-autoscaling`: include autoscaling configurations which only supported by kubectl 1.23.* or above, requires latest docker desktop or minikube.
+
+### helm (no horizontal autoscaling configuration)
+`deployment/kubernetes/dlw-helm`: no autoscaling configurations in the deployments templements
 
 ## prepare 
 1. register OAuth Apps in https://github.com/settings/developers
-    the Authorization callback URL should be： http://localhost/user/oauth2/github/redirect
-    keep the ClientID and ClientSecret
+   
+   the Authorization callback URL should be： http://localhost/user/oauth2/github/redirect
+   
+   keep the ClientID and ClientSecret
 
-2. Add parameters in aws parameter store: https://ap-southeast-1.console.aws.amazon.com/systems-manager/parameters/?region=ap-southeast-1&tab=Table , use KMS customer managed keys if necessary.
+2. Add parameters in aws parameter store: 
+   
+   https://ap-southeast-1.console.aws.amazon.com/systems-manager/parameters/?region=ap-southeast-1&tab=Table , 
+   
+   use KMS customer managed keys if necessary.
 
 3. create Tables in aws DynamoDB:
-    dlf.Memos, dlf.Users
+
+   dlf.Memos, dlf.Users
 
 4. for doker desktop:
+    
     a. start your docker-desktop service, enable kubernetes feature (with wsl 2 enbled together).
+    
     b. setup ingress-nginx controller by following: https://kubernetes.github.io/ingress-nginx/deploy/#docker-desktop
         or: kubectl apply -f ingress_deployment.yml
 
 5. for minikube:
+    
     a. start minikube: minikube start
+    
     b. minikube addons enable ingress
+    
     c. eval $(minikube -p minikube docker-env) ## force to use minikube docker deamon in current shell
+    
     d. docker build -t xxx-api .  # build image use minikube docker deamon so it visible to minikube
+    
     e. you can use  ./dlw-helm-autoscaling when deploy by helm install command 
+    
     f. ssh to minikube container to test the api after installed.
 
 ## helm test

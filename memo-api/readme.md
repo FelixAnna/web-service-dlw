@@ -11,7 +11,8 @@
 ### Build
 
 docker build -t memo-api . 
-
+or
+docker build -t memo-api:1.0.0 . 
 ### Check Image
 
 docker image ls

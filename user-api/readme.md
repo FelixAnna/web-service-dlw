@@ -18,7 +18,8 @@
 ### Build
 
 docker build -t user-api . 
-
+or
+docker build -t user-api:1.0.0 . 
 ### Check Image
 
 docker image ls

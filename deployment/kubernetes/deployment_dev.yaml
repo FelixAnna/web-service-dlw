@@ -16,10 +16,10 @@ metadata:
   namespace: dlw-dev
 spec:
   hard:
-    requests.cpu: "1"
-    requests.memory: 2Gi
-    limits.cpu: "2"
-    limits.memory: 3Gi
+    requests.cpu: "4"
+    requests.memory: 6Gi
+    limits.cpu: "6"
+    limits.memory: 8Gi
 
 ---
 # 3.1 create roles for access pods
@@ -62,7 +62,7 @@ roleRef:
   kind: Role #this must be Role or ClusterRole
   name: dlw-service-role # this must match the name of the Role or ClusterRole you wish to bind to
   apiGroup: rbac.authorization.k8s.io
-  
+
 ---
 # 4.1 create deployment with pod spec for date-api service
 apiVersion: apps/v1
@@ -71,7 +71,7 @@ metadata:
   name: dlw-deployment-dev-date
   namespace: dlw-dev
 spec:
-  replicas: 1
+  #replicas: 1
   selector:
     matchLabels:
       app: date-api
@@ -120,6 +120,7 @@ spec:
               path: vault-token
               expirationSeconds: 7200
               audience: vault            
+
 ---
 # 4.2 create deployment with pod spec for memo-api service
 apiVersion: apps/v1
@@ -128,7 +129,7 @@ metadata:
   name: dlw-deployment-dev-memo
   namespace: dlw-dev
 spec:
-  replicas: 1
+  #replicas: 1
   selector:
     matchLabels:
       app: memo-api
@@ -176,7 +177,8 @@ spec:
           - serviceAccountToken:
               path: vault-token
               expirationSeconds: 7200
-              audience: vault            
+              audience: vault         
+
 ---
 # 4.3 create deployment with pod spec for user-api service
 apiVersion: apps/v1
@@ -185,7 +187,7 @@ metadata:
   name: dlw-deployment-dev-user
   namespace: dlw-dev
 spec:
-  replicas: 1
+  #replicas: 1
   selector:
     matchLabels:
       app: user-api
@@ -234,6 +236,7 @@ spec:
               path: vault-token
               expirationSeconds: 7200
               audience: vault    
+
 ---
 # 4.4 create deployment with pod spec for finance-api service
 apiVersion: apps/v1
@@ -242,7 +245,7 @@ metadata:
   name: dlw-deployment-dev-finance
   namespace: dlw-dev
 spec:
-  replicas: 1
+  #replicas: 1
   selector:
     matchLabels:
       app: finance-api
@@ -291,6 +294,7 @@ spec:
               path: vault-token
               expirationSeconds: 7200
               audience: vault                 
+
 ---
 # 5.1 create service for with NodePort exposed
 apiVersion: v1

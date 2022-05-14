@@ -9,7 +9,8 @@
 ### Build
 
 docker build -t date-api . 
-
+or
+docker build -t date-api:1.0.0 . 
 ### Check Image
 
 docker image ls

@@ -38,7 +38,8 @@ a. 深圳住房指导价查询
 ### Build
 
 docker build -t finance-api . 
-
+or
+docker build -t finance-api:1.0.0 . 
 ### Check Image
 
 docker image ls

@@ -1,0 +1,154 @@
+---
+# 6.1 autoscaling settings for date
+apiVersion: autoscaling/v2  # kubectl v1.23 +
+kind: HorizontalPodAutoscaler
+metadata:
+  name: date-scaler
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: dlw-deployment-dev-date
+  minReplicas: 2
+  maxReplicas: 5
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50
+  - type: Pods
+    pods:
+      metric:
+        name: packets-per-second
+      target:
+        type: AverageValue
+        averageValue: 10
+  - type: Object
+    object:
+      metric:
+        name: requests-per-second
+      describedObject:
+        apiVersion: networking.k8s.io/v1
+        kind: Ingress
+        name: dlw-ingress
+      target:
+        type: Value
+        value: 10k
+
+---
+# 6.2 autoscaling settings for memo
+apiVersion: autoscaling/v2  # kubectl v1.23 +
+kind: HorizontalPodAutoscaler
+metadata:
+  name: memo-scaler
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: dlw-deployment-dev-memo
+  minReplicas: 2
+  maxReplicas: 5
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50
+  - type: Pods
+    pods:
+      metric:
+        name: packets-per-second
+      target:
+        type: AverageValue
+        averageValue: 10
+  - type: Object
+    object:
+      metric:
+        name: requests-per-second
+      describedObject:
+        apiVersion: networking.k8s.io/v1
+        kind: Ingress
+        name: dlw-ingress
+      target:
+        type: Value
+        value: 10k   
+---
+# 6.3 autoscaling settings for user
+apiVersion: autoscaling/v2  # kubectl v1.23 +
+kind: HorizontalPodAutoscaler
+metadata:
+  name: user-scaler
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: dlw-deployment-dev-user
+  minReplicas: 2
+  maxReplicas: 5
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50
+  - type: Pods
+    pods:
+      metric:
+        name: packets-per-second
+      target:
+        type: AverageValue
+        averageValue: 10
+  - type: Object
+    object:
+      metric:
+        name: requests-per-second
+      describedObject:
+        apiVersion: networking.k8s.io/v1
+        kind: Ingress
+        name: dlw-ingress
+      target:
+        type: Value
+        value: 10k
+
+---
+# 6.4 autoscaling settings for finance
+apiVersion: autoscaling/v2  # kubectl v1.23 +
+kind: HorizontalPodAutoscaler
+metadata:
+  name: finance-scaler
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: dlw-deployment-dev-finance
+  minReplicas: 2
+  maxReplicas: 5
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50
+  - type: Pods
+    pods:
+      metric:
+        name: packets-per-second
+      target:
+        type: AverageValue
+        averageValue: 10
+  - type: Object
+    object:
+      metric:
+        name: requests-per-second
+      describedObject:
+        apiVersion: networking.k8s.io/v1
+        kind: Ingress
+        name: dlw-ingress
+      target:
+        type: Value
+        value: 10k

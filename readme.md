@@ -8,8 +8,8 @@
 
 ## deployments
 deployment/kubernetes/*.yaml: no autoscaler configurations in the deployments templements;
-deployment/kubernetes/dlw-helm： no autoscaler configurations in the deployments templements;
-deployment/kubernetes/dlw-helm-minikube： include autoscaler configurations which only supported by kubectl 1.23.* or above, which isn't supported by docker-desktop yet.
+deployment/kubernetes/dlw-helm: no autoscaler configurations in the deployments templements;
+deployment/kubernetes/dlw-helm-autoscaling: include autoscaler configurations which only supported by kubectl 1.23.* or above, require latest docker desktop or minikube.
 
 ## prepare 
 1. register OAuth Apps in https://github.com/settings/developers
@@ -33,7 +33,7 @@ deployment/kubernetes/dlw-helm-minikube： include autoscaler configurations whi
     b. minikube addons enable ingress
     c. eval $(minikube -p minikube docker-env) ## force to use minikube docker deamon in current shell
     d. docker build -t xxx-api .  # build image use minikube docker deamon so it visible to minikube
-    e. you can use  ./dlw-helm-minikube when deploy by helm install command 
+    e. you can use  ./dlw-helm-autoscaling when deploy by helm install command 
     f. ssh to minikube container to test the api after installed.
 
 ## helm test
@@ -64,9 +64,10 @@ deployment/kubernetes/dlw-helm-minikube： include autoscaler configurations whi
 2. make sure you have build docker images for the 4 api services, and tag them as xxx-api:1.0.0
 3. start deployment from deployment folder:
     ```bash
-	kubectl apply -f namespace_config_secret_dev.yaml
-    kubectl apply -f deployment_dev.yaml
-    kubectl apply -f ingress_dev.yaml
+	kubectl apply -f namespace_config_secret_dev.yaml -n dlw-dev
+    kubectl apply -f deployment_dev.yaml -n dlw-dev
+    kubectl apply -f ingress_dev.yaml -n dlw-dev
+    kubectl apply -f auto_scaler.yaml -n dlw-dev
     ```
 
 4. wait for the ingress resource ready
@@ -79,9 +80,10 @@ deployment/kubernetes/dlw-helm-minikube： include autoscaler configurations whi
 
 6. clean resource when you finished the local test:
      ```bash
-    kubectl delete -f ingress_dev.yaml
-    kubectl delete -f deployment_dev.yaml
-	kubectl delete -f namespace_config_secret_dev.yaml
+    kubectl delete -f auto_scaler.yaml -n dlw-dev
+    kubectl delete -f ingress_dev.yaml -n dlw-dev
+    kubectl delete -f deployment_dev.yaml -n dlw-dev
+	kubectl delete -f namespace_config_secret_dev.yaml -n dlw-dev
     ```
 
 ## local test

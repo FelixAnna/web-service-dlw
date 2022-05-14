@@ -2,7 +2,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ingress-resource-dlw
+  name: dlw-ingress
   namespace: dlw-dev
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /$1
@@ -39,4 +39,3 @@ spec:
             name: dlw-service-finance
             port:
               number: 8484
-           

@@ -62,7 +62,7 @@
 	helm repo add bitnami https://charts.bitnami.com/bitnami
 	```
 
-3. cd to deployment\kubernetes\dlw-helm, update the awsKeyId and awsSecretKey to correct value in "values.yaml"
+3. cd to deployment\kubernetes\dlw-helm-autoscaling, update the awsKeyId and awsSecretKey to correct value in "values.yaml"
 4. cd to deployment\kubernetes folder, run:
 	```bash
 	helm install dlw ./dlw-helm-autoscaling/ --namespace dlw-dev --create-namespace
@@ -79,10 +79,10 @@
 
 ## kubernete test
 1. cd to deployment\kubernetes folder, update the AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY to correct value in "namespace_config_secret_dev.yaml"
-2. make sure you have build docker images for the 4 api services, and tag them as xxx-api:1.0.0
+2. build docker images for the 4 api services, and tag them as xxx-api:1.0.0
 3. start deployment from deployment folder:
     ```bash
-	kubectl apply -f namespace_config_secret_dev.yaml -n dlw-dev
+    kubectl apply -f namespace_config_secret_dev.yaml -n dlw-dev
     kubectl apply -f deployment_dev.yaml -n dlw-dev
     kubectl apply -f ingress_dev.yaml -n dlw-dev
     kubectl apply -f auto_scaler.yaml -n dlw-dev
@@ -101,7 +101,7 @@
     kubectl delete -f auto_scaler.yaml -n dlw-dev
     kubectl delete -f ingress_dev.yaml -n dlw-dev
     kubectl delete -f deployment_dev.yaml -n dlw-dev
-	kubectl delete -f namespace_config_secret_dev.yaml -n dlw-dev
+    kubectl delete -f namespace_config_secret_dev.yaml -n dlw-dev
     ```
 
 ## local test

@@ -70,6 +70,7 @@ func defineRoutes(router *gin.Engine) {
 		userGroupRouter.GET("/", zdj.GetAll)
 		userGroupRouter.POST("/search", zdj.Search)
 		userGroupRouter.POST("/upload", zdj.Upload)
+		userGroupRouter.GET("/slow", zdj.MemoryCosty)
 	}
 }
 

@@ -1,0 +1,43 @@
+---
+# create deployment with pod spec for prometheus service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dlw-deployment-dev-prometheus
+spec:
+  #replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus
+  template:
+    metadata:
+      labels:
+        app: prometheus
+    spec:
+      containers:
+      - name: prometheus
+        image: prom/prometheus:latest
+        imagePullPolicy: IfNotPresent
+        args:
+          - '--storage.tsdb.retention=6h'
+          - '--storage.tsdb.path=/prometheus'
+          - '--config.file=/etc/prometheus/prometheus.yml'
+        command:
+        - /bin/prometheus
+        ports:
+        - containerPort: 9090
+        resources:
+          requests:
+            memory: 128Mi
+            cpu: "128m"
+          limits:
+            memory: 256Mi
+            cpu: "256m"
+        volumeMounts:
+          - mountPath: /etc/prometheus
+            name: config-prom
+      serviceAccountName: prom-sericeaccount
+      volumes:
+      - name: config-prom
+        configMap:
+          name: prometheus-config

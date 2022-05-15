@@ -38,6 +38,28 @@ func Search(c *gin.Context) {
 	c.JSON(http.StatusOK, results)
 }
 
+func MemoryCosty(c *gin.Context) {
+	//get result from somewhere
+	times := c.DefaultQuery("times", "1000000")
+	itimes, err := strconv.ParseInt(times, 10, 32)
+	if err != nil {
+		itimes = 100000
+	}
+
+	results := make(map[int]int, itimes)
+
+	for i := 1; i <= int(itimes); i++ {
+		if i <= 2 {
+			results[i] = i
+			continue
+		}
+
+		results[i] = results[i-1] + results[i-2]
+	}
+
+	c.JSON(http.StatusOK, results)
+}
+
 func Upload(c *gin.Context) {
 	file, _ := c.FormFile("file")
 	version := c.DefaultQuery("version", "2021")

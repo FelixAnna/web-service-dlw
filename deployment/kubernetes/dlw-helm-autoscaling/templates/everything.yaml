@@ -85,6 +85,7 @@ roleRef:
 ---
 {{- range .Values.applications }}
 # 4.1 autoscaling settings
+## need enable metric before it can be take effect (using metric server or Prometheus)
 apiVersion: autoscaling/v2  # kubectl v1.23 +
 kind: HorizontalPodAutoscaler
 metadata:
@@ -102,7 +103,7 @@ spec:
       name: cpu
       target:
         type: Utilization
-        averageUtilization: 50
+        averageUtilization: 10
   - type: Pods
     pods:
       metric:

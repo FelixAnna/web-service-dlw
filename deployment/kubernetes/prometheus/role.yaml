@@ -36,3 +36,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: prom-sericeaccount
+  namespace: dlw-dev

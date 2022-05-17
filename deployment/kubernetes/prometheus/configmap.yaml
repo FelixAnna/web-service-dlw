@@ -34,6 +34,9 @@ data:
           - role: service
 
         relabel_configs:
+          - source_labels: [__meta_kubernetes_namespace]
+            action: keep
+            regex: dlw-dev
           - source_labels: [__address__]
             target_label: __param_target
           #- target_label: __address__
@@ -46,10 +49,27 @@ data:
             target_label: namespace
           - source_labels: [__meta_kubernetes_service_name]
             target_label: service
+      - job_name: "kubernetes-service-endpoints"
 
+        kubernetes_sd_configs:
+          - role: endpoints
+
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_namespace]
+            action: keep
+            regex: dlw-dev
+          - action: labelmap
+            regex: __meta_kubernetes_service_label_(.+)
+          - source_labels: [__meta_kubernetes_namespace]
+            action: replace
+            target_label: namespace
+          - source_labels: [__meta_kubernetes_service_name]
+            action: replace
+            target_label: service
+            
       - job_name: "kubernetes-ingresses"
 
-        metrics_path: /probe
+        metrics_path: /status
         params:
           module: [http_2xx]
 
@@ -57,6 +77,9 @@ data:
           - role: ingress
 
         relabel_configs:
+          - source_labels: [__meta_kubernetes_namespace]
+            action: keep
+            regex: dlw-dev
           - source_labels:
               [
                 __meta_kubernetes_ingress_scheme,
@@ -66,8 +89,8 @@ data:
             regex: (.+);(.+);(.+)
             replacement: ${1}://${2}${3}
             target_label: __param_target
-          - target_label: __address__
-            replacement: blackbox-exporter.example.com:9115
+          #- target_label: __address__
+          #  replacement: blackbox-exporter.example.com:9115
           - source_labels: [__param_target]
             target_label: instance
           - action: labelmap

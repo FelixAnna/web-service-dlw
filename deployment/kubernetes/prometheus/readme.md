@@ -15,6 +15,13 @@ helm install prometheus prometheus-community/kube-prometheus-stack --namespace p
 --patch for bugs
 kubectl patch ds prometheus-prometheus-node-exporter --type "json" -p '[{"op": "remove", "path" : "/spec/template/spec/containers/0/volumeMounts/2/mountPropagation"}]' -n prometheus
 
+-- expose service and view dashboards
+
+kubectl port-forward service/prometheus-kube-prometheus-prometheus -n prometheus 9090
+kubectl port-forward service/prometheus-grafana -n prometheus 8080:80
+
+find adminPassword: https://github.com/prometheus-community/helm-charts/blob/main/charts/kube-prometheus-stack/values.yaml, and login to grafana
+
 ### clean
 helm uninstall prometheus -n prometheus
 

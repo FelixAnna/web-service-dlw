@@ -20,7 +20,7 @@ kubectl patch ds prometheus-prometheus-node-exporter --type "json" -p '[{"op": "
 kubectl port-forward service/prometheus-kube-prometheus-prometheus -n prometheus 9090
 kubectl port-forward service/prometheus-grafana -n prometheus 8080:80
 
-find adminPassword: https://github.com/prometheus-community/helm-charts/blob/main/charts/kube-prometheus-stack/values.yaml, and login to grafana
+find adminPassword: https://github.com/prometheus-community/helm-charts/blob/main/charts/kube-prometheus-stack/values.yaml, default is "admin:prom-operator" and login to grafana
 
 ### clean
 helm uninstall prometheus -n prometheus

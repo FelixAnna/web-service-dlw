@@ -209,7 +209,25 @@
         }
     ]
     ```
+## AKS deployment
 
+1. create acr, like: dlwcr
+2. push local images to the acr:
+
+    docker tag memo-api:1.0.0 dlwcr.azurecr.io/memo-api:1.0.0
+
+    docker push  dlwcr.azurecr.io/date-api:1.0.0
+3. create aks cluster, 1 node is ok, select kubeneters >=1.23
+
+4. connect your local kubectl to aks cluster
+az aks get-credentials --resource-group dlw-cluste_group --name dlw-cluster
+
+5. install nginx-controller
+https://docs.microsoft.com/en-us/azure/aks/ingress-basic?tabs=azure-cli
+
+6. deploy by use helm and ./dlw-helm-aks
+7. user external ip of ingress to access the api services
+(or use )
 
 ## TODO
 ### create user / serviceaccount for containerd service (service registry need rabc, currently use default user) #done at 2022-01-03

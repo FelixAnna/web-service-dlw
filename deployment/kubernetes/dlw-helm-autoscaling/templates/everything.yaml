@@ -103,25 +103,32 @@ spec:
       name: cpu
       target:
         type: Utilization
-        averageUtilization: 10
-  - type: Pods
-    pods:
-      metric:
-        name: packets-per-second
+        averageUtilization: 50
+  - type: Resource
+    resource:
+      name: memory
       target:
-        type: AverageValue
-        averageValue: 10
-  - type: Object
-    object:
-      metric:
-        name: requests-per-second
-      describedObject:
-        apiVersion: networking.k8s.io/v1
-        kind: Ingress
-        name: {{ $.Release.Name }}-ingress
-      target:
-        type: Value
-        value: 10k
+        type: Utilization
+        averageUtilization: 60
+  ##below are custom metrics which need advanced advanced cluster monitoring setup
+  #- type: Pods
+  #  pods:
+  #    metric:
+  #      name: packets-per-second
+  #    target:
+  #      type: AverageValue
+  #      averageValue: 10
+  #- type: Object
+  #  object:
+  #    metric:
+  #      name: requests-per-second
+  #    describedObject:
+  #      apiVersion: networking.k8s.io/v1
+  #      kind: Ingress
+  #      name: {{ $.Release.Name }}-ingress
+  #    target:
+  #      type: Value
+  #      value: 10k
 ---
 # 4.2 create deployment with pod spec for api service
 apiVersion: apps/v1

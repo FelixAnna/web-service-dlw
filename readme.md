@@ -16,6 +16,12 @@
 ### helm (no horizontal autoscaling configuration)
 `deployment/kubernetes/dlw-helm`: no autoscaling configurations in the deployments templements
 
+### metrics
+`metrics/*.yaml`: enable metrics for server, --kubelet-insecure-tls args is used for local, --metric-resolution can be set to longer if use docker-desktop
+
+### kind
+`kind/*.yml`: set up kubernetes cluster by using kind, which can run multiple control panel and work nodes by using docker in local
+
 ## prepare 
 1. register OAuth Apps in https://github.com/settings/developers
    
@@ -38,7 +44,10 @@
     a. start your docker-desktop service, enable kubernetes feature (with wsl 2 enbled together).
     
     b. setup ingress-nginx controller by following: https://kubernetes.github.io/ingress-nginx/deploy/#docker-desktop
-        or: kubectl apply -f ingress_deployment.yml
+        or by kubectl: kubectl apply -f ingress_deployment.yml
+        or by helm: helm upgrade --install ingress-nginx ingress-nginx \
+            --repo https://kubernetes.github.io/ingress-nginx \
+            --namespace ingress-nginx --create-namespace
 
 5. for minikube:
     
@@ -53,6 +62,21 @@
     e. you can use  ./dlw-helm-autoscaling when deploy by helm install command 
     
     f. ssh to minikube container to test the api after installed.
+
+6. for kind:
+
+    a. go install sigs.k8s.io/kind@v0.14.0
+
+    b. cd to kind dir
+
+    c. run: kind create cluster --config kind-dlw.yml
+
+    d. setup ingress controller by helm or kubectl
+
+    e. install metrics by apply metrics/*
+
+    f. install ./dlw-helm-autoscaling by helm
+
 
 ## helm test
 1. download and unzip helm, add folder to env PATH, following: https://helm.sh/   https://github.com/helm/helm/releases
@@ -228,8 +252,3 @@ https://docs.microsoft.com/en-us/azure/aks/ingress-basic?tabs=azure-cli
 6. deploy by use helm and ./dlw-helm-aks
 7. user external ip of ingress to access the api services
 (or use )
-
-## TODO
-### create user / serviceaccount for containerd service (service registry need rabc, currently use default user) #done at 2022-01-03
-### use helm to organize deployment templete #done at 2022-01-04
-### 

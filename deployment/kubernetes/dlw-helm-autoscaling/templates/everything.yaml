@@ -103,13 +103,13 @@ spec:
       name: cpu
       target:
         type: Utilization
-        averageUtilization: 50
+        averageUtilization: 20
   - type: Resource
     resource:
       name: memory
       target:
         type: Utilization
-        averageUtilization: 60
+        averageUtilization: 30
   ##below are custom metrics which need advanced advanced cluster monitoring setup
   #- type: Pods
   #  pods:

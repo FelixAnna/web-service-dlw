@@ -25,15 +25,15 @@ find adminPassword: https://github.com/prometheus-community/helm-charts/blob/mai
 ### clean
 helm uninstall prometheus -n prometheus
 
-
-## self deploy
+## (not recommand)
+### self deploy 
 
 kubectl apply -f configmap.yaml -n dlw-dev
 kubectl apply -f role.yaml -n dlw-dev
 kubectl apply -f prometheus.yaml -n dlw-dev
 kubectl apply -f service.yaml -n dlw-dev
 
-## self clean
+### self clean
 
 kubectl delete -f service.yaml -n dlw-dev
 kubectl delete -f prometheus.yaml -n dlw-dev

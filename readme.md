@@ -8,16 +8,16 @@
 
 ## deployments
 ### kubectl
-`deployment/kubernetes/*.yaml`: pure kubernetes deployments templements;
+`deployment/kubernetes/*.yaml`: native kubernetes deployments templements, include microservices and nginx ingress.
 
 ### helm
 `deployment/kubernetes/dlw-helm-autoscaling`: include autoscaling configurations which only supported by kubectl 1.23.* or above, requires latest docker desktop or minikube.
 
-### helm (no horizontal autoscaling configuration)
+### helm (no autoscaling configuration)
 `deployment/kubernetes/dlw-helm`: no autoscaling configurations in the deployments templements
 
 ### metrics
-`metrics/*.yaml`: enable metrics for server, --kubelet-insecure-tls args is used for local, --metric-resolution can be set to longer if use docker-desktop
+`metrics/*.yaml`: enable metrics server which is necessary for horizontalautoscaler or veticalautoscaler, --kubelet-insecure-tls args is used for local, --metric-resolution can be set to longer if use docker-desktop
 
 ### kind
 `kind/*.yml`: set up kubernetes cluster by using kind, which can run multiple control panel and work nodes by using docker in local
@@ -45,7 +45,8 @@
     
     b. setup ingress-nginx controller by following: https://kubernetes.github.io/ingress-nginx/deploy/#docker-desktop
         or by kubectl: kubectl apply -f ingress_deployment.yml
-        or by helm: helm upgrade --install ingress-nginx ingress-nginx \
+        or by helm: 
+            helm upgrade --install ingress-nginx ingress-nginx \
             --repo https://kubernetes.github.io/ingress-nginx \
             --namespace ingress-nginx --create-namespace
 
@@ -65,20 +66,9 @@
 
 6. for kind:
 
-    a. go install sigs.k8s.io/kind@v0.14.0
+    reference: /kind/readme.md
 
-    b. cd to kind dir
-
-    c. run: kind create cluster --config kind-dlw.yml
-
-    d. setup ingress controller by helm or kubectl
-
-    e. install metrics by apply metrics/*
-
-    f. install ./dlw-helm-autoscaling by helm
-
-
-## helm test
+## deploy by helm
 1. download and unzip helm, add folder to env PATH, following: https://helm.sh/   https://github.com/helm/helm/releases
 
 2. add helm chart repo: https://helm.sh/docs/intro/quickstart/
@@ -89,19 +79,19 @@
 3. cd to deployment\kubernetes\dlw-helm-autoscaling, update the awsKeyId and awsSecretKey to correct value in "values.yaml"
 4. cd to deployment\kubernetes folder, run:
 	```bash
-	helm install dlw ./dlw-helm-autoscaling/ --namespace dlw-dev --create-namespace
+	helm install dlw ./dlw-helm-autoscaling/ --namespace dlw-dev --create-namespace  --values ./dlw-helm-autoscaling/values_dev.yaml
 	```
 5. after all resources installed, you can access test api from local browser: http://localhost/date/status
 6. update by running:
 	```bash
-	helm upgrade dlw ./dlw-helm-autoscaling/ --namespace dlw-dev
+	helm upgrade dlw ./dlw-helm-autoscaling/ --namespace dlw-dev --values ./dlw-helm-autoscaling/values_dev.yaml
 	```
 7. remove all by running:
 	```bash
-	helm uninstall dlw
+	helm uninstall dlw -n dlw-dev
 	```
 
-## kubernete test
+## deply by kubectl
 1. cd to deployment\kubernetes folder, update the AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY to correct value in "namespace_config_secret_dev.yaml"
 2. build docker images for the 4 api services, and tag them as xxx-api:1.0.0
 3. start deployment from deployment folder:
@@ -130,7 +120,7 @@
 
 ## local test
 1. start consul service and client:  https://learn.hashicorp.com/tutorials/consul/docker-container-agents?in=consul/docker
-     1. start server
+     a. start server
 
         ```bash
         docker run \
@@ -148,7 +138,7 @@
     docker exec badger consul members
     ```
 
-    2. register a client
+    b. register a client
 
         ```bash
         docker run \
@@ -233,8 +223,8 @@
         }
     ]
     ```
-## AKS deployment
 
+## AKS deployment
 1. create acr, like: dlwcr
 2. push local images to the acr:
 
@@ -242,13 +232,31 @@
 
     docker push  dlwcr.azurecr.io/date-api:1.0.0
 3. create aks cluster, 1 node is ok, select kubeneters >=1.23
-
 4. connect your local kubectl to aks cluster
 az aks get-credentials --resource-group dlw-cluste_group --name dlw-cluster
-
-5. install nginx-controller
+5. install nginx-controller:
 https://docs.microsoft.com/en-us/azure/aks/ingress-basic?tabs=azure-cli
 
-6. deploy by use helm and ./dlw-helm-aks
+add "--set controller.service.externalTrafficPolicy=Local" for enable access to the dynamic assigned public ip of nginx controller
+
+`NAMESPACE=ingress-basic
+
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm repo update
+
+helm install ingress-nginx ingress-nginx/ingress-nginx \
+  --create-namespace \
+  --namespace $NAMESPACE \
+  --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-health-probe-request-path"=/healthz \
+  --set controller.service.externalTrafficPolicy=Local
+  `
+6. deploy/upgrade/uninstall by：
+helm install dlw ./dlw-helm-autoscaling/ --namespace dlw-dev --create-namespace  --values ./dlw-helm-autoscaling/values_aks.yaml
+
+helm upgrade dlw ./dlw-helm-autoscaling/ --namespace dlw-dev --values ./dlw-helm-autoscaling/values_aks.yaml --set controller.service.externalTrafficPolicy=Local
+
+helm uninstall dlw -n dlw-dev
+
 7. user external ip of ingress to access the api services
 (or use )
+8. metrics server should be deployed by default by azure

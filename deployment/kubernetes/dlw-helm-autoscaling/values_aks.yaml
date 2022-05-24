@@ -27,23 +27,23 @@ quota:
     cpu: "2"
     memory: 2Gi
   limits:
-    cpu: "4"
-    memory: 4Gi
+    cpu: "3"
+    memory: 3Gi
 
 applications:
   - name: user
     port: 8181
-    image: dlwcr.azurecr.io/user-api:1.0.0
+    image: yufelix/dlw-user-api:1.0.0
     resources:
       requests:
-        memory: 256Mi
+        memory: 128Mi
         cpu: "128m"
       limits:
-        memory: 512Mi
+        memory: 256Mi
         cpu: "256m"
   - name: memo
     port: 8282
-    image: dlwcr.azurecr.io/memo-api:1.0.0
+    image: yufelix/dlw-memo-api:1.0.0
     resources:
       requests:
         memory: 128Mi
@@ -53,7 +53,7 @@ applications:
         cpu: "256m"
   - name: date
     port: 8383
-    image: dlwcr.azurecr.io/date-api:1.0.0
+    image: yufelix/dlw-date-api:1.0.0
     resources:
       requests:
         memory: 128Mi
@@ -63,7 +63,7 @@ applications:
         cpu: "256m"
   - name: finance
     port: 8484
-    image: dlwcr.azurecr.io/finance-api:1.0.0
+    image: yufelix/dlw-finance-api:1.0.0
     resources:
       requests:
         memory: 128Mi

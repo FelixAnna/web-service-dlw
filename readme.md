@@ -233,30 +233,34 @@
     docker push  dlwcr.azurecr.io/date-api:1.0.0
 3. create aks cluster, 1 node is ok, select kubeneters >=1.23
 4. connect your local kubectl to aks cluster
-az aks get-credentials --resource-group dlw-cluste_group --name dlw-cluster
-5. install nginx-controller:
-https://docs.microsoft.com/en-us/azure/aks/ingress-basic?tabs=azure-cli
 
-add "--set controller.service.externalTrafficPolicy=Local" for enable access to the dynamic assigned public ip of nginx controller
+	`az aks get-credentials --resource-group dlw-cluste_group --name dlw-cluster`
 
-`NAMESPACE=ingress-basic
+5. install nginx-controller: https://docs.microsoft.com/en-us/azure/aks/ingress-basic?tabs=azure-cli
 
-helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-helm repo update
+	add "--set controller.service.externalTrafficPolicy=Local" for enable access to the dynamic assigned public ip of nginx controller
 
-helm install ingress-nginx ingress-nginx/ingress-nginx \
-  --create-namespace \
-  --namespace $NAMESPACE \
-  --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-health-probe-request-path"=/healthz \
-  --set controller.service.externalTrafficPolicy=Local
-  `
+	```
+	NAMESPACE=ingress-basic
+
+	helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+	helm repo update
+
+	helm install ingress-nginx ingress-nginx/ingress-nginx \
+	  --create-namespace \
+	  --namespace $NAMESPACE \
+	  --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-health-probe-request-path"=/healthz \
+	  --set controller.service.externalTrafficPolicy=Local
+	  ```
 6. deploy/upgrade/uninstall by：
-helm install dlw ./dlw-helm-autoscaling/ --namespace dlw-dev --create-namespace  --values ./dlw-helm-autoscaling/values_aks.yaml
+	
+	```
+	helm install dlw ./dlw-helm-autoscaling/ --namespace dlw-dev --create-namespace  --values ./dlw-helm-autoscaling/values_aks.yaml
 
-helm upgrade dlw ./dlw-helm-autoscaling/ --namespace dlw-dev --values ./dlw-helm-autoscaling/values_aks.yaml --set controller.service.externalTrafficPolicy=Local
+	helm upgrade dlw ./dlw-helm-autoscaling/ --namespace dlw-dev --values ./dlw-helm-autoscaling/values_aks.yaml --set controller.service.externalTrafficPolicy=Local
 
-helm uninstall dlw -n dlw-dev
+	helm uninstall dlw -n dlw-dev
+	```
 
 7. user external ip of ingress to access the api services
-(or use )
-8. metrics server should be deployed by default by azure
+8. metrics server deployed by azure by default

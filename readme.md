@@ -1,51 +1,26 @@
 # dlw - daily life web microservices
 
+# Table of Contents
 
-## Microservices
+## 1. [Prepare](#prepare)
 
-1. user api service: `./user-api`
-2. memo api service: `./memo-api`
-3. date api service: `./date-api`
-4. finance api service: `./finance-api`
+## 2. [Switch Context](#swith-kubectl-context)
 
-### kubectl deployment templetes
-`deployment/kubernetes/*.yaml`: native kubernetes deployments templements, include microservices and nginx ingress.
+## 3. [Components](#components)
+### 3.1 [Microservices](#microservices)
+### 3.2 [Ingress controller](#ingress-controller)
+### 3.3 [Metric Server](#metric-server)
 
-### helm deployment templetes (autoscaling)
+## 4. [Deployment](#deployments)
+### 4.1 [Helm](#helm-deployments)
+### 4.2 [Kubectl](#kubectl-deployments)
+### 4.3 [Docker](#docker-deployments-with-consul-and-sd-solution)
 
-`deployment/kubernetes/dlw-helm-autoscaling`: include autoscaling configurations which only supported by kubectl 1.23.* or above, requires latest docker desktop or minikube.
-
-### helm deployment templetes(no autoscaling)
-`deployment/kubernetes/dlw-helm`: no autoscaling configurations in the deployments templements
-
-
-## Ingress controller
-following: [install nginx](https://kubernetes.github.io/ingress-nginx/deploy/#docker-desktop)
-
-### by kubectl: 
-    
-`kubectl apply -f ingress_deployment.yml`
-
-### by helm: 
-
-`helm upgrade --install ingress-nginx ingress-nginx \
---repo https://kubernetes.github.io/ingress-nginx \
---namespace ingress-nginx --create-namespace`
-
-### minikube:
-
-`minikube addons enable ingress`
-
-
-## Metric Server
-`deployment/kubernetes/metrics/*.yaml`: enable metrics server which is necessary for horizontalautoscaler or veticalautoscaler if metric server not deployed by default, --kubelet-insecure-tls args is used for local, --metric-resolution can be set to longer if use docker-desktop
-
-cloud based kubernetes should already include metric server by default.
-
-## Kind
-`deployment/kubernetes/kind/*.yml`: set up kubernetes cluster by using kind, which can run multiple control panel and work nodes by using docker containers in local.
-
-see details in: [kind/readme.md](deployment/kubernetes/kind/readme.md)
+## 5. [Target](#target)
+### 5.1 [Kind](#kind)
+### 5.2 [AKS](#aks)
+### 5.3 [MiniKube](#minikube)
+### 5.4 [Docker-Desktop](#docker-desktop)
 
 ## Prepare 
 1. Register OAuth Apps in https://github.com/settings/developers
@@ -64,34 +39,69 @@ see details in: [kind/readme.md](deployment/kubernetes/kind/readme.md)
 
    dlf.Memos, dlf.Users
 
-4. for doker desktop:
+## Swith kubectl context
+
+after you connected to aks, you context is attached to aks by default, if you want to check your local kubernetes status, you need switch context:
+
+```bash
+kubectl config view
+kubectl config use-context kind-dlw-cluster
+```
+
+## Components
+### Microservices
+
+1. user api service: [user api service](/user-api/readme.md)
+2. memo api service: [memo api service](/memo-api/readme.md)
+3. date api service: [date api service](/date-api/readme.md)
+4. finance api service: [finance api service](/finance-api/readme.md)
+
+#### kubectl deployment templetes
+`deployment/kubernetes/*.yaml`: native kubernetes deployments templements, include microservices and nginx ingress.
+
+#### helm deployment templetes (autoscaling)
+
+`deployment/kubernetes/dlw-helm-autoscaling`: include autoscaling configurations which only supported by kubectl 1.23.* or above, requires latest docker desktop or minikube.
+
+#### helm deployment templetes(no autoscaling)
+`deployment/kubernetes/dlw-helm`: no autoscaling configurations in the deployments templements
+
+
+### Ingress Controller
+following: [install nginx](https://kubernetes.github.io/ingress-nginx/deploy/#docker-desktop) to install ingress for certain env.
+
+#### by kubectl: 
     
-    a. start your docker-desktop service, enable kubernetes feature (with wsl 2 enbled together).
+```bash
+kubectl apply -f ingress_deployment.yml
+```
 
-5. for minikube:
-    
-    a. start minikube: minikube start
-    
-    b. eval $(minikube -p minikube docker-env)  ***force to use minikube docker deamon in current shell***
-    
-    c. docker build -t xxx-api .  ***build image use minikube docker deamon so it visible to minikube***
+#### by helm: 
 
-    d. after deployed, ssh to minikube container to test the api after installed.
+```bash
+helm upgrade --install ingress-nginx ingress-nginx \
+--repo https://kubernetes.github.io/ingress-nginx \
+--namespace ingress-nginx --create-namespace
+```
 
-6. for kind:
 
-    reference: /kind/readme.md
+### Metric Server
+`deployment/kubernetes/metrics/*.yaml`: enable metrics server which is necessary for horizontalautoscaler or veticalautoscaler if metric server not deployed by default, --kubelet-insecure-tls args is used for local, --metric-resolution can be set to longer if use docker-desktop
 
-## Helm deployments
+cloud based kubernetes should already include metric server by default.
 
-### setup
+
+## Deployments
+### Helm Deployments
+
+#### setup
 1. download and unzip helm, add folder to env PATH, following: https://helm.sh/   https://github.com/helm/helm/releases
 
 2. add helm chart repo: https://helm.sh/docs/intro/quickstart/
 	```bash
 	helm repo add bitnami https://charts.bitnami.com/bitnami
 	```
-### deploy
+#### deploy
 1. update the *awsKeyId* and *awsSecretKey* to correct value in: `deployment\kubernetes\dlw-helm-autoscalingvalues_*.yaml`
 2. cd to `deployment\kubernetes` folder, run:
 	```bash
@@ -107,7 +117,7 @@ see details in: [kind/readme.md](deployment/kubernetes/kind/readme.md)
 	helm uninstall dlw -n dlw-dev
 	```
 
-## deply by kubectl
+### Kubectl Deployments
 1. cd to `deployment\kubernetes` folder, update the *AWS_ACCESS_KEY_ID* and *AWS_SECRET_ACCESS_KEY* to correct value in "namespace_config_secret_dev.yaml"
 2. build docker images for the 4 api services, and tag them as xxx-api:1.0.0
 3. start deployment from deployment folder:
@@ -134,7 +144,7 @@ see details in: [kind/readme.md](deployment/kubernetes/kind/readme.md)
     kubectl delete -f namespace_config_secret_dev.yaml -n dlw-dev
     ```
 
-## local test (use consul and sd solution)
+### Docker Deployments (with consul and sd solution)
 1. start consul service and client: [start consul](https://learn.hashicorp.com/tutorials/consul/docker-container-agents?in=consul/docker)
 
      a. start server
@@ -248,7 +258,14 @@ see details in: [kind/readme.md](deployment/kubernetes/kind/readme.md)
     ]
     ```
 
-## AKS deployment
+
+## Target
+### Kind
+`deployment/kubernetes/kind/*.yml`: set up kubernetes cluster by using kind, which can run multiple control panel and work nodes by using docker containers in local.
+
+see details in: [kind/readme.md](deployment/kubernetes/kind/readme.md)
+
+### AKS
 1. create acr, like: dlwcr
 2. push local images to the acr like below:
 
@@ -261,6 +278,9 @@ see details in: [kind/readme.md](deployment/kubernetes/kind/readme.md)
 4. connect your local kubectl to aks cluster
 
 	`az aks get-credentials --resource-group dlw-cluste_group --name dlw-cluster`
+
+    az ml computetarget detach -n dlw-cluster -g dlw-cluste_group -w myworkspace
+    az aks get-credentials --resource-group dlw-cluste_group --name dlw-cluster
 
 5. install nginx-controller: [install nginx for aks](https://docs.microsoft.com/en-us/azure/aks/ingress-basic?tabs=azure-cli)
 
@@ -289,3 +309,25 @@ see details in: [kind/readme.md](deployment/kubernetes/kind/readme.md)
 	```
 
 7. user external ip of ingress to access the api services
+
+### Minikube
+
+a. start minikube and enable ingress: 
+
+    ```bash
+    minikube start
+    minikube addons enable ingress
+    ```
+
+b. eval $(minikube -p minikube docker-env)  ***force to use minikube docker deamon in current shell***
+
+c. docker build -t xxx-api .  ***build image use minikube docker deamon so it visible to minikube***
+
+d. after deployed, ssh to minikube container to test the api after installed.
+
+### Docker desktop
+ start your docker-desktop service, enable kubernetes feature (with wsl 2 enbled together).
+
+ deploy ingress, metric server, microservices use either helm or kubectl.
+
+ known issue is the metric server need longer `--metric-resolution`, refer [metric server](#metric-server)

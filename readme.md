@@ -2,25 +2,24 @@
 
 # Table of Contents
 
-## 1. [Prepare](#prepare)
+- 1. [Prepare](#prepare)
+- 2. [Switch Context](#swith-kubectl-context)
 
-## 2. [Switch Context](#swith-kubectl-context)
+- 3. [Components](#components)
+    - 3.1 [Microservices](#microservices)
+    - 3.2 [Ingress controller](#ingress-controller)
+    - 3.3 [Metric Server](#metric-server)
 
-## 3. [Components](#components)
-### 3.1 [Microservices](#microservices)
-### 3.2 [Ingress controller](#ingress-controller)
-### 3.3 [Metric Server](#metric-server)
+- 4. [Deployment](#deployments)
+    - 4.1 [Helm](#helm-deployments)
+    - 4.2 [Kubectl](#kubectl-deployments)
+    - 4.3 [Docker](#docker-deployments-with-consul-and-sd-solution)
 
-## 4. [Deployment](#deployments)
-### 4.1 [Helm](#helm-deployments)
-### 4.2 [Kubectl](#kubectl-deployments)
-### 4.3 [Docker](#docker-deployments-with-consul-and-sd-solution)
-
-## 5. [Target](#target)
-### 5.1 [Kind](#kind)
-### 5.2 [AKS](#aks)
-### 5.3 [MiniKube](#minikube)
-### 5.4 [Docker-Desktop](#docker-desktop)
+- 5. [Target](#target)
+    - 5.1 [Kind](#kind)
+    - 5.2 [AKS](#aks)
+    - 5.3 [MiniKube](#minikube)
+    - 5.4 [Docker-Desktop](#docker-desktop)
 
 ## Prepare 
 1. Register OAuth Apps in https://github.com/settings/developers

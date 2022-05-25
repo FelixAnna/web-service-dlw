@@ -1,29 +1,54 @@
 # dlw - daily life web microservices
 
-## APIs
-1. user api service
-2. memo api service
-3. date api service
-4. finance api service
 
-## deployments
-### kubectl
+## Microservices
+
+1. user api service: `./user-api`
+2. memo api service: `./memo-api`
+3. date api service: `./date-api`
+4. finance api service: `./finance-api`
+
+### kubectl deployment templetes
 `deployment/kubernetes/*.yaml`: native kubernetes deployments templements, include microservices and nginx ingress.
 
-### helm
+### helm deployment templetes (autoscaling)
+
 `deployment/kubernetes/dlw-helm-autoscaling`: include autoscaling configurations which only supported by kubectl 1.23.* or above, requires latest docker desktop or minikube.
 
-### helm (no autoscaling configuration)
+### helm deployment templetes(no autoscaling)
 `deployment/kubernetes/dlw-helm`: no autoscaling configurations in the deployments templements
 
-### metrics
-`metrics/*.yaml`: enable metrics server which is necessary for horizontalautoscaler or veticalautoscaler, --kubelet-insecure-tls args is used for local, --metric-resolution can be set to longer if use docker-desktop
 
-### kind
-`kind/*.yml`: set up kubernetes cluster by using kind, which can run multiple control panel and work nodes by using docker in local
+## Ingress controller
+following: [install nginx](https://kubernetes.github.io/ingress-nginx/deploy/#docker-desktop)
 
-## prepare 
-1. register OAuth Apps in https://github.com/settings/developers
+### by kubectl: 
+    
+`kubectl apply -f ingress_deployment.yml`
+
+### by helm: 
+
+`helm upgrade --install ingress-nginx ingress-nginx \
+--repo https://kubernetes.github.io/ingress-nginx \
+--namespace ingress-nginx --create-namespace`
+
+### minikube:
+
+`minikube addons enable ingress`
+
+
+## Metric Server
+`deployment/kubernetes/metrics/*.yaml`: enable metrics server which is necessary for horizontalautoscaler or veticalautoscaler if metric server not deployed by default, --kubelet-insecure-tls args is used for local, --metric-resolution can be set to longer if use docker-desktop
+
+cloud based kubernetes should already include metric server by default.
+
+## Kind
+`deployment/kubernetes/kind/*.yml`: set up kubernetes cluster by using kind, which can run multiple control panel and work nodes by using docker containers in local.
+
+see details in: [kind/readme.md](deployment/kubernetes/kind/readme.md)
+
+## Prepare 
+1. Register OAuth Apps in https://github.com/settings/developers
    
    the Authorization callback URL should be： http://localhost/user/oauth2/github/redirect
    
@@ -42,57 +67,48 @@
 4. for doker desktop:
     
     a. start your docker-desktop service, enable kubernetes feature (with wsl 2 enbled together).
-    
-    b. setup ingress-nginx controller by following: https://kubernetes.github.io/ingress-nginx/deploy/#docker-desktop
-        or by kubectl: kubectl apply -f ingress_deployment.yml
-        or by helm: 
-            helm upgrade --install ingress-nginx ingress-nginx \
-            --repo https://kubernetes.github.io/ingress-nginx \
-            --namespace ingress-nginx --create-namespace
 
 5. for minikube:
     
     a. start minikube: minikube start
     
-    b. minikube addons enable ingress
+    b. eval $(minikube -p minikube docker-env)  ***force to use minikube docker deamon in current shell***
     
-    c. eval $(minikube -p minikube docker-env) ## force to use minikube docker deamon in current shell
-    
-    d. docker build -t xxx-api .  # build image use minikube docker deamon so it visible to minikube
-    
-    e. you can use  ./dlw-helm-autoscaling when deploy by helm install command 
-    
-    f. ssh to minikube container to test the api after installed.
+    c. docker build -t xxx-api .  ***build image use minikube docker deamon so it visible to minikube***
+
+    d. after deployed, ssh to minikube container to test the api after installed.
 
 6. for kind:
 
     reference: /kind/readme.md
 
-## deploy by helm
+## Helm deployments
+
+### setup
 1. download and unzip helm, add folder to env PATH, following: https://helm.sh/   https://github.com/helm/helm/releases
 
 2. add helm chart repo: https://helm.sh/docs/intro/quickstart/
 	```bash
 	helm repo add bitnami https://charts.bitnami.com/bitnami
 	```
-
-3. cd to deployment\kubernetes\dlw-helm-autoscaling, update the awsKeyId and awsSecretKey to correct value in "values.yaml"
-4. cd to deployment\kubernetes folder, run:
+### deploy
+1. update the *awsKeyId* and *awsSecretKey* to correct value in: `deployment\kubernetes\dlw-helm-autoscalingvalues_*.yaml`
+2. cd to `deployment\kubernetes` folder, run:
 	```bash
 	helm install dlw ./dlw-helm-autoscaling/ --namespace dlw-dev --create-namespace  --values ./dlw-helm-autoscaling/values_dev.yaml
 	```
-5. after all resources installed, you can access test api from local browser: http://localhost/date/status
-6. update by running:
+3. after all resources installed (include ingress controller), access test api from local browser: http://localhost/date/status
+4. update by running:
 	```bash
 	helm upgrade dlw ./dlw-helm-autoscaling/ --namespace dlw-dev --values ./dlw-helm-autoscaling/values_dev.yaml
 	```
-7. remove all by running:
+5. remove all by running:
 	```bash
 	helm uninstall dlw -n dlw-dev
 	```
 
 ## deply by kubectl
-1. cd to deployment\kubernetes folder, update the AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY to correct value in "namespace_config_secret_dev.yaml"
+1. cd to `deployment\kubernetes` folder, update the *AWS_ACCESS_KEY_ID* and *AWS_SECRET_ACCESS_KEY* to correct value in "namespace_config_secret_dev.yaml"
 2. build docker images for the 4 api services, and tag them as xxx-api:1.0.0
 3. start deployment from deployment folder:
     ```bash
@@ -102,13 +118,13 @@
     kubectl apply -f auto_scaler.yaml -n dlw-dev
     ```
 
-4. wait for the ingress resource ready
+4. waiting for the ingress resource ready
     ```bash
     kubectl config set-context --current --namespace=dlw-dev
 
     kubectl describe ingress
     ```
-5. now, you can access from local browser: http://localhost/date/status
+5. access from local browser: http://localhost/date/status
 
 6. clean resource when you finished the local test:
      ```bash
@@ -118,8 +134,9 @@
     kubectl delete -f namespace_config_secret_dev.yaml -n dlw-dev
     ```
 
-## local test
-1. start consul service and client:  https://learn.hashicorp.com/tutorials/consul/docker-container-agents?in=consul/docker
+## local test (use consul and sd solution)
+1. start consul service and client: [start consul](https://learn.hashicorp.com/tutorials/consul/docker-container-agents?in=consul/docker)
+
      a. start server
 
         ```bash
@@ -145,34 +162,41 @@
         --name=tuer \
         consul agent -node=client-1 -join=172.17.0.2
         ```
-2. store your aws credentials in place: https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html
-    1. for local recommand: Shared Credentials File
-    2. for docker container not in ecs/eks/ec2: use env passed to container (in yaml or from docker run command)
-    3. for docker container in ecs/eks/ec2: use aws role assume
-3. start user-api on port 8181
-    1. run in local system: 
+2. store your aws credentials in place: [configuring aws sdk](https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html)
+
+    i. for local recommand: Shared Credentials File
+
+    ii. for docker container not in ecs/eks/ec2: use env passed to container (in yaml or from docker run command)
+
+    iii. for docker container in ecs/eks/ec2: use aws role assume
+
+3. start user-api on port 8181:
+
+    i. run in local system: 
+        
         ```bash
         cd user-api
         profile=dev go run .
         ```
-    2. run from local docker container: 
+
+    ii. run from local docker container: 
+        
         ```bash
         docker run -d -e AWS_ACCESS_KEY_ID=xyz -e AWS_SECRET_ACCESS_KEY=abc -e AWS_REGION=ap-southeast-1 -e profile=dev  --publish 8383:8383 date-api:1.0.0
         ```
-4. start memo-api on port 8282
-5. start date-api on port 8383
-6. start finance-api on port 8484
-7. test your api works
-    1. get github redirectUrl: 
+4. start memo-api/date-api/finance-api in the same way
+5. test your api works
+
+    a. get github redirectUrl: 
     ```bash
     curl --location --request GET 'http://localhost:8181/oauth2/github/authorize/url'
     ```
-    2. copy to browser, and keep the token returned
-    3. login to user api with the github token
+    b. copy to browser, and keep the token returned
+    c. login to user api with the github token
     ```bash
     curl --location --request GET 'http://localhost:8181/oauth2/github/user?access_code=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'
     ```
-    4. add one user memo
+    d. add one user memo
     ```bash
     curl --location --request PUT 'http://localhost:8282/memos/' \
     --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxNjM4MzYzMDY1MDgxIiwiZW1haWwiOiJ5dWVjbnVAaG90bWFpbC5jb20iLCJleHAiOjE2NDAzMjk1MjB9.uOvsu9mLS95Wc9uWONGR-DZx6WPfGxChrHJ6dPaAsag' \
@@ -185,7 +209,7 @@
         "Lunar":true
     }'
     ```
-    5. find the memo just added, and see the previous and next memo date distance
+    e. find the memo just added, and see the previous and next memo date distance
     ```bash
     curl --location --request GET 'http://localhost:8282/memos/recent?start=1124&end=1227' \
     --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxNjM4MzYzMDY1MDgxIiwiZW1haWwiOiJ5dWVjbnVAaG90bWFpbC5jb20iLCJleHAiOjE2NDAzMjk1MjB9.uOvsu9mLS95Wc9uWONGR-DZx6WPfGxChrHJ6dPaAsag'
@@ -226,21 +250,23 @@
 
 ## AKS deployment
 1. create acr, like: dlwcr
-2. push local images to the acr:
+2. push local images to the acr like below:
 
+    ```bash
     docker tag memo-api:1.0.0 dlwcr.azurecr.io/memo-api:1.0.0
-
     docker push  dlwcr.azurecr.io/date-api:1.0.0
+    ```
+
 3. create aks cluster, 1 node is ok, select kubeneters >=1.23
 4. connect your local kubectl to aks cluster
 
 	`az aks get-credentials --resource-group dlw-cluste_group --name dlw-cluster`
 
-5. install nginx-controller: https://docs.microsoft.com/en-us/azure/aks/ingress-basic?tabs=azure-cli
+5. install nginx-controller: [install nginx for aks](https://docs.microsoft.com/en-us/azure/aks/ingress-basic?tabs=azure-cli)
 
-	add "--set controller.service.externalTrafficPolicy=Local" for enable access to the dynamic assigned public ip of nginx controller
+	add `--set controller.service.externalTrafficPolicy=Local` for enable access to the dynamic assigned public ip of nginx controller
 
-	```
+	```bash
 	NAMESPACE=ingress-basic
 
 	helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
@@ -254,7 +280,7 @@
 	  ```
 6. deploy/upgrade/uninstall by：
 	
-	```
+	```bash
 	helm install dlw ./dlw-helm-autoscaling/ --namespace dlw-dev --create-namespace  --values ./dlw-helm-autoscaling/values_aks.yaml
 
 	helm upgrade dlw ./dlw-helm-autoscaling/ --namespace dlw-dev --values ./dlw-helm-autoscaling/values_aks.yaml --set controller.service.externalTrafficPolicy=Local
@@ -263,4 +289,3 @@
 	```
 
 7. user external ip of ingress to access the api services
-8. metrics server deployed by azure by default

@@ -91,27 +91,25 @@ cloud based kubernetes should already include metric server by default.
 
 
 ## Deployments
-### Helm Deployments
 
-#### setup
-1. download and unzip helm, add folder to env PATH, following: https://helm.sh/   https://github.com/helm/helm/releases
+### Helm Deployments
+1. install helm, add folder to env PATH, following: https://helm.sh/   https://github.com/helm/helm/releases
 
 2. add helm chart repo: https://helm.sh/docs/intro/quickstart/
 	```bash
 	helm repo add bitnami https://charts.bitnami.com/bitnami
 	```
-#### deploy
-1. update the *awsKeyId* and *awsSecretKey* to correct value in: `deployment\kubernetes\dlw-helm-autoscalingvalues_*.yaml`
-2. cd to `deployment\kubernetes` folder, run:
+3. update the *awsKeyId* and *awsSecretKey* to correct value in:`deployment\kubernetes\dlw-helm-autoscaling\values_*.yaml`
+4. cd to `deployment\kubernetes` folder, run:
 	```bash
 	helm install dlw ./dlw-helm-autoscaling/ --namespace dlw-dev --create-namespace  --values ./dlw-helm-autoscaling/values_dev.yaml
 	```
-3. after all resources installed (include ingress controller), access test api from local browser: http://localhost/date/status
-4. update by running:
+5. after all resources installed (include ingress controller), access test api from local browser: http://localhost/date/status
+6. update by running:
 	```bash
 	helm upgrade dlw ./dlw-helm-autoscaling/ --namespace dlw-dev --values ./dlw-helm-autoscaling/values_dev.yaml
 	```
-5. remove all by running:
+7. remove all by running:
 	```bash
 	helm uninstall dlw -n dlw-dev
 	```

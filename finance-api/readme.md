@@ -11,11 +11,14 @@ a. 深圳住房指导价查询
 1. upload file
 
     example:
+    ```
     curl --location --request POST 'http://localhost:8484/zdj/upload' \
     --header 'Content-Type:  multipart/form-data' \
     --form 'file=@"/D:/my/github/keep-learning/zdj.txt"'
+    ```
 
 2. search by criteria
+    ```
     curl --location --request POST 'http://localhost:8484/zdj/search' \
     --header 'Content-Type: application/json' \
     --data-raw '{
@@ -32,6 +35,7 @@ a. 深圳住房指导价查询
         "Page": 1,
         "Size":3
     }'
+    ```
 
 ## Docker Guide
 

@@ -35,9 +35,11 @@
    
    use KMS customer managed keys if necessary.
 
-3. create Tables in aws DynamoDB:
+3. Create Tables in aws DynamoDB:
 
    dlf.Memos, dlf.Users
+   
+4. Prepare an SQL Server instance to store data for finance api, table will be automatic migrated
 
 ## Swith kubectl context
 

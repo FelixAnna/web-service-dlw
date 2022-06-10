@@ -1,7 +1,8 @@
 package entity
 
 type Zhidaojia struct {
-	Id        int
+	Id int
+
 	Distrct   string
 	Street    string
 	Community string

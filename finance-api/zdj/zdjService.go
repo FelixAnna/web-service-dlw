@@ -16,7 +16,7 @@ import (
 var repo repository.ZdjRepo
 
 func init() {
-	repo = &repository.ZdjInMemoryRepo{}
+	repo = &repository.ZdjSqlServerRepo{}
 }
 
 func GetAll(c *gin.Context) {
@@ -80,7 +80,34 @@ func Upload(c *gin.Context) {
 	models := parseModel(lines, int(iversion))
 
 	//save to somewhere
-	repo.Append(&models)
+	err = repo.Append(&models)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, "Data uploaded.")
+}
+
+func Delete(c *gin.Context) {
+	sid := c.Param("id")
+	sversion := c.DefaultQuery("version", "2021")
+	id, err := strconv.ParseInt(sid, 10, 32)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err)
+		return
+	}
+	version, err := strconv.ParseInt(sversion, 10, 32)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err)
+		return
+	}
+
+	err = repo.Delete(int(id), int(version))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err)
+	}
+	c.JSON(http.StatusOK, "Data deleted.")
 }
 
 func getTempPath() string {

@@ -17,7 +17,7 @@ func init() {
 type ZdjInMemoryRepo struct {
 }
 
-func (repo *ZdjInMemoryRepo) Append(zdj *[]entity.Zhidaojia) (bool, error) {
+func (repo *ZdjInMemoryRepo) Append(zdj *[]entity.Zhidaojia) error {
 	count := 0
 	var current entity.Zhidaojia
 	for i := 0; i < len(*zdj); i++ {
@@ -31,7 +31,7 @@ func (repo *ZdjInMemoryRepo) Append(zdj *[]entity.Zhidaojia) (bool, error) {
 	}
 
 	log.Printf("Inserted %v of %v items.", count, len(*zdj))
-	return true, nil
+	return nil
 }
 
 func (repo *ZdjInMemoryRepo) Search(criteria *entity.Criteria) ([]entity.Zhidaojia, error) {

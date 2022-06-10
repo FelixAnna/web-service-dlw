@@ -9,6 +9,7 @@
     - 3.1 [Microservices](#microservices)
     - 3.2 [Ingress controller](#ingress-controller)
     - 3.3 [Metric Server](#metric-server)
+    - 3.4 [Dashboard](#dashboard)
 
 - 4. [Deployment](#deployments)
     - 4.1 [Helm](#helm-deployments)
@@ -89,6 +90,8 @@ helm upgrade --install ingress-nginx ingress-nginx \
 
 cloud based kubernetes should already include metric server by default.
 
+### Dashboard
+`deployment/kubernetes/dashboard`: follow the instructions to enable dashboard.
 
 ## Deployments
 

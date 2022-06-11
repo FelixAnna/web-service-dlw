@@ -16,7 +16,7 @@ import (
 var repo repository.ZdjRepo
 
 func init() {
-	repo = &repository.ZdjSqlServerRepo{}
+	repo = &repository.ZdjSqlServerRepo{} //you can switch inmemory here
 }
 
 func GetAll(c *gin.Context) {

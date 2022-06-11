@@ -96,25 +96,27 @@ cloud based kubernetes should already include metric server by default.
 `deployment/kubernetes/dashboard`: follow the instructions to enable dashboard.
 
 ## Deployments
-
 ### Helm Deployments
-1. install helm, add folder to env PATH, following: https://helm.sh/   https://github.com/helm/helm/releases
+
+#### setup
+1. download and unzip helm, add folder to env PATH, following: https://helm.sh/   https://github.com/helm/helm/releases
 
 2. add helm chart repo: https://helm.sh/docs/intro/quickstart/
 	```bash
 	helm repo add bitnami https://charts.bitnami.com/bitnami
 	```
-3. update the *awsKeyId* and *awsSecretKey* to correct value in:`deployment\kubernetes\dlw-helm-autoscaling\values_*.yaml`
-4. cd to `deployment\kubernetes` folder, run:
+#### deploy
+1. update the *awsKeyId* and *awsSecretKey* to correct value in: `deployment\kubernetes\dlw-helm-autoscalingvalues_*.yaml`
+2. cd to `deployment\kubernetes` folder, run:
 	```bash
 	helm install dlw ./dlw-helm-autoscaling/ --namespace dlw-dev --create-namespace  --values ./dlw-helm-autoscaling/values_dev.yaml
 	```
-5. after all resources installed (include ingress controller), access test api from local browser: http://localhost/date/status
-6. update by running:
+3. after all resources installed (include ingress controller), access test api from local browser: http://localhost/date/status
+4. update by running:
 	```bash
 	helm upgrade dlw ./dlw-helm-autoscaling/ --namespace dlw-dev --values ./dlw-helm-autoscaling/values_dev.yaml
 	```
-7. remove all by running:
+5. remove all by running:
 	```bash
 	helm uninstall dlw -n dlw-dev
 	```
@@ -147,33 +149,34 @@ cloud based kubernetes should already include metric server by default.
     ```
 
 ### Docker Deployments (with consul and sd solution)
+
 1. start consul service and client: [start consul](https://learn.hashicorp.com/tutorials/consul/docker-container-agents?in=consul/docker)
 
-     a. start server
+    a. start server
 
-        ```bash
-        docker run \
-        -d \
-        -p 8500:8500 \
-        -p 8600:8600/udp \
-        --name=shifu \
-        consul agent -server -ui -node=server-1 -bootstrap-expect=1 -client=0.0.0.0
-        
-        ```
+```bash
+docker run \
+-d \
+-p 8500:8500 \
+-p 8600:8600/udp \
+--name=shifu \
+consul agent -server -ui -node=server-1 -bootstrap-expect=1 -client=0.0.0.0
+
+```
 
     check ip of the consul server by exec command inside badger server
 
-    ```bash
-    docker exec badger consul members
-    ```
+```bash
+docker exec badger consul members
+```
 
     b. register a client
 
-        ```bash
-        docker run \
-        --name=tuer \
-        consul agent -node=client-1 -join=172.17.0.2
-        ```
+```bash
+docker run \
+--name=tuer \
+consul agent -node=client-1 -join=172.17.0.2
+```
 2. store your aws credentials in place: [configuring aws sdk](https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html)
 
     i. for local recommand: Shared Credentials File
@@ -333,3 +336,8 @@ d. after deployed, ssh to minikube container to test the api after installed.
  deploy ingress, metric server, microservices use either helm or kubectl.
 
  known issue is the metric server need longer `--metric-resolution`, refer [metric server](#metric-server)
+
+
+## TODO list
+### research on DI
+### research helm upgrade not update replicaset + pod when image version changed

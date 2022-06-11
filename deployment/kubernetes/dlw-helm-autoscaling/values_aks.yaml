@@ -33,7 +33,7 @@ quota:
 applications:
   - name: user
     port: 8181
-    image: yufelix/dlw-user-api:1.0.0
+    image: yufelix/dlw-user-api:1.1.0
     resources:
       requests:
         memory: 128Mi
@@ -43,7 +43,7 @@ applications:
         cpu: "256m"
   - name: memo
     port: 8282
-    image: yufelix/dlw-memo-api:1.0.0
+    image: yufelix/dlw-memo-api:1.1.0
     resources:
       requests:
         memory: 128Mi
@@ -53,7 +53,7 @@ applications:
         cpu: "256m"
   - name: date
     port: 8383
-    image: yufelix/dlw-date-api:1.0.0
+    image: yufelix/dlw-date-api:1.1.0
     resources:
       requests:
         memory: 128Mi
@@ -63,7 +63,7 @@ applications:
         cpu: "256m"
   - name: finance
     port: 8484
-    image: yufelix/dlw-finance-api:1.0.1
+    image: yufelix/dlw-finance-api:1.1.0
     resources:
       requests:
         memory: 128Mi

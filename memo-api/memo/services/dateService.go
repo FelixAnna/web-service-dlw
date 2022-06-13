@@ -26,35 +26,40 @@ type Distance struct {
 	After     int64
 }
 
-var dlwClient client.Client
+type DateService struct {
+	DlwClient client.Client
+}
 
-func init() {
+//provide for wire
+func ProvideDateService() *DateService {
 	reg := mesh.GetRegistry()
 	s := selector.NewSelector(selector.Registry(reg))
-	dlwClient = httpClient.NewClient(client.Selector(s))
+	dlwClient := httpClient.NewClient(client.Selector(s))
+
+	return &DateService{DlwClient: dlwClient}
 }
 
 /*
 Get distance from date-api for given date
 Currently only support POST method
 */
-func GetDistance(start, end int) (before, after int) {
-	return getDistance(start, end, false)
+func (service *DateService) GetDistance(start, end int) (before, after int) {
+	return service.getDistance(start, end, false)
 }
 
 /*
 Get distance from date-api for given date (Lunar)
 Currently only support POST method
 */
-func GetLunarDistance(start, end int) (before, after int) {
-	return getDistance(start, end, true)
+func (service *DateService) GetLunarDistance(start, end int) (before, after int) {
+	return service.getDistance(start, end, true)
 }
 
 /*
 Get distance from date-api for given date (Lunar)
 Currently only support POST method
 */
-func getDistance(start, end int, lunar bool) (before, after int) {
+func (service *DateService) getDistance(start, end int, lunar bool) (before, after int) {
 	category := "" //default calender
 	if lunar {
 		category = "/lunar"
@@ -63,10 +68,10 @@ func getDistance(start, end int, lunar bool) (before, after int) {
 	path := fmt.Sprintf("/date/distance%v?start=%v&end=%v", category, start, end)
 
 	// create request/response
-	request := dlwClient.NewRequest(serviceName, path, "", client.WithContentType("application/json"))
+	request := service.DlwClient.NewRequest(serviceName, path, "", client.WithContentType("application/json"))
 	response := new(Distance)
 	// call service
-	err := dlwClient.Call(context.Background(), request, response)
+	err := service.DlwClient.Call(context.Background(), request, response)
 	log.Printf("err:%v response:%#v\n", err, response)
 
 	return int(response.Before), int(response.After)

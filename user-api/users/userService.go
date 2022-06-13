@@ -8,16 +8,17 @@ import (
 	"github.com/FelixAnna/web-service-dlw/user-api/users/entity"
 	"github.com/FelixAnna/web-service-dlw/user-api/users/repository"
 	"github.com/gin-gonic/gin"
+	"github.com/google/wire"
 )
 
-var repo repository.UserRepo
+var UserSet = wire.NewSet(wire.Struct(new(UserApi), "*"))
 
-func init() {
-	repo = &repository.UserRepoDynamoDB{}
+type UserApi struct {
+	Repo repository.UserRepo
 }
 
-func GetAllUsers(c *gin.Context) {
-	users, err := repo.GetAll()
+func (api *UserApi) GetAllUsers(c *gin.Context) {
+	users, err := api.Repo.GetAll()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 		return
@@ -26,9 +27,9 @@ func GetAllUsers(c *gin.Context) {
 	c.JSON(http.StatusOK, users)
 }
 
-func GetUserByEmail(c *gin.Context) {
+func (api *UserApi) GetUserByEmail(c *gin.Context) {
 	email := c.Param("email")
-	user, err := repo.GetByEmail(email)
+	user, err := api.Repo.GetByEmail(email)
 	if err != nil {
 		c.JSON(http.StatusNotFound, err.Error())
 		return
@@ -37,9 +38,9 @@ func GetUserByEmail(c *gin.Context) {
 	c.JSON(http.StatusOK, user)
 }
 
-func GetUserById(c *gin.Context) {
+func (api *UserApi) GetUserById(c *gin.Context) {
 	strId := c.Param("userId")
-	user, err := repo.GetById(strId)
+	user, err := api.Repo.GetById(strId)
 	if err != nil {
 		c.JSON(http.StatusNotFound, err.Error())
 		return
@@ -48,10 +49,10 @@ func GetUserById(c *gin.Context) {
 	c.JSON(http.StatusOK, user)
 }
 
-func UpdateUserBirthdayById(c *gin.Context) {
+func (api *UserApi) UpdateUserBirthdayById(c *gin.Context) {
 	userId := c.Param("userId")
 	birthday := c.Query("birthday")
-	err := repo.UpdateBirthday(userId, birthday)
+	err := api.Repo.UpdateBirthday(userId, birthday)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return
@@ -60,7 +61,7 @@ func UpdateUserBirthdayById(c *gin.Context) {
 	c.JSON(http.StatusOK, fmt.Sprintf("User birthday updated, userId: %v.", userId))
 }
 
-func UpdateUserAddressById(c *gin.Context) {
+func (api *UserApi) UpdateUserAddressById(c *gin.Context) {
 	userId := c.Param("userId")
 	var addresses []entity.Address
 	if err := c.BindJSON(&addresses); err != nil {
@@ -69,7 +70,7 @@ func UpdateUserAddressById(c *gin.Context) {
 		return
 	}
 
-	err := repo.UpdateAddress(userId, addresses)
+	err := api.Repo.UpdateAddress(userId, addresses)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return
@@ -78,7 +79,7 @@ func UpdateUserAddressById(c *gin.Context) {
 	c.JSON(http.StatusOK, fmt.Sprintf("User address updated, userId: %v.", userId))
 }
 
-func AddUser(c *gin.Context) {
+func (api *UserApi) AddUser(c *gin.Context) {
 	var new_user entity.User
 	if err := c.BindJSON(&new_user); err != nil {
 		log.Println(err)
@@ -86,7 +87,7 @@ func AddUser(c *gin.Context) {
 		return
 	}
 
-	id, err := repo.Add(&new_user)
+	id, err := api.Repo.Add(&new_user)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return
@@ -95,9 +96,9 @@ func AddUser(c *gin.Context) {
 	c.JSON(http.StatusOK, fmt.Sprintf("User %v created!", *id))
 }
 
-func RemoveUser(c *gin.Context) {
+func (api *UserApi) RemoveUser(c *gin.Context) {
 	userId := c.Param("userId")
-	err := repo.Delete(userId)
+	err := api.Repo.Delete(userId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return

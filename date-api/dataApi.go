@@ -10,7 +10,7 @@ import (
 
 	"github.com/FelixAnna/web-service-dlw/common/mesh"
 	"github.com/FelixAnna/web-service-dlw/common/middleware"
-	dateService "github.com/FelixAnna/web-service-dlw/date-api/date"
+	"github.com/FelixAnna/web-service-dlw/date-api/di"
 
 	httpServer "github.com/asim/go-micro/plugins/server/http/v4"
 	"go-micro.dev/v4"
@@ -62,11 +62,12 @@ func defineRoutes(router *gin.Engine) {
 		c.String(http.StatusOK, "running")
 	})
 
+	var dateApi = di.InitialDateApi()
 	userGroupRouter := router.Group("/date")
 	{
-		userGroupRouter.GET("/current/month", dateService.GetMonthDate)
-		userGroupRouter.Any("/distance", dateService.GetDateDistance)
-		userGroupRouter.Any("/distance/lunar", dateService.GetLunarDateDistance)
+		userGroupRouter.GET("/current/month", dateApi.GetMonthDate)
+		userGroupRouter.Any("/distance", dateApi.GetDateDistance)
+		userGroupRouter.Any("/distance/lunar", dateApi.GetLunarDateDistance)
 	}
 }
 

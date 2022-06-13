@@ -10,7 +10,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GetMonthDate(c *gin.Context) {
+type DateApi struct {
+	CarbonService *services.CarbonService
+}
+
+//provide for wire
+func ProvideDateApi(service *services.CarbonService) DateApi {
+	return DateApi{CarbonService: service}
+}
+
+func (api *DateApi) GetMonthDate(c *gin.Context) {
 	//ctx := context.Background()
 	//generate state and return to client can stop CSRF
 	date := c.Query("date")
@@ -19,12 +28,12 @@ func GetMonthDate(c *gin.Context) {
 		today := time.Now()
 		dateInt = today.Year()*10000 + int(today.Month())*100 + today.Day()
 	}
-	dateList := services.GetMonthDate(dateInt)
+	dateList := api.CarbonService.GetMonthDate(dateInt)
 
 	c.JSON(http.StatusOK, dateList)
 }
 
-func GetDateDistance(c *gin.Context) {
+func (api *DateApi) GetDateDistance(c *gin.Context) {
 	//ctx := context.Background()
 	//generate state and return to client can stop CSRF
 	start := c.Query("start")
@@ -35,7 +44,7 @@ func GetDateDistance(c *gin.Context) {
 		c.String(http.StatusBadRequest, "Not a number")
 	}
 
-	before, after := services.GetCarbonDistanceWithCacheAside(iStart, iEnd)
+	before, after := api.CarbonService.GetCarbonDistanceWithCacheAside(iStart, iEnd)
 
 	distance := &entity.Distance{
 		StartYMD:  iStart,
@@ -47,7 +56,7 @@ func GetDateDistance(c *gin.Context) {
 	c.JSON(http.StatusOK, distance)
 }
 
-func GetLunarDateDistance(c *gin.Context) {
+func (api *DateApi) GetLunarDateDistance(c *gin.Context) {
 	//ctx := context.Background()
 	//generate state and return to client can stop CSRF
 	start := c.Query("start")
@@ -58,7 +67,7 @@ func GetLunarDateDistance(c *gin.Context) {
 		c.String(http.StatusBadRequest, "Not a number")
 	}
 
-	before, after := services.GetLunarDistanceWithCacheAside(iStart, iEnd)
+	before, after := api.CarbonService.GetLunarDistanceWithCacheAside(iStart, iEnd)
 
 	distance := &entity.Distance{
 		StartYMD:  iStart,

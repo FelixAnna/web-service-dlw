@@ -8,25 +8,24 @@ import (
 	"strconv"
 	"time"
 
+	config "github.com/FelixAnna/web-service-dlw/common/aws"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
+	"github.com/google/wire"
 
-	config "github.com/FelixAnna/web-service-dlw/common/aws"
 	"github.com/FelixAnna/web-service-dlw/memo-api/memo/entity"
 )
 
-var (
-	tableName string
-	client    *dynamodb.DynamoDB
-)
-
-func init() {
-	tableName = "dlf.Memos"
-	client = config.GetDynamoDBClient()
-}
+var RepoSet = wire.NewSet(ProvideMemoRepoDynamoDB, wire.Bind(new(MemoRepo), new(*MemoRepoDynamoDB)))
 
 type MemoRepoDynamoDB struct {
+	TableName string
+	Client    *dynamodb.DynamoDB
+}
+
+func ProvideMemoRepoDynamoDB() *MemoRepoDynamoDB {
+	return &MemoRepoDynamoDB{Client: config.GetDynamoDBClient(), TableName: "dlf.Memos"}
 }
 
 func (m *MemoRepoDynamoDB) Add(memo *entity.Memo) (*string, error) {
@@ -40,8 +39,8 @@ func (m *MemoRepoDynamoDB) Add(memo *entity.Memo) (*string, error) {
 		return nil, err
 	}
 
-	_, err = client.PutItem(&dynamodb.PutItemInput{
-		TableName: aws.String(tableName),
+	_, err = m.Client.PutItem(&dynamodb.PutItemInput{
+		TableName: aws.String(m.TableName),
 		Item:      memoJson,
 	})
 
@@ -54,8 +53,8 @@ func (m *MemoRepoDynamoDB) Add(memo *entity.Memo) (*string, error) {
 }
 
 func (m *MemoRepoDynamoDB) GetById(id string) (*entity.Memo, error) {
-	result, err := client.GetItem(&dynamodb.GetItemInput{
-		TableName: aws.String(tableName),
+	result, err := m.Client.GetItem(&dynamodb.GetItemInput{
+		TableName: aws.String(m.TableName),
 		Key: map[string]*dynamodb.AttributeValue{
 			"Id": {S: aws.String(id)},
 		},
@@ -83,8 +82,8 @@ func (m *MemoRepoDynamoDB) GetById(id string) (*entity.Memo, error) {
 }
 
 func (m *MemoRepoDynamoDB) GetByUserId(userId string) ([]entity.Memo, error) {
-	result, err := client.Query(&dynamodb.QueryInput{
-		TableName:              aws.String(tableName),
+	result, err := m.Client.Query(&dynamodb.QueryInput{
+		TableName:              aws.String(m.TableName),
 		IndexName:              aws.String("UserId-MonthDay-index"),
 		KeyConditionExpression: aws.String("UserId = :userId"),
 		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
@@ -115,8 +114,8 @@ func (m *MemoRepoDynamoDB) GetByUserId(userId string) ([]entity.Memo, error) {
 }
 
 func (m *MemoRepoDynamoDB) GetByDateRange(start, end, userId string) ([]entity.Memo, error) {
-	result, err := client.Query(&dynamodb.QueryInput{
-		TableName:              aws.String(tableName),
+	result, err := m.Client.Query(&dynamodb.QueryInput{
+		TableName:              aws.String(m.TableName),
 		IndexName:              aws.String("UserId-MonthDay-index"),
 		KeyConditionExpression: aws.String("UserId = :userId and MonthDay BETWEEN :start and :end"),
 		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
@@ -167,7 +166,7 @@ func (m *MemoRepoDynamoDB) Update(memo entity.Memo) error {
 			":lunar":      {BOOL: aws.Bool(memo.Lunar)},
 			":updateTime": {S: aws.String(strconv.FormatInt(time.Now().UTC().Unix(), 10))},
 		},
-		TableName: aws.String(tableName),
+		TableName: aws.String(m.TableName),
 		Key: map[string]*dynamodb.AttributeValue{
 			"Id": {S: aws.String(memo.Id)},
 		},
@@ -175,7 +174,7 @@ func (m *MemoRepoDynamoDB) Update(memo entity.Memo) error {
 		UpdateExpression: aws.String("set Subject = :subject, Description = :desc, MonthDay = :monthDay, StartYear = :year, Lunar = :lunar, LastModifiedTime = :updateTime"),
 	}
 
-	_, err = client.UpdateItem(input)
+	_, err = m.Client.UpdateItem(input)
 	if err != nil {
 		log.Printf("Got error calling UpdateItem: %s", err)
 		return err
@@ -189,8 +188,8 @@ func (m *MemoRepoDynamoDB) Delete(id string) error {
 		return errors.New("memo not exists")
 	}
 
-	_, err := client.DeleteItem(&dynamodb.DeleteItemInput{
-		TableName: aws.String(tableName),
+	_, err := m.Client.DeleteItem(&dynamodb.DeleteItemInput{
+		TableName: aws.String(m.TableName),
 		Key: map[string]*dynamodb.AttributeValue{
 			"Id": {S: aws.String(id)},
 		},

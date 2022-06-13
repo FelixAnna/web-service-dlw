@@ -2,8 +2,6 @@ package entity
 
 import (
 	"time"
-
-	"github.com/FelixAnna/web-service-dlw/memo-api/memo/services"
 )
 
 type Memo struct {
@@ -50,26 +48,8 @@ func (memo *Memo) ToResponse(now *time.Time) *MemoResponse {
 		Lunar:            memo.Lunar,
 		CreateTime:       memo.CreateTime,
 		LastModifiedTime: memo.LastModifiedTime,
-		Distance:         memo.getDistance(now),
+		//Distance:         memo.getDistance(now),
 	}
 
 	return resp
-}
-
-func (memo *Memo) getDistance(target *time.Time) []int {
-	year := memo.StartYear
-	if year <= 1900 {
-		year = time.Now().Year()
-	}
-
-	startDate := year*10000 + memo.MonthDay
-	targetDate := target.Year()*10000 + int(target.Month())*100 + target.Day()
-
-	if memo.Lunar {
-		before, after := services.GetLunarDistance(startDate, targetDate)
-		return []int{before, after}
-	} else {
-		before, after := services.GetDistance(startDate, targetDate)
-		return []int{before, after}
-	}
 }

@@ -10,8 +10,7 @@ import (
 
 	"github.com/FelixAnna/web-service-dlw/common/mesh"
 	"github.com/FelixAnna/web-service-dlw/common/middleware"
-	"github.com/FelixAnna/web-service-dlw/user-api/auth"
-	userService "github.com/FelixAnna/web-service-dlw/user-api/users"
+	"github.com/FelixAnna/web-service-dlw/user-api/di"
 
 	httpServer "github.com/asim/go-micro/plugins/server/http/v4"
 	"go-micro.dev/v4"
@@ -63,27 +62,30 @@ func defineRoutes(router *gin.Engine) {
 		c.String(http.StatusOK, "running")
 	})
 
+	var authApi = di.InitialGithubAuthApi()
+	var userApi = di.InitialUserApi()
+
 	authGitHubRouter := router.Group("/oauth2/github")
 	{
-		authGitHubRouter.GET("/authorize", auth.AuthorizeGithub)
-		authGitHubRouter.GET("/authorize/url", auth.AuthorizeGithubUrl)
-		authGitHubRouter.GET("/redirect", auth.GetGithubToken)
-		authGitHubRouter.GET("/user", auth.GetNativeToken)
-		authGitHubRouter.GET("/checktoken", auth.CheckNativeToken)
+		authGitHubRouter.GET("/authorize", authApi.AuthorizeGithub)
+		authGitHubRouter.GET("/authorize/url", authApi.AuthorizeGithubUrl)
+		authGitHubRouter.GET("/redirect", authApi.GetGithubToken)
+		authGitHubRouter.GET("/user", authApi.GetNativeToken)
+		authGitHubRouter.GET("/checktoken", authApi.CheckNativeToken)
 	}
 
 	userGroupRouter := router.Group("/users", middleware.AuthorizationHandler())
 	{
-		userGroupRouter.GET("/", userService.GetAllUsers)
-		userGroupRouter.GET("/:userId", userService.GetUserById)
-		userGroupRouter.GET("/email/:email", userService.GetUserByEmail)
+		userGroupRouter.GET("/", userApi.GetAllUsers)
+		userGroupRouter.GET("/:userId", userApi.GetUserById)
+		userGroupRouter.GET("/email/:email", userApi.GetUserByEmail)
 
-		userGroupRouter.POST("/:userId", userService.UpdateUserBirthdayById)
-		userGroupRouter.POST("/:userId/address", userService.UpdateUserAddressById)
+		userGroupRouter.POST("/:userId", userApi.UpdateUserBirthdayById)
+		userGroupRouter.POST("/:userId/address", userApi.UpdateUserAddressById)
 
-		userGroupRouter.PUT("/", userService.AddUser)
+		userGroupRouter.PUT("/", userApi.AddUser)
 
-		userGroupRouter.DELETE("/:userId", userService.RemoveUser)
+		userGroupRouter.DELETE("/:userId", userApi.RemoveUser)
 	}
 }
 

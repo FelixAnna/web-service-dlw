@@ -5,23 +5,29 @@ import (
 	"github.com/golang-module/carbon/v2"
 )
 
-var CarbonTimeMap map[int]int
-var LunarTimeMap map[int]int
-
-const start = 19500101
-const end = 20501231
-
-func init() {
-	//init 1901-2050 carbon and lunar maps
-	length := (start - end) / 10000 * 365
-	CarbonTimeMap = make(map[int]int, length)
-	LunarTimeMap = make(map[int]int, length)
-	initMap()
+type CarbonService struct {
+	CarbonTimeMap map[int]int
+	LunarTimeMap  map[int]int
 }
 
-func initMap() {
-	startCarbon := getCarbonDate(start)
-	endCarbon := getCarbonDate(end)
+//provide for wire
+func ProvideCarbonService() *CarbonService {
+	const start = 19500101
+	const end = 20501231
+
+	carbonService := CarbonService{}
+	//init 1901-2050 carbon and lunar maps
+	length := (start - end) / 10000 * 365
+	carbonService.CarbonTimeMap = make(map[int]int, length)
+	carbonService.LunarTimeMap = make(map[int]int, length)
+	carbonService.initMap(start, end)
+
+	return &carbonService
+}
+
+func (c *CarbonService) initMap(start, end int) {
+	startCarbon := c.getCarbonDate(start)
+	endCarbon := c.getCarbonDate(end)
 
 	i, j := 0, 0
 	for startCarbon.Lte(*endCarbon) {
@@ -33,8 +39,8 @@ func initMap() {
 			lunarKey += 1
 		}
 
-		CarbonTimeMap[carbonKey] = i
-		LunarTimeMap[lunarKey] = j
+		c.CarbonTimeMap[carbonKey] = i
+		c.LunarTimeMap[lunarKey] = j
 
 		i, j = i+1, j+1
 
@@ -48,8 +54,8 @@ func initMap() {
 	fist search in cache;
 	if not found, calculate manually.
 */
-func GetCarbonDistanceWithCacheAside(startDate, targetDate int) (before, after int64) {
-	targetValue, ok := CarbonTimeMap[targetDate]
+func (c *CarbonService) GetCarbonDistanceWithCacheAside(startDate, targetDate int) (before, after int64) {
+	targetValue, ok := c.CarbonTimeMap[targetDate]
 	if ok {
 		_, startMonthDay := startDate/10000, startDate%10000
 		targetYear, targetMonthDay := targetDate/10000, targetDate%10000
@@ -58,8 +64,8 @@ func GetCarbonDistanceWithCacheAside(startDate, targetDate int) (before, after i
 			//targetYear + startMonthDay
 			//targetYear+1 + startMonthDay
 			preDate, nextDate := targetYear*10000+startMonthDay, (targetYear+1)*10000+startMonthDay
-			preDateValue, okPre := CarbonTimeMap[preDate]
-			nextDateValue, okNext := CarbonTimeMap[nextDate]
+			preDateValue, okPre := c.CarbonTimeMap[preDate]
+			nextDateValue, okNext := c.CarbonTimeMap[nextDate]
 			if okPre && okNext {
 				before = int64(preDateValue) - int64(targetValue)
 				after = int64(nextDateValue) - int64(targetValue)
@@ -70,8 +76,8 @@ func GetCarbonDistanceWithCacheAside(startDate, targetDate int) (before, after i
 			//targetYear-1 + startMonthDay
 			//targetYear + startMonthDay
 			preDate, nextDate := (targetYear-1)*10000+startMonthDay, targetYear*10000+startMonthDay
-			preDateValue, okPre := CarbonTimeMap[preDate]
-			nextDateValue, okNext := CarbonTimeMap[nextDate]
+			preDateValue, okPre := c.CarbonTimeMap[preDate]
+			nextDateValue, okNext := c.CarbonTimeMap[nextDate]
 			if okPre && okNext {
 				before = int64(preDateValue) - int64(targetValue)
 				after = int64(nextDateValue) - int64(targetValue)
@@ -83,7 +89,7 @@ func GetCarbonDistanceWithCacheAside(startDate, targetDate int) (before, after i
 		}
 	}
 
-	return getCarbonDistance(startDate, targetDate)
+	return c.getCarbonDistance(startDate, targetDate)
 }
 
 /*
@@ -91,9 +97,9 @@ func GetCarbonDistanceWithCacheAside(startDate, targetDate int) (before, after i
 	fist search in cache;
 	if not found, calculate manually.
 */
-func GetLunarDistanceWithCacheAside(startDate, targetDate int) (before, after int64) {
-	startCarbon := getCarbonDate(startDate)
-	targetCarbon := getCarbonDate(targetDate)
+func (c *CarbonService) GetLunarDistanceWithCacheAside(startDate, targetDate int) (before, after int64) {
+	startCarbon := c.getCarbonDate(startDate)
+	targetCarbon := c.getCarbonDate(targetDate)
 
 	startLunarDate := startCarbon.Lunar()
 	targetLunarDate := targetCarbon.Lunar()
@@ -108,7 +114,7 @@ func GetLunarDistanceWithCacheAside(startDate, targetDate int) (before, after in
 		targetDate += 1
 	}
 
-	targetValue, ok := LunarTimeMap[targetDate]
+	targetValue, ok := c.LunarTimeMap[targetDate]
 	if ok {
 		_, startMonthDay, _ := startDate/100000, (startDate%100000)/10, startDate%10
 		targetYear, targetMonthDay, _ := targetDate/100000, (targetDate%100000)/10, targetDate%10
@@ -118,7 +124,7 @@ func GetLunarDistanceWithCacheAside(startDate, targetDate int) (before, after in
 			//targetYear+1 + startMonthDay
 			preDate, nextDate := targetYear*100000+startMonthDay*10, (targetYear+1)*100000+startMonthDay*10
 
-			preDateFinal, nextDateFinal := getLunarCacheValue(preDate, nextDate)
+			preDateFinal, nextDateFinal := c.getLunarCacheValue(preDate, nextDate)
 			if preDateFinal > 0 && nextDateFinal > 0 {
 				before = int64(preDateFinal) - int64(targetValue)
 				after = int64(nextDateFinal) - int64(targetValue)
@@ -129,7 +135,7 @@ func GetLunarDistanceWithCacheAside(startDate, targetDate int) (before, after in
 			//targetYear-1 + startMonthDay
 			//targetYear + startMonthDay
 			preDate, nextDate := (targetYear-1)*10000+startMonthDay, targetYear*10000+startMonthDay
-			preDateFinal, nextDateFinal := getLunarCacheValue(preDate, nextDate)
+			preDateFinal, nextDateFinal := c.getLunarCacheValue(preDate, nextDate)
 			if preDateFinal > 0 && nextDateFinal > 0 {
 				before = int64(preDateFinal) - int64(targetValue)
 				after = int64(nextDateFinal) - int64(targetValue)
@@ -141,14 +147,14 @@ func GetLunarDistanceWithCacheAside(startDate, targetDate int) (before, after in
 		}
 	}
 
-	return getLunarDistance(startDate, targetDate)
+	return c.getLunarDistance(startDate, targetDate)
 }
 
-func GetMonthDate(todayDate int) []entity.DLWDate {
-	todayCarbon := getCarbonDate(todayDate)
+func (c *CarbonService) GetMonthDate(todayDate int) []entity.DLWDate {
+	todayCarbon := c.getCarbonDate(todayDate)
 
-	firstCarbon := getCarbonDate(todayDate/100*100 + 1)
-	lastCarbon := getCarbonDate(todayDate/100*100 + todayCarbon.DaysInMonth())
+	firstCarbon := c.getCarbonDate(todayDate/100*100 + 1)
+	lastCarbon := c.getCarbonDate(todayDate/100*100 + todayCarbon.DaysInMonth())
 
 	startCarbon := firstCarbon.AddDays(firstCarbon.DayOfWeek() * -1)
 	endCarbon := lastCarbon.AddDays(6 - lastCarbon.DayOfWeek())
@@ -179,25 +185,25 @@ func GetMonthDate(todayDate int) []entity.DLWDate {
 /*
 Get lunar cache value with consideration of Leap month
 */
-func getLunarCacheValue(preDate, nextDate int) (int, int) {
+func (c *CarbonService) getLunarCacheValue(preDate, nextDate int) (int, int) {
 	preDateFinal := 0
-	preDateLeapValue, okPreLeap := LunarTimeMap[preDate+1]
+	preDateLeapValue, okPreLeap := c.LunarTimeMap[preDate+1]
 	if okPreLeap {
 		preDateFinal = preDateLeapValue
 
 	} else {
-		preDateValue, okPre := LunarTimeMap[preDate]
+		preDateValue, okPre := c.LunarTimeMap[preDate]
 		if okPre {
 			preDateFinal = preDateValue
 		}
 	}
 
 	nextDateFinal := 0
-	nextDateValue, okNext := LunarTimeMap[nextDate]
+	nextDateValue, okNext := c.LunarTimeMap[nextDate]
 	if okNext {
 		nextDateFinal = nextDateValue
 	} else {
-		nextDateLeapValue, okNextLeap := LunarTimeMap[nextDate+1]
+		nextDateLeapValue, okNextLeap := c.LunarTimeMap[nextDate+1]
 		if okNextLeap {
 			nextDateFinal = nextDateLeapValue
 		}
@@ -211,10 +217,10 @@ getCarbonDistance - Get the distance between startDate and targetDate (ignore ye
 Suppose target date is now,
 return how many days before and how many days later if startDate (same month and day)
 */
-func getCarbonDistance(startDate, targetDate int) (before, after int64) {
+func (c *CarbonService) getCarbonDistance(startDate, targetDate int) (before, after int64) {
 
-	startCarbon := getCarbonDate(startDate)
-	targetCarbon := getCarbonDate(targetDate)
+	startCarbon := c.getCarbonDate(startDate)
+	targetCarbon := c.getCarbonDate(targetDate)
 
 	diffYear := startCarbon.DiffInYears(*targetCarbon)
 	startCarbonThisYear := startCarbon.AddYears(int(diffYear))
@@ -242,16 +248,16 @@ getLunarDistance - Get the distance between startDate and targetDate (ignore yea
 Suppose target date is now,
 return how many days before and how many days later if startDate (same month and day)
 */
-func getLunarDistance(startDate, targetDate int) (before, after int64) {
-	startCarbon := getCarbonDate(startDate)
-	targetCarbon := getCarbonDate(targetDate)
+func (c *CarbonService) getLunarDistance(startDate, targetDate int) (before, after int64) {
+	startCarbon := c.getCarbonDate(startDate)
+	targetCarbon := c.getCarbonDate(targetDate)
 
-	before = getLunarDistanceOneWay(startCarbon, targetCarbon, false)
-	after = getLunarDistanceOneWay(startCarbon, targetCarbon, true)
+	before = c.getLunarDistanceOneWay(startCarbon, targetCarbon, false)
+	after = c.getLunarDistanceOneWay(startCarbon, targetCarbon, true)
 	return
 }
 
-func getLunarDistanceOneWay(startCarbon, targetCarbon *carbon.Carbon, forward bool) int64 {
+func (c *CarbonService) getLunarDistanceOneWay(startCarbon, targetCarbon *carbon.Carbon, forward bool) int64 {
 	distance := 0
 	startLunarDate := startCarbon.Lunar()
 	targetLunarDate := targetCarbon.Lunar()
@@ -279,7 +285,7 @@ func getLunarDistanceOneWay(startCarbon, targetCarbon *carbon.Carbon, forward bo
 	return int64(distance)
 }
 
-func getCarbonDate(date int) *carbon.Carbon {
+func (c *CarbonService) getCarbonDate(date int) *carbon.Carbon {
 	carbonDate := carbon.CreateFromDate(date/10000, (date%10000)/100, date%100)
 	return &carbonDate
 }

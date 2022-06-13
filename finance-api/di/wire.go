@@ -1,7 +1,7 @@
 //go:build wireinject
 // +build wireinject
 
-package dependencyInjection
+package di
 
 import (
 	"github.com/FelixAnna/web-service-dlw/finance-api/zdj"

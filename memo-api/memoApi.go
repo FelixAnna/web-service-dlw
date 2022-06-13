@@ -10,7 +10,7 @@ import (
 
 	"github.com/FelixAnna/web-service-dlw/common/mesh"
 	"github.com/FelixAnna/web-service-dlw/common/middleware"
-	memoService "github.com/FelixAnna/web-service-dlw/memo-api/memo"
+	"github.com/FelixAnna/web-service-dlw/memo-api/di"
 	httpServer "github.com/asim/go-micro/plugins/server/http/v4"
 	"go-micro.dev/v4"
 
@@ -62,16 +62,17 @@ func defineRoutes(router *gin.Engine) {
 		c.String(http.StatusOK, "running")
 	})
 
+	var memoApi = di.InitialMemoApi()
 	userGroupRouter := router.Group("/memos", middleware.AuthorizationHandler())
 	{
-		userGroupRouter.PUT("/", memoService.AddMemo)
+		userGroupRouter.PUT("/", memoApi.AddMemo)
 
-		userGroupRouter.GET("/:id", memoService.GetMemoById)
-		userGroupRouter.GET("/", memoService.GetMemosByUserId)
-		userGroupRouter.GET("/recent", memoService.GetRecentMemos)
+		userGroupRouter.GET("/:id", memoApi.GetMemoById)
+		userGroupRouter.GET("/", memoApi.GetMemosByUserId)
+		userGroupRouter.GET("/recent", memoApi.GetRecentMemos)
 
-		userGroupRouter.POST("/:id", memoService.UpdateMemoById)
-		userGroupRouter.DELETE("/:id", memoService.RemoveMemo)
+		userGroupRouter.POST("/:id", memoApi.UpdateMemoById)
+		userGroupRouter.DELETE("/:id", memoApi.RemoveMemo)
 	}
 }
 

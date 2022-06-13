@@ -9,7 +9,10 @@ require (
 	go-micro.dev/v4 v4.7.0
 )
 
-require github.com/asim/go-micro/plugins/server/http/v4 v4.0.0-20220530075002-cf51ddeb26c8
+require (
+	github.com/asim/go-micro/plugins/server/http/v4 v4.0.0-20220530075002-cf51ddeb26c8
+	github.com/google/wire v0.5.0
+)
 
 require (
 	github.com/Microsoft/go-winio v0.5.2 // indirect
@@ -67,7 +70,6 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/sergi/go-diff v1.2.0 // indirect
-	github.com/shurcooL/sanitized_anchor_name v1.0.0 // indirect
 	github.com/ugorji/go/codec v1.2.7 // indirect
 	github.com/urfave/cli/v2 v2.8.1 // indirect
 	github.com/xanzy/ssh-agent v0.3.1 // indirect

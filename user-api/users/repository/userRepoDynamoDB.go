@@ -12,28 +12,26 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	"github.com/aws/aws-sdk-go/service/dynamodb/expression"
+	"github.com/google/wire"
 
 	config "github.com/FelixAnna/web-service-dlw/common/aws"
 	"github.com/FelixAnna/web-service-dlw/user-api/users/entity"
 )
 
-var (
-	tableName string
-	client    *dynamodb.DynamoDB
-)
-
-func init() {
-	tableName = "dlf.Users"
-	client = config.GetDynamoDBClient()
-}
+var RepoSet = wire.NewSet(ProvideUserRepoDynamoDB, wire.Bind(new(UserRepo), new(*UserRepoDynamoDB)))
 
 type UserRepoDynamoDB struct {
-	UserRepo
+	TableName string
+	Client    *dynamodb.DynamoDB
+}
+
+func ProvideUserRepoDynamoDB() *UserRepoDynamoDB {
+	return &UserRepoDynamoDB{Client: config.GetDynamoDBClient(), TableName: "dlf.Users"}
 }
 
 func (u *UserRepoDynamoDB) GetAllTables() {
 	// Build the request with its input parameters
-	resp, err := client.ListTables(&dynamodb.ListTablesInput{
+	resp, err := u.Client.ListTables(&dynamodb.ListTablesInput{
 		Limit: aws.Int64(5),
 	})
 	if err != nil {
@@ -63,10 +61,10 @@ func (u *UserRepoDynamoDB) GetAll() ([]entity.User, error) {
 		ExpressionAttributeValues: expr.Values(),
 		FilterExpression:          expr.Filter(),
 		ProjectionExpression:      expr.Projection(),
-		TableName:                 aws.String(tableName),
+		TableName:                 aws.String(u.TableName),
 	}
 
-	result, err := client.Scan(params)
+	result, err := u.Client.Scan(params)
 	if err != nil {
 		log.Printf("Query API call failed: %s", err)
 		return nil, err
@@ -104,8 +102,8 @@ func (u *UserRepoDynamoDB) Add(user *entity.User) (*string, error) {
 		return nil, err
 	}
 
-	_, err = client.PutItem(&dynamodb.PutItemInput{
-		TableName: aws.String(tableName),
+	_, err = u.Client.PutItem(&dynamodb.PutItemInput{
+		TableName: aws.String(u.TableName),
 		Item:      userJson,
 	})
 
@@ -118,8 +116,8 @@ func (u *UserRepoDynamoDB) Add(user *entity.User) (*string, error) {
 }
 
 func (u *UserRepoDynamoDB) GetById(userId string) (*entity.User, error) {
-	result, err := client.GetItem(&dynamodb.GetItemInput{
-		TableName: aws.String(tableName),
+	result, err := u.Client.GetItem(&dynamodb.GetItemInput{
+		TableName: aws.String(u.TableName),
 		Key: map[string]*dynamodb.AttributeValue{
 			"Id": {S: aws.String(userId)},
 		},
@@ -147,8 +145,8 @@ func (u *UserRepoDynamoDB) GetById(userId string) (*entity.User, error) {
 }
 
 func (u *UserRepoDynamoDB) GetByEmail(email string) (*entity.User, error) {
-	result, err := client.Query(&dynamodb.QueryInput{
-		TableName:              aws.String(tableName),
+	result, err := u.Client.Query(&dynamodb.QueryInput{
+		TableName:              aws.String(u.TableName),
 		IndexName:              aws.String("Email-index"),
 		KeyConditionExpression: aws.String("Email = :email"),
 		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
@@ -184,7 +182,7 @@ func (u *UserRepoDynamoDB) UpdateBirthday(userId, birthday string) error {
 		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
 			":birthday": {S: aws.String(birthday)},
 		},
-		TableName: aws.String(tableName),
+		TableName: aws.String(u.TableName),
 		Key: map[string]*dynamodb.AttributeValue{
 			"Id": {S: aws.String(userId)},
 		},
@@ -192,7 +190,7 @@ func (u *UserRepoDynamoDB) UpdateBirthday(userId, birthday string) error {
 		UpdateExpression: aws.String("set Birthday = :birthday"),
 	}
 
-	_, err := client.UpdateItem(input)
+	_, err := u.Client.UpdateItem(input)
 	if err != nil {
 		log.Printf("Got error calling UpdateItem: %s", err)
 		return err
@@ -214,7 +212,7 @@ func (u *UserRepoDynamoDB) UpdateAddress(userId string, addresses []entity.Addre
 		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
 			":addresses": {L: addressJson},
 		},
-		TableName: aws.String(tableName),
+		TableName: aws.String(u.TableName),
 		Key: map[string]*dynamodb.AttributeValue{
 			"Id": {S: aws.String(userId)},
 		},
@@ -222,7 +220,7 @@ func (u *UserRepoDynamoDB) UpdateAddress(userId string, addresses []entity.Addre
 		UpdateExpression: aws.String("set Address = :addresses"),
 	}
 
-	_, err = client.UpdateItem(input)
+	_, err = u.Client.UpdateItem(input)
 	if err != nil {
 		log.Printf("Got error calling UpdateItem: %s", err)
 		return err
@@ -236,8 +234,8 @@ func (u *UserRepoDynamoDB) Delete(userId string) error {
 		return errors.New("user not exists")
 	}
 
-	_, err := client.DeleteItem(&dynamodb.DeleteItemInput{
-		TableName: aws.String(tableName),
+	_, err := u.Client.DeleteItem(&dynamodb.DeleteItemInput{
+		TableName: aws.String(u.TableName),
 		Key: map[string]*dynamodb.AttributeValue{
 			"Id": {S: aws.String(userId)},
 		},

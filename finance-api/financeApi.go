@@ -10,7 +10,7 @@ import (
 
 	"github.com/FelixAnna/web-service-dlw/common/mesh"
 	"github.com/FelixAnna/web-service-dlw/common/middleware"
-	"github.com/FelixAnna/web-service-dlw/finance-api/dependencyInjection"
+	"github.com/FelixAnna/web-service-dlw/finance-api/di"
 	httpServer "github.com/asim/go-micro/plugins/server/http/v4"
 	"go-micro.dev/v4"
 	"go-micro.dev/v4/server"
@@ -65,7 +65,7 @@ func defineRoutes(router *gin.Engine) {
 		c.String(http.StatusOK, "running")
 	})
 
-	zdjApi, err := dependencyInjection.InitializeApi()
+	zdjApi, err := di.InitializeApi()
 	if err != nil {
 		log.Println(err)
 		return

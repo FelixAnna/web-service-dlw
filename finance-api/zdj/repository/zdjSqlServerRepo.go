@@ -7,32 +7,39 @@ import (
 
 	"github.com/FelixAnna/web-service-dlw/common/aws"
 	"github.com/FelixAnna/web-service-dlw/finance-api/zdj/entity"
+	"github.com/google/wire"
 	"gorm.io/driver/sqlserver"
 	"gorm.io/gorm"
 )
 
 var dsn string
-var db *gorm.DB
+
+var SqlRepoSet = wire.NewSet(ProvideZdjSqlServerRepo, wire.Bind(new(ZdjRepo), new(*ZdjSqlServerRepo)))
 
 func init() {
 	dsn = aws.GetParameterByKey("sqldsn")
-	var err error
-	db, err = gorm.Open(sqlserver.Open(dsn), &gorm.Config{})
-
-	if err != nil {
-		panic("failed to connect database")
-	}
-
-	db.AutoMigrate(&entity.Zhidaojia{})
+	//db.AutoMigrate(&entity.Zhidaojia{})
 }
 
 type ZdjSqlServerRepo struct {
+	Db *gorm.DB
+}
+
+//provide for wire
+func ProvideZdjSqlServerRepo() (*ZdjSqlServerRepo, error) {
+	db, err := gorm.Open(sqlserver.Open(dsn), &gorm.Config{})
+	if err != nil {
+		log.Printf("failed to connect database: %v", err)
+		return &ZdjSqlServerRepo{}, err
+	}
+
+	return &ZdjSqlServerRepo{Db: db}, nil
 }
 
 func (s *ZdjSqlServerRepo) Append(zdj *[]entity.Zhidaojia) error {
 	count := 0
-	if db.Model(&entity.Zhidaojia{}).Where("Version=?", (*zdj)[0].Version).FirstOrInit(&entity.Zhidaojia{}).RowsAffected == 0 {
-		result := db.CreateInBatches(*zdj, 100)
+	if s.Db.Model(&entity.Zhidaojia{}).Where("Version=?", (*zdj)[0].Version).FirstOrInit(&entity.Zhidaojia{}).RowsAffected == 0 {
+		result := s.Db.CreateInBatches(*zdj, 100)
 		if result.Error != nil {
 			return result.Error
 		}
@@ -45,7 +52,7 @@ func (s *ZdjSqlServerRepo) Append(zdj *[]entity.Zhidaojia) error {
 }
 
 func (s *ZdjSqlServerRepo) Search(criteria *entity.Criteria) ([]entity.Zhidaojia, error) {
-	query := db.Model(&entity.Zhidaojia{})
+	query := s.Db.Model(&entity.Zhidaojia{})
 	if len(criteria.Distrct) > 0 {
 		query = query.Where(&entity.Zhidaojia{Distrct: criteria.Distrct})
 	}
@@ -92,7 +99,7 @@ func (s *ZdjSqlServerRepo) Search(criteria *entity.Criteria) ([]entity.Zhidaojia
 }
 
 func (s *ZdjSqlServerRepo) Delete(id int, version int) error {
-	result := db.Model(&entity.Zhidaojia{}).Where(map[string]interface{}{"Id": id, "Version": version}).Delete(&entity.Zhidaojia{})
+	result := s.Db.Model(&entity.Zhidaojia{}).Where(map[string]interface{}{"Id": id, "Version": version}).Delete(&entity.Zhidaojia{})
 	if result.RowsAffected > 0 {
 		log.Printf("deleted: id=%v, version=%v.", id, version)
 	}

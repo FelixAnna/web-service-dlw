@@ -10,7 +10,7 @@ import (
 
 	"github.com/FelixAnna/web-service-dlw/common/mesh"
 	"github.com/FelixAnna/web-service-dlw/common/middleware"
-	zdj "github.com/FelixAnna/web-service-dlw/finance-api/zdj"
+	"github.com/FelixAnna/web-service-dlw/finance-api/dependencyInjection"
 	httpServer "github.com/asim/go-micro/plugins/server/http/v4"
 	"go-micro.dev/v4"
 	"go-micro.dev/v4/server"
@@ -56,7 +56,7 @@ func GetGinRouter() *gin.Engine {
 
 	defineRoutes(router)
 
-	//router.Run(":8282")
+	//router.Run(":8484")
 	return router
 }
 
@@ -65,13 +65,19 @@ func defineRoutes(router *gin.Engine) {
 		c.String(http.StatusOK, "running")
 	})
 
+	zdjApi, err := dependencyInjection.InitializeApi()
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
 	userGroupRouter := router.Group("/zdj", middleware.AuthorizationHandler())
 	{
-		userGroupRouter.GET("/", zdj.GetAll)
-		userGroupRouter.POST("/search", zdj.Search)
-		userGroupRouter.POST("/upload", zdj.Upload)
-		userGroupRouter.DELETE("/:id", zdj.Delete)
-		userGroupRouter.GET("/slow", zdj.MemoryCosty)
+		userGroupRouter.GET("/", zdjApi.GetAll)
+		userGroupRouter.POST("/search", zdjApi.Search)
+		userGroupRouter.POST("/upload", zdjApi.Upload)
+		userGroupRouter.DELETE("/:id", zdjApi.Delete)
+		userGroupRouter.GET("/slow", zdjApi.MemoryCosty)
 	}
 }
 

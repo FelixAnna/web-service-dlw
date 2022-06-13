@@ -6,6 +6,7 @@ import (
 
 	"github.com/FelixAnna/web-service-dlw/finance-api/zdj/entity"
 	linq "github.com/ahmetb/go-linq/v3"
+	"github.com/google/wire"
 )
 
 var zdjList []entity.Zhidaojia
@@ -14,7 +15,14 @@ func init() {
 	zdjList = make([]entity.Zhidaojia, 0)
 }
 
+var MemoryRepoSet = wire.NewSet(ProvideZdjInMemoryRepo, wire.Bind(new(ZdjRepo), new(*ZdjInMemoryRepo)))
+
 type ZdjInMemoryRepo struct {
+}
+
+//provide for wire
+func ProvideZdjInMemoryRepo() *ZdjInMemoryRepo {
+	return &ZdjInMemoryRepo{}
 }
 
 func (repo *ZdjInMemoryRepo) Append(zdj *[]entity.Zhidaojia) error {

@@ -13,18 +13,21 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-var repo repository.ZdjRepo
-
-func init() {
-	repo = &repository.ZdjSqlServerRepo{} //you can switch inmemory here
+type ZdjApi struct {
+	Repo repository.ZdjRepo
 }
 
-func GetAll(c *gin.Context) {
-	results, _ := repo.Search(&entity.Criteria{Page: 1, Size: 20})
+//provide for wire
+func ProvideZdjApi(repo repository.ZdjRepo) ZdjApi {
+	return ZdjApi{Repo: repo}
+}
+
+func (api *ZdjApi) GetAll(c *gin.Context) {
+	results, _ := api.Repo.Search(&entity.Criteria{Page: 1, Size: 20})
 	c.JSON(http.StatusOK, results)
 }
 
-func Search(c *gin.Context) {
+func (api *ZdjApi) Search(c *gin.Context) {
 	//get result from somewhere
 	var criteria entity.Criteria
 	if err := c.BindJSON(&criteria); err != nil {
@@ -33,12 +36,12 @@ func Search(c *gin.Context) {
 		return
 	}
 
-	results, _ := repo.Search(&criteria)
+	results, _ := api.Repo.Search(&criteria)
 
 	c.JSON(http.StatusOK, results)
 }
 
-func MemoryCosty(c *gin.Context) {
+func (api *ZdjApi) MemoryCosty(c *gin.Context) {
 	//get result from somewhere
 	times := c.DefaultQuery("times", "1000000")
 	itimes, err := strconv.ParseInt(times, 10, 32)
@@ -60,7 +63,7 @@ func MemoryCosty(c *gin.Context) {
 	c.JSON(http.StatusOK, results)
 }
 
-func Upload(c *gin.Context) {
+func (api *ZdjApi) Upload(c *gin.Context) {
 	file, _ := c.FormFile("file")
 	version := c.DefaultQuery("version", "2021")
 	iversion, err := strconv.ParseInt(version, 10, 32)
@@ -80,7 +83,7 @@ func Upload(c *gin.Context) {
 	models := parseModel(lines, int(iversion))
 
 	//save to somewhere
-	err = repo.Append(&models)
+	err = api.Repo.Append(&models)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 		return
@@ -89,7 +92,7 @@ func Upload(c *gin.Context) {
 	c.JSON(http.StatusOK, "Data uploaded.")
 }
 
-func Delete(c *gin.Context) {
+func (api *ZdjApi) Delete(c *gin.Context) {
 	sid := c.Param("id")
 	sversion := c.DefaultQuery("version", "2021")
 	id, err := strconv.ParseInt(sid, 10, 32)
@@ -103,7 +106,7 @@ func Delete(c *gin.Context) {
 		return
 	}
 
-	err = repo.Delete(int(id), int(version))
+	err = api.Repo.Delete(int(id), int(version))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 	}

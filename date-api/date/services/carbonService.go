@@ -1,9 +1,18 @@
 package services
 
 import (
+	"time"
+
 	"github.com/FelixAnna/web-service-dlw/date-api/date/entity"
 	"github.com/golang-module/carbon/v2"
 )
+
+var start, end int
+
+func init() {
+	start = (time.Now().Year()-100)*10000 + 101
+	end = (time.Now().Year()+100)*10000 + 1231
+}
 
 type CarbonService struct {
 	CarbonTimeMap map[int]int
@@ -12,9 +21,6 @@ type CarbonService struct {
 
 //provide for wire
 func ProvideCarbonService() *CarbonService {
-	const start = 19500101
-	const end = 20501231
-
 	carbonService := CarbonService{}
 	//init 1901-2050 carbon and lunar maps
 	length := (start - end) / 10000 * 365
@@ -54,16 +60,16 @@ func (c *CarbonService) initMap(start, end int) {
 	fist search in cache;
 	if not found, calculate manually.
 */
-func (c *CarbonService) GetCarbonDistanceWithCacheAside(startDate, targetDate int) (before, after int64) {
+func (c *CarbonService) GetCarbonDistanceWithCacheAside(alignToDate, targetDate int) (before, after int64) {
 	targetValue, ok := c.CarbonTimeMap[targetDate]
 	if ok {
-		_, startMonthDay := startDate/10000, startDate%10000
+		_, alignToMonthDay := alignToDate/10000, alignToDate%10000
 		targetYear, targetMonthDay := targetDate/10000, targetDate%10000
 
-		if startMonthDay < targetMonthDay {
-			//targetYear + startMonthDay
-			//targetYear+1 + startMonthDay
-			preDate, nextDate := targetYear*10000+startMonthDay, (targetYear+1)*10000+startMonthDay
+		if alignToMonthDay < targetMonthDay {
+			//targetYear + alignToMonthDay
+			//targetYear+1 + alignToMonthDay
+			preDate, nextDate := targetYear*10000+alignToMonthDay, (targetYear+1)*10000+alignToMonthDay
 			preDateValue, okPre := c.CarbonTimeMap[preDate]
 			nextDateValue, okNext := c.CarbonTimeMap[nextDate]
 			if okPre && okNext {
@@ -72,10 +78,10 @@ func (c *CarbonService) GetCarbonDistanceWithCacheAside(startDate, targetDate in
 				return
 			}
 
-		} else if startMonthDay > targetMonthDay {
-			//targetYear-1 + startMonthDay
-			//targetYear + startMonthDay
-			preDate, nextDate := (targetYear-1)*10000+startMonthDay, targetYear*10000+startMonthDay
+		} else if alignToMonthDay > targetMonthDay {
+			//targetYear-1 + alignToMonthDay
+			//targetYear + alignToMonthDay
+			preDate, nextDate := (targetYear-1)*10000+alignToMonthDay, targetYear*10000+alignToMonthDay
 			preDateValue, okPre := c.CarbonTimeMap[preDate]
 			nextDateValue, okNext := c.CarbonTimeMap[nextDate]
 			if okPre && okNext {
@@ -89,26 +95,26 @@ func (c *CarbonService) GetCarbonDistanceWithCacheAside(startDate, targetDate in
 		}
 	}
 
-	return c.getCarbonDistance(startDate, targetDate)
+	return c.getCarbonDistance(alignToDate, targetDate)
 }
 
 /*
-	Get distance of 2 datetime (will convert to lunar) in days
+GetLunarDistanceWithCacheAside - Get distance of 2 datetime (will convert to lunar) in days
 	fist search in cache;
 	if not found, calculate manually.
 */
-func (c *CarbonService) GetLunarDistanceWithCacheAside(startDate, targetDate int) (before, after int64) {
-	startCarbon := c.getCarbonDate(startDate)
+func (c *CarbonService) GetLunarDistanceWithCacheAside(alignToDate, targetDate int) (before, after int64) {
+	alignToCarbon := c.getCarbonDate(alignToDate)
 	targetCarbon := c.getCarbonDate(targetDate)
 
-	startLunarDate := startCarbon.Lunar()
+	alignToLunarDate := alignToCarbon.Lunar()
 	targetLunarDate := targetCarbon.Lunar()
 
-	startDate = startLunarDate.Year()*100000 + startLunarDate.Month()*1000 + startLunarDate.Day()*10
+	alignToDate = alignToLunarDate.Year()*100000 + alignToLunarDate.Month()*1000 + alignToLunarDate.Day()*10
 	targetDate = targetLunarDate.Year()*100000 + targetLunarDate.Month()*1000 + targetLunarDate.Day()*10
 
-	if startLunarDate.IsLeapMonth() {
-		startDate += 1
+	if alignToLunarDate.IsLeapMonth() {
+		alignToDate += 1
 	}
 	if targetLunarDate.IsLeapMonth() {
 		targetDate += 1
@@ -116,13 +122,13 @@ func (c *CarbonService) GetLunarDistanceWithCacheAside(startDate, targetDate int
 
 	targetValue, ok := c.LunarTimeMap[targetDate]
 	if ok {
-		_, startMonthDay, _ := startDate/100000, (startDate%100000)/10, startDate%10
+		_, alignToMonthDay, _ := alignToDate/100000, (alignToDate%100000)/10, alignToDate%10
 		targetYear, targetMonthDay, _ := targetDate/100000, (targetDate%100000)/10, targetDate%10
 
-		if startMonthDay < targetMonthDay {
-			//targetYear + startMonthDay
-			//targetYear+1 + startMonthDay
-			preDate, nextDate := targetYear*100000+startMonthDay*10, (targetYear+1)*100000+startMonthDay*10
+		if alignToMonthDay < targetMonthDay {
+			//targetYear + alignToMonthDay
+			//targetYear+1 + alignToMonthDay
+			preDate, nextDate := targetYear*100000+alignToMonthDay*10, (targetYear+1)*100000+alignToMonthDay*10
 
 			preDateFinal, nextDateFinal := c.getLunarCacheValue(preDate, nextDate)
 			if preDateFinal > 0 && nextDateFinal > 0 {
@@ -131,10 +137,10 @@ func (c *CarbonService) GetLunarDistanceWithCacheAside(startDate, targetDate int
 				return
 			}
 
-		} else if startMonthDay > targetMonthDay {
-			//targetYear-1 + startMonthDay
-			//targetYear + startMonthDay
-			preDate, nextDate := (targetYear-1)*10000+startMonthDay, targetYear*10000+startMonthDay
+		} else if alignToMonthDay > targetMonthDay {
+			//targetYear-1 + alignToMonthDay
+			//targetYear + alignToMonthDay
+			preDate, nextDate := (targetYear-1)*100000+alignToMonthDay*10, targetYear*100000+alignToMonthDay*10
 			preDateFinal, nextDateFinal := c.getLunarCacheValue(preDate, nextDate)
 			if preDateFinal > 0 && nextDateFinal > 0 {
 				before = int64(preDateFinal) - int64(targetValue)
@@ -147,7 +153,7 @@ func (c *CarbonService) GetLunarDistanceWithCacheAside(startDate, targetDate int
 		}
 	}
 
-	return c.getLunarDistance(startDate, targetDate)
+	return c.getLunarDistance(alignToDate, targetDate)
 }
 
 func (c *CarbonService) GetMonthDate(todayDate int) []entity.DLWDate {
@@ -190,7 +196,6 @@ func (c *CarbonService) getLunarCacheValue(preDate, nextDate int) (int, int) {
 	preDateLeapValue, okPreLeap := c.LunarTimeMap[preDate+1]
 	if okPreLeap {
 		preDateFinal = preDateLeapValue
-
 	} else {
 		preDateValue, okPre := c.LunarTimeMap[preDate]
 		if okPre {
@@ -213,29 +218,31 @@ func (c *CarbonService) getLunarCacheValue(preDate, nextDate int) (int, int) {
 }
 
 /*
-getCarbonDistance - Get the distance between startDate and targetDate (ignore year)
-Suppose target date is now,
-return how many days before and how many days later if startDate (same month and day)
-*/
-func (c *CarbonService) getCarbonDistance(startDate, targetDate int) (before, after int64) {
+getCarbonDistance - Get the distance between alignToDate and targetDate (ignore year)
+	Suppose target date is now,
+	alignToDate is the day we want to align,
 
-	startCarbon := c.getCarbonDate(startDate)
+	return how many days before and how many days later if alignToDate in MMdd (same month and day)
+*/
+func (c *CarbonService) getCarbonDistance(alignToDate, targetDate int) (before, after int64) {
+
+	alignToCarbon := c.getCarbonDate(alignToDate)
 	targetCarbon := c.getCarbonDate(targetDate)
 
-	diffYear := startCarbon.DiffInYears(*targetCarbon)
-	startCarbonThisYear := startCarbon.AddYears(int(diffYear))
-	diffDays := targetCarbon.DiffInDays(startCarbonThisYear)
+	diffYear := alignToCarbon.DiffInYears(*targetCarbon)
+	alignToCarbonThisYear := alignToCarbon.AddYears(int(diffYear))
+	diffDays := targetCarbon.DiffInDays(alignToCarbonThisYear)
 
-	if diffDays < 0 { //target after start - n days before were start, then find m days later when it will be start again
+	if diffDays < 0 { //target after alignToDate - n days before were alignToDate in MMdd, then find m days later when it will be alignToDate in MMdd again
 		before = diffDays
 
-		startCarbonNextYear := startCarbonThisYear.AddYear()
-		after = targetCarbon.DiffInDays(startCarbonNextYear)
-	} else if diffDays > 0 { //target before start - n days later will be start, then find m days before when it was start
+		alignToCarbonNextYear := alignToCarbonThisYear.AddYear()
+		after = targetCarbon.DiffInDays(alignToCarbonNextYear)
+	} else if diffDays > 0 { //target before alignToDate - n days later will be alignToDate in MMdd, then find m days before when it was alignToDate in MMdd
 		after = diffDays
 
-		startCarbonPreYear := startCarbonThisYear.SubYear()
-		before = targetCarbon.DiffInDays(startCarbonPreYear)
+		alignToCarbonPreYear := alignToCarbonThisYear.SubYear()
+		before = targetCarbon.DiffInDays(alignToCarbonPreYear)
 	} else {
 		return 0, 0
 	}
@@ -244,27 +251,29 @@ func (c *CarbonService) getCarbonDistance(startDate, targetDate int) (before, af
 }
 
 /*
-getLunarDistance - Get the distance between startDate and targetDate (ignore year) after convert them to lunar
-Suppose target date is now,
-return how many days before and how many days later if startDate (same month and day)
+getLunarDistance - Get the distance between alignToDate and targetDate (ignore year) after convert them to lunar
+	Suppose targetDate is now,
+	alignToDate is the day we want to align,
+
+	return how many days before and how many days later if same as alignToDate in MMdd (same month and day)
 */
-func (c *CarbonService) getLunarDistance(startDate, targetDate int) (before, after int64) {
-	startCarbon := c.getCarbonDate(startDate)
+func (c *CarbonService) getLunarDistance(alignToDate, targetDate int) (before, after int64) {
+	alignToCarbon := c.getCarbonDate(alignToDate)
 	targetCarbon := c.getCarbonDate(targetDate)
 
-	before = c.getLunarDistanceOneWay(startCarbon, targetCarbon, false)
-	after = c.getLunarDistanceOneWay(startCarbon, targetCarbon, true)
+	before = c.getLunarDistanceOneWay(alignToCarbon, targetCarbon, false)
+	after = c.getLunarDistanceOneWay(alignToCarbon, targetCarbon, true)
 	return
 }
 
-func (c *CarbonService) getLunarDistanceOneWay(startCarbon, targetCarbon *carbon.Carbon, forward bool) int64 {
+func (c *CarbonService) getLunarDistanceOneWay(alignToCarbon, targetCarbon *carbon.Carbon, forward bool) int64 {
 	distance := 0
-	startLunarDate := startCarbon.Lunar()
+	alignToLunarDate := alignToCarbon.Lunar()
 	targetLunarDate := targetCarbon.Lunar()
 
-	startMMdd := startLunarDate.Month()*100 + startLunarDate.Day()
+	alignToMMdd := alignToLunarDate.Month()*100 + alignToLunarDate.Day()
 	targetMMdd := targetLunarDate.Month()*100 + targetLunarDate.Day()
-	for startMMdd != targetMMdd {
+	for alignToMMdd != targetMMdd {
 		if forward {
 			targetCarbonNew := targetCarbon.AddDays(1)
 			targetCarbon = &targetCarbonNew

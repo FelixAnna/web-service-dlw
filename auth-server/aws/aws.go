@@ -15,7 +15,7 @@ func GetClientByConfig() *dynamodb.Client {
 	// credentials, and shared configuration files
 	cfg, err := config.LoadDefaultConfig(context.TODO(), config.WithRegion("ap-southeast-1"))
 	if err != nil {
-		log.Fatalf("unable to load SDK config, %v", err)
+		log.Printf("unable to load SDK config, %v", err)
 	}
 
 	// Using the Config value, create the DynamoDB client
@@ -41,7 +41,7 @@ func init() {
 	})
 
 	if err != nil {
-		log.Fatalf("Error when geting ssm parameters: %v", err)
+		log.Printf("Error when geting ssm parameters: %v", err)
 		panic(err)
 	}
 

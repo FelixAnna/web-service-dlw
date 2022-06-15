@@ -35,7 +35,7 @@ func (u *UserRepoDynamoDB) GetAllTables() {
 		Limit: aws.Int64(5),
 	})
 	if err != nil {
-		log.Fatalf("failed to list tables, %v", err)
+		log.Printf("failed to list tables, %v", err)
 	}
 
 	log.Println("Tables:")

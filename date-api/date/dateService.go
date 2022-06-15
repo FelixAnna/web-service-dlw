@@ -42,6 +42,7 @@ func (api *DateApi) GetDateDistance(c *gin.Context) {
 	iEnd, erEnd := strconv.Atoi(end)
 	if erStart != nil || erEnd != nil {
 		c.String(http.StatusBadRequest, "Not a number")
+		return
 	}
 
 	before, after := api.CarbonService.GetCarbonDistanceWithCacheAside(iStart, iEnd)
@@ -65,6 +66,7 @@ func (api *DateApi) GetLunarDateDistance(c *gin.Context) {
 	iEnd, erEnd := strconv.Atoi(end)
 	if erStart != nil || erEnd != nil {
 		c.String(http.StatusBadRequest, "Not a number")
+		return
 	}
 
 	before, after := api.CarbonService.GetLunarDistanceWithCacheAside(iStart, iEnd)

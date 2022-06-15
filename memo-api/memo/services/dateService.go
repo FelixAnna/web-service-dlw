@@ -81,13 +81,13 @@ func (service *DateService) getDistance(start, end int, lunar bool) (before, aft
 func getDistance(url string) (*Distance, error) {
 	response, err := http.Get(url)
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Println(err.Error())
 		return nil, err
 	}
 
 	responseData, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 		return nil, err
 	}
 

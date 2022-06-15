@@ -58,7 +58,7 @@ func GetGinRouter() *gin.Engine {
 }
 
 func defineRoutes(router *gin.Engine) {
-	router.Any("/status", func(c *gin.Context) {
+	router.GET("/status", func(c *gin.Context) {
 		c.String(http.StatusOK, "running")
 	})
 
@@ -66,8 +66,8 @@ func defineRoutes(router *gin.Engine) {
 	userGroupRouter := router.Group("/date")
 	{
 		userGroupRouter.GET("/current/month", dateApi.GetMonthDate)
-		userGroupRouter.Any("/distance", dateApi.GetDateDistance)
-		userGroupRouter.Any("/distance/lunar", dateApi.GetLunarDateDistance)
+		userGroupRouter.GET("/distance", dateApi.GetDateDistance)
+		userGroupRouter.GET("/distance/lunar", dateApi.GetLunarDateDistance)
 	}
 }
 

@@ -4,13 +4,15 @@ go 1.18
 
 require (
 	//github.com/FelixAnna/web-service-dlw/common v0.0.0-00010101000000-000000000000
-	github.com/FelixAnna/web-service-dlw/common v0.0.0-20220610101257-29c5c0fd12e9
+	github.com/FelixAnna/web-service-dlw/common v0.0.0-20220613132716-6f68054f660c
 	github.com/asim/go-micro/plugins/client/http/v4 v4.0.0-20220530075002-cf51ddeb26c8
 	github.com/asim/go-micro/plugins/server/http/v4 v4.0.0-20220530075002-cf51ddeb26c8
-	github.com/aws/aws-sdk-go v1.44.31
+	github.com/aws/aws-sdk-go v1.44.33
 	github.com/gin-gonic/gin v1.8.1
 	go-micro.dev/v4 v4.7.0
 )
+
+require github.com/google/wire v0.5.0
 
 require (
 	github.com/Microsoft/go-winio v0.5.2 // indirect
@@ -39,7 +41,6 @@ require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/uuid v1.3.0 // indirect
-	github.com/google/wire v0.5.0 // indirect
 	github.com/hashicorp/consul/api v1.13.0 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
 	github.com/hashicorp/go-hclog v1.2.1 // indirect
@@ -83,7 +84,7 @@ require (
 	golang.org/x/mod v0.6.0-dev.0.20220419223038-86c51ed26bb4 // indirect
 	golang.org/x/net v0.0.0-20220607020251-c690dde0001d // indirect
 	golang.org/x/sync v0.0.0-20220601150217-0de741cfad7f // indirect
-	golang.org/x/sys v0.0.0-20220608164250-635b8c9b7f68 // indirect
+	golang.org/x/sys v0.0.0-20220610221304-9f5ed59c137d // indirect
 	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/tools v0.1.11 // indirect
 	golang.org/x/xerrors v0.0.0-20220609144429-65e65417b02f // indirect

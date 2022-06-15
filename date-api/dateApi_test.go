@@ -82,6 +82,24 @@ func TestGetLunarDateDistance(t *testing.T) {
 	assert.EqualValues(t, response.Before, -155)
 }
 
+func TestGetDateDistanceInvalid(t *testing.T) {
+	//Act
+	w := performRequest(router, "GET", "/date/distance?start=&end=20200505")
+
+	//Assert
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	assert.EqualValues(t, w.Body.String(), "Not a number")
+}
+
+func TestGetLunarDateDistanceInvalid(t *testing.T) {
+	//Act
+	w := performRequest(router, "GET", "/date/distance/lunar?start=&end=20200505")
+
+	//Assert
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	assert.EqualValues(t, w.Body.String(), "Not a number")
+}
+
 func performRequest(r http.Handler, method, path string) *httptest.ResponseRecorder {
 	req, _ := http.NewRequest(method, path, nil)
 	w := httptest.NewRecorder()

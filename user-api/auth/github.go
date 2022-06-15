@@ -85,7 +85,7 @@ func (api *GithubAuthApi) GetGithubToken(c *gin.Context) {
 	//TODO: how to verify dynamic csrf token
 	token, err := api.ConfGitHub.Exchange(c.Request.Context(), code)
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Println(err.Error())
 		c.String(http.StatusBadRequest, err.Error())
 	}
 
@@ -106,7 +106,7 @@ func (api *GithubAuthApi) GetNativeToken(c *gin.Context) {
 
 	user, err := api.getGithubUser(githubUserUrl, token)
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Println(err.Error())
 		c.String(http.StatusInternalServerError, err.Error())
 	}
 
@@ -152,7 +152,7 @@ func (api *GithubAuthApi) CheckNativeToken(c *gin.Context) {
 func (api *GithubAuthApi) getGithubUser(url, token string) (*GitHubUser, error) {
 	request, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Println(err.Error())
 		return nil, err
 	}
 
@@ -160,13 +160,13 @@ func (api *GithubAuthApi) getGithubUser(url, token string) (*GitHubUser, error) 
 	response, err := http.DefaultClient.Do(request)
 
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Println(err.Error())
 		return nil, err
 	}
 
 	responseData, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 		return nil, err
 	}
 

@@ -339,7 +339,9 @@ d. after deployed, ssh to minikube container to test the api after installed.
 
 
 ## TODO list
-### research on DI
+### research on DI 
+    -- wire : compile-time dependency injection
+    -- dig /inject: runtime dependency injection
 ### research helm upgrade not update replicaset + pod when image version changed
 ### delete stucked namespace
 https://phoenixnap.com/kb/kubernetes-delete-namespace

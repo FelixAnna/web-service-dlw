@@ -6,7 +6,14 @@ import (
 	"os"
 )
 
-func ReadLines(path string) []string {
+type FileService struct {
+}
+
+func ProvideFileService() *FileService {
+	return &FileService{}
+}
+
+func (file *FileService) ReadLines(path string) []string {
 	f, err := os.Open(path)
 	if err != nil {
 		log.Println("Invalid file", path)

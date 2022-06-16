@@ -9,10 +9,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func AuthorizationHandler() gin.HandlerFunc {
+type AuthorizationMiddleware struct {
+	tokenService *jwt.TokenService
+}
+
+func ProvideAuthorizationMiddleware(service *jwt.TokenService) *AuthorizationMiddleware {
+	return &AuthorizationMiddleware{tokenService: service}
+}
+
+func (service *AuthorizationMiddleware) AuthorizationHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Set example variable
-		token := jwt.GetToken(c)
+		token := service.tokenService.GetToken(c)
 
 		if token == "" {
 			c.String(http.StatusForbidden, "token not found!")
@@ -20,7 +28,7 @@ func AuthorizationHandler() gin.HandlerFunc {
 			return
 		}
 
-		claims, err := jwt.ParseToken(token)
+		claims, err := service.tokenService.ParseToken(token)
 		if err != nil {
 			log.Println(err.Error())
 			c.String(http.StatusForbidden, err.Error())

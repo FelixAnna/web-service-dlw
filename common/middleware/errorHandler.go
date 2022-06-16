@@ -7,7 +7,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func ErrorHandler() gin.HandlerFunc {
+type ErrorHandlingMiddleware struct {
+}
+
+func ProvideErrorHandlingMiddleware() *ErrorHandlingMiddleware {
+	return &ErrorHandlingMiddleware{}
+}
+
+func (service *ErrorHandlingMiddleware) ErrorHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Next()
 		err := c.Errors.Last()

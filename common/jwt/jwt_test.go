@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/FelixAnna/web-service-dlw/common/aws"
-	"github.com/FelixAnna/web-service-dlw/common/test"
+	test "github.com/FelixAnna/web-service-dlw/common/testing"
 	"github.com/stretchr/testify/assert"
 )
 

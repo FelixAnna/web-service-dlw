@@ -4,6 +4,9 @@
 package di
 
 import (
+	"github.com/FelixAnna/web-service-dlw/common/aws"
+	"github.com/FelixAnna/web-service-dlw/common/mesh"
+	"github.com/FelixAnna/web-service-dlw/common/middleware"
 	"github.com/FelixAnna/web-service-dlw/date-api/date"
 	"github.com/FelixAnna/web-service-dlw/date-api/date/services"
 	"github.com/google/wire"
@@ -12,4 +15,16 @@ import (
 func InitialDateApi() date.DateApi {
 	wire.Build(date.ProvideDateApi, services.ProvideCarbonService)
 	return date.DateApi{}
+}
+
+func InitialRegistry() *mesh.Registry {
+	wire.Build(mesh.ProvideRegistry,
+		aws.ProvideAWSService,
+		aws.AwsSet)
+	return &mesh.Registry{}
+}
+
+func InitialErrorMiddleware() *middleware.ErrorHandlingMiddleware {
+	wire.Build(middleware.ProvideErrorHandlingMiddleware)
+	return &middleware.ErrorHandlingMiddleware{}
 }

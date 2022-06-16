@@ -16,10 +16,10 @@ type TokenService struct {
 	myExpireAt   string
 }
 
-func ProvideTokenService(awsservice *aws.AWSService) *TokenService {
-	mySigningKey := []byte(awsservice.GetParameterByKey("jwt/signKey"))
-	myIssuer := awsservice.GetParameterByKey("jwt/issuer")
-	myExpireAt := awsservice.GetParameterByKey("jwt/expiryAfter")
+func ProvideTokenService(awsService *aws.AWSService) *TokenService {
+	mySigningKey := []byte(awsService.GetParameterByKey("jwt/signKey"))
+	myIssuer := awsService.GetParameterByKey("jwt/issuer")
+	myExpireAt := awsService.GetParameterByKey("jwt/expiryAfter")
 
 	return &TokenService{mySigningKey: mySigningKey, myIssuer: myIssuer, myExpireAt: myExpireAt}
 }

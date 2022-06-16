@@ -15,12 +15,9 @@ type AWSService struct {
 }
 
 func ProvideAWSService(helper AwsInterface) *AWSService {
-
-	service := AWSService{}
-	service.sess = helper.CreateSess()
-	service.parameters = helper.LoadParameters(service.sess)
-
-	return &service
+	sess := helper.CreateSess()
+	parameters := helper.LoadParameters(sess)
+	return &AWSService{sess: sess, parameters: parameters}
 }
 
 func (service *AWSService) GetParameterByKey(key string) string {
@@ -30,9 +27,6 @@ func (service *AWSService) GetParameterByKey(key string) string {
 }
 
 func (service *AWSService) GetDynamoDBClient() *dynamodb.DynamoDB {
-
-	// Create DynamoDB client
 	dynamoDB := dynamodb.New(service.sess)
-
 	return dynamoDB
 }

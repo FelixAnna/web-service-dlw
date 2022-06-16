@@ -6,7 +6,10 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/google/wire"
 )
+
+var AwsSet = wire.NewSet(ProvideAwsHelper, wire.Bind(new(AwsInterface), new(*AwsHelper)))
 
 type AwsInterface interface {
 	CreateSess() *session.Session

@@ -7,6 +7,9 @@
 package di
 
 import (
+	"github.com/FelixAnna/web-service-dlw/common/aws"
+	"github.com/FelixAnna/web-service-dlw/common/mesh"
+	"github.com/FelixAnna/web-service-dlw/common/middleware"
 	"github.com/FelixAnna/web-service-dlw/date-api/date"
 	"github.com/FelixAnna/web-service-dlw/date-api/date/services"
 )
@@ -17,4 +20,16 @@ func InitialDateApi() date.DateApi {
 	carbonService := services.ProvideCarbonService()
 	dateApi := date.ProvideDateApi(carbonService)
 	return dateApi
+}
+
+func InitialRegistry() *mesh.Registry {
+	awsHelper := aws.ProvideAwsHelper()
+	awsService := aws.ProvideAWSService(awsHelper)
+	registry := mesh.ProvideRegistry(awsService)
+	return registry
+}
+
+func InitialErrorMiddleware() *middleware.ErrorHandlingMiddleware {
+	errorHandlingMiddleware := middleware.ProvideErrorHandlingMiddleware()
+	return errorHandlingMiddleware
 }

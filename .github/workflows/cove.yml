@@ -23,7 +23,7 @@ jobs:
         with:
           version: v1.45.0
           args: --verbose
-          working-directory: date-api
+          working-directory: ./date-api
   test:
     needs: lint
     strategy:

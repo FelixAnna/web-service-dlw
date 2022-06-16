@@ -344,6 +344,6 @@ d. after deployed, ssh to minikube container to test the api after installed.
     -- dig /inject: runtime dependency injection
 ### research helm upgrade not update replicaset + pod when image version changed
 ### delete stucked namespace
-https://phoenixnap.com/kb/kubernetes-delete-namespace
+    https://phoenixnap.com/kb/kubernetes-delete-namespace
 ### ut
 ### document api

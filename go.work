@@ -1,0 +1,9 @@
+go 1.18
+
+use (
+	./common
+	./date-api/
+	./finance-api
+	./memo-api
+	./user-api
+)

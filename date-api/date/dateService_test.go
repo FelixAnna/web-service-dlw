@@ -11,20 +11,23 @@ import (
 	mockit "github.com/stretchr/testify/mock"
 )
 
-var mockService *mock.MockCarbonService
-var service *DateApi
+func setupService() (*mock.MockCarbonService, *DateApi) {
+	mockService := &mock.MockCarbonService{}
+	service := ProvideDateApi(mockService)
 
-func init() {
-	mockService = &mock.MockCarbonService{}
-	service = ProvideDateApi(mockService)
+	return mockService, service
 }
 
 func TestProvideDateApi(t *testing.T) {
+	_, service := setupService()
+
 	assert.NotNil(t, service)
 	assert.NotNil(t, service.CarbonService)
 }
 
 func TestGetMonthDateDefault(t *testing.T) {
+	mockService, service := setupService()
+
 	ctx, writer := commonmock.GetGinContext("", map[string][]string{})
 	mockService.On("GetMonthDate", mockit.Anything).Return([]entity.DLWDate{})
 
@@ -38,6 +41,8 @@ func TestGetMonthDateDefault(t *testing.T) {
 }
 
 func TestGetMonthDate(t *testing.T) {
+	mockService, service := setupService()
+
 	ctx, writer := commonmock.GetGinContext("date=20200505", map[string][]string{})
 	mockService.On("GetMonthDate", mockit.Anything).Return([]entity.DLWDate{})
 
@@ -51,6 +56,8 @@ func TestGetMonthDate(t *testing.T) {
 }
 
 func TestGetDateDistanceInvalidStart(t *testing.T) {
+	mockService, service := setupService()
+
 	ctx, writer := commonmock.GetGinContext("start=&end=20200505", map[string][]string{})
 	mockService.On("GetCarbonDistanceWithCacheAside", mockit.Anything, mockit.Anything).Return(mockit.Anything, mockit.Anything)
 
@@ -63,6 +70,8 @@ func TestGetDateDistanceInvalidStart(t *testing.T) {
 }
 
 func TestGetDateDistanceInvalidEnd(t *testing.T) {
+	mockService, service := setupService()
+
 	ctx, writer := commonmock.GetGinContext("start=20200505&end=", map[string][]string{})
 	mockService.On("GetCarbonDistanceWithCacheAside", mockit.Anything, mockit.Anything).Return(mockit.Anything, mockit.Anything)
 
@@ -76,8 +85,10 @@ func TestGetDateDistanceInvalidEnd(t *testing.T) {
 }
 
 func TestGetDateDistance(t *testing.T) {
+	mockService, service := setupService()
+
 	ctx, writer := commonmock.GetGinContext("start=20200505&end=20200101", map[string][]string{})
-	mockService.On("GetCarbonDistanceWithCacheAside", mockit.Anything, mockit.Anything).Return(1, 2)
+	mockService.On("GetCarbonDistanceWithCacheAside", mockit.Anything, mockit.Anything).Return(int64(1), int64(2))
 
 	service.GetDateDistance(ctx)
 
@@ -88,6 +99,8 @@ func TestGetDateDistance(t *testing.T) {
 }
 
 func TestGetLunarDateDistanceInvalidStart(t *testing.T) {
+	mockService, service := setupService()
+
 	ctx, writer := commonmock.GetGinContext("start=&end=20200505", map[string][]string{})
 	mockService.On("GetLunarDistanceWithCacheAside", mockit.Anything, mockit.Anything).Return(mockit.Anything, mockit.Anything)
 
@@ -100,6 +113,8 @@ func TestGetLunarDateDistanceInvalidStart(t *testing.T) {
 }
 
 func TestGetLunarDateDistanceInvalidEnd(t *testing.T) {
+	mockService, service := setupService()
+
 	ctx, writer := commonmock.GetGinContext("start=20200505&end=", map[string][]string{})
 	mockService.On("GetLunarDistanceWithCacheAside", mockit.Anything, mockit.Anything).Return(mockit.Anything, mockit.Anything)
 
@@ -113,8 +128,10 @@ func TestGetLunarDateDistanceInvalidEnd(t *testing.T) {
 }
 
 func TestGetLunarDateDistance(t *testing.T) {
+	mockService, service := setupService()
+
 	ctx, writer := commonmock.GetGinContext("start=20200505&end=20200101", map[string][]string{})
-	mockService.On("GetLunarDistanceWithCacheAside", mockit.Anything, mockit.Anything).Return(1, 2)
+	mockService.On("GetLunarDistanceWithCacheAside", mockit.Anything, mockit.Anything).Return(int64(1), int64(2))
 
 	service.GetLunarDateDistance(ctx)
 

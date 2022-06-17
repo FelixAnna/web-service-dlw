@@ -11,12 +11,12 @@ type MockCarbonService struct {
 
 func (service *MockCarbonService) GetCarbonDistanceWithCacheAside(alignToDate, targetDate int) (before, after int64) {
 	args := service.Called(alignToDate, targetDate)
-	return int64(args.Int(0)), int64(args.Int(1))
+	return args.Get(0).(int64), args.Get(1).(int64)
 }
 
 func (service *MockCarbonService) GetLunarDistanceWithCacheAside(alignToDate, targetDate int) (before, after int64) {
 	args := service.Called(alignToDate, targetDate)
-	return int64(args.Int(0)), int64(args.Int(1))
+	return args.Get(0).(int64), args.Get(1).(int64)
 }
 
 func (service *MockCarbonService) GetMonthDate(todayDate int) []entity.DLWDate {

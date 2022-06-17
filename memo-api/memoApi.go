@@ -8,8 +8,6 @@ import (
 	"os"
 	"time"
 
-	"github.com/FelixAnna/web-service-dlw/common/mesh"
-	"github.com/FelixAnna/web-service-dlw/common/middleware"
 	"github.com/FelixAnna/web-service-dlw/memo-api/di"
 	httpServer "github.com/asim/go-micro/plugins/server/http/v4"
 	"go-micro.dev/v4"
@@ -35,7 +33,7 @@ func main() {
 
 	service := micro.NewService(
 		micro.Server(srv),
-		micro.Registry(mesh.GetRegistry()),
+		micro.Registry(di.InitialRegistry().GetRegistry()),
 	)
 
 	service.Init()
@@ -48,7 +46,7 @@ func GetGinRouter() *gin.Engine {
 	//define middleware before apis
 	initialLogger()
 	router.Use(gin.Logger())
-	router.Use(middleware.ErrorHandler())
+	router.Use(di.InitialErrorMiddleware().ErrorHandler())
 	router.Use(gin.Recovery())
 
 	defineRoutes(router)
@@ -63,7 +61,7 @@ func defineRoutes(router *gin.Engine) {
 	})
 
 	var memoApi = di.InitialMemoApi()
-	userGroupRouter := router.Group("/memos", middleware.AuthorizationHandler())
+	userGroupRouter := router.Group("/memos", di.InitialAuthorizationMiddleware().AuthorizationHandler())
 	{
 		userGroupRouter.PUT("/", memoApi.AddMemo)
 

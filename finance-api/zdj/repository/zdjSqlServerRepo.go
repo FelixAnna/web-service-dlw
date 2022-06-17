@@ -12,21 +12,15 @@ import (
 	"gorm.io/gorm"
 )
 
-var dsn string
-
 var SqlRepoSet = wire.NewSet(ProvideZdjSqlServerRepo, wire.Bind(new(ZdjRepo), new(*ZdjSqlServerRepo)))
-
-func init() {
-	dsn = aws.GetParameterByKey("sqldsn")
-	//db.AutoMigrate(&entity.Zhidaojia{})
-}
 
 type ZdjSqlServerRepo struct {
 	Db *gorm.DB
 }
 
 //provide for wire
-func ProvideZdjSqlServerRepo() (*ZdjSqlServerRepo, error) {
+func ProvideZdjSqlServerRepo(awsService *aws.AWSService) (*ZdjSqlServerRepo, error) {
+	dsn := awsService.GetParameterByKey("sqldsn")
 	db, err := gorm.Open(sqlserver.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Printf("failed to connect database: %v", err)

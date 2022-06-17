@@ -25,8 +25,8 @@ type UserRepoDynamoDB struct {
 	Client    *dynamodb.DynamoDB
 }
 
-func ProvideUserRepoDynamoDB() *UserRepoDynamoDB {
-	return &UserRepoDynamoDB{Client: config.GetDynamoDBClient(), TableName: "dlf.Users"}
+func ProvideUserRepoDynamoDB(awsService *config.AWSService) *UserRepoDynamoDB {
+	return &UserRepoDynamoDB{Client: awsService.GetDynamoDBClient(), TableName: "dlf.Users"}
 }
 
 func (u *UserRepoDynamoDB) GetAllTables() {

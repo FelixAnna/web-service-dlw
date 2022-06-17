@@ -21,26 +21,33 @@ import (
 	"golang.org/x/oauth2/clientcredentials"
 )
 
-var (
-	authServerURL = aws.GetParameterByKey("oauth2/serverDomain")
+var globalToken *oauth2.Token // Non-concurrent security
 
-	config = oauth2.Config{
-		ClientID:     aws.GetParameterByKey("oauth2/clientId"),
-		ClientSecret: aws.GetParameterByKey("oauth2/clientSecret"),
+type InternalAuthApi struct {
+	config        oauth2.Config
+	authServerURL string
+
+	NativeServer *server.Server
+}
+
+func ProvideInternalAuthApi(awsService *aws.AWSService) *InternalAuthApi {
+	authServerURL := awsService.GetParameterByKey("oauth2/serverDomain")
+
+	config := oauth2.Config{
+		ClientID:     awsService.GetParameterByKey("oauth2/clientId"),
+		ClientSecret: awsService.GetParameterByKey("oauth2/clientSecret"),
 		Scopes:       []string{"all"},
-		RedirectURL:  fmt.Sprintf("%v/oauth2/token", aws.GetParameterByKey("oauth2/clientDomain")),
+		RedirectURL:  fmt.Sprintf("%v/oauth2/token", awsService.GetParameterByKey("oauth2/clientDomain")),
 		Endpoint: oauth2.Endpoint{
 			AuthURL:  authServerURL + "/oauth/authorize",
 			TokenURL: authServerURL + "/oauth/token",
 		},
 	}
 
-	globalToken *oauth2.Token // Non-concurrent security
-)
+	return &InternalAuthApi{config: config, authServerURL: authServerURL, NativeServer: GetServer()}
+}
 
-var NativeServer *server.Server
-
-func init() {
+func GetServer() *server.Server {
 	manager := manage.NewDefaultManager()
 	// token memory store
 	manager.MustTokenStorage(store.NewMemoryTokenStore())
@@ -67,7 +74,7 @@ func init() {
 		log.Println("Response Error:", re.Error.Error())
 	})
 
-	NativeServer = srv
+	return srv
 }
 
 /*
@@ -87,14 +94,14 @@ func GetNativeToken(c *gin.Context) {
 	}
 }*/
 
-func GetRedirectUrl(c *gin.Context) {
-	u := config.AuthCodeURL("xyz",
-		oauth2.SetAuthURLParam("code_challenge", genCodeChallengeS256("s256example")),
+func (api *InternalAuthApi) GetRedirectUrl(c *gin.Context) {
+	u := api.config.AuthCodeURL("xyz",
+		oauth2.SetAuthURLParam("code_challenge", api.genCodeChallengeS256("s256example")),
 		oauth2.SetAuthURLParam("code_challenge_method", "S256"))
 	c.String(http.StatusFound, u)
 }
 
-func GetToken(c *gin.Context) {
+func (api *InternalAuthApi) GetToken(c *gin.Context) {
 	state := c.Query("state")
 	if state != "xyz" {
 		c.String(http.StatusBadRequest, "State invalid")
@@ -105,7 +112,7 @@ func GetToken(c *gin.Context) {
 		c.String(http.StatusBadRequest, "Code not found")
 		return
 	}
-	token, err := config.Exchange(context.Background(), code, oauth2.SetAuthURLParam("code_verifier", "s256example"))
+	token, err := api.config.Exchange(context.Background(), code, oauth2.SetAuthURLParam("code_verifier", "s256example"))
 	if err != nil {
 		c.String(http.StatusInternalServerError, err.Error())
 		return
@@ -115,14 +122,14 @@ func GetToken(c *gin.Context) {
 	c.JSON(http.StatusOK, token)
 }
 
-func RefreshToken(c *gin.Context) {
+func (api *InternalAuthApi) RefreshToken(c *gin.Context) {
 	if globalToken == nil {
-		GetToken(c)
+		api.GetToken(c)
 		return
 	}
 
 	globalToken.Expiry = time.Now()
-	token, err := config.TokenSource(context.Background(), globalToken).Token()
+	token, err := api.config.TokenSource(context.Background(), globalToken).Token()
 	if err != nil {
 		c.String(http.StatusInternalServerError, err.Error())
 		return
@@ -132,13 +139,13 @@ func RefreshToken(c *gin.Context) {
 	c.JSON(http.StatusOK, token)
 }
 
-func TestAccess(c *gin.Context) {
+func (api *InternalAuthApi) TestAccess(c *gin.Context) {
 	if globalToken == nil {
-		GetToken(c)
+		api.GetToken(c)
 		return
 	}
 
-	resp, err := http.Get(fmt.Sprintf("%s/test?access_token=%s", authServerURL, globalToken.AccessToken))
+	resp, err := http.Get(fmt.Sprintf("%s/test?access_token=%s", api.authServerURL, globalToken.AccessToken))
 	if err != nil {
 		c.String(http.StatusBadRequest, err.Error())
 		return
@@ -148,8 +155,8 @@ func TestAccess(c *gin.Context) {
 	io.Copy(c.Writer, resp.Body)
 }
 
-func PassordLogin(c *gin.Context) {
-	token, err := config.PasswordCredentialsToken(context.Background(), "test", "test")
+func (api *InternalAuthApi) PassordLogin(c *gin.Context) {
+	token, err := api.config.PasswordCredentialsToken(context.Background(), "test", "test")
 	if err != nil {
 		c.String(http.StatusInternalServerError, err.Error())
 		return
@@ -159,11 +166,11 @@ func PassordLogin(c *gin.Context) {
 	c.JSON(http.StatusOK, token)
 }
 
-func ClientSecretLogin(c *gin.Context) {
+func (api *InternalAuthApi) ClientSecretLogin(c *gin.Context) {
 	cfg := clientcredentials.Config{
-		ClientID:     config.ClientID,
-		ClientSecret: config.ClientSecret,
-		TokenURL:     config.Endpoint.TokenURL,
+		ClientID:     api.config.ClientID,
+		ClientSecret: api.config.ClientSecret,
+		TokenURL:     api.config.Endpoint.TokenURL,
 	}
 
 	token, err := cfg.Token(context.Background())
@@ -176,7 +183,7 @@ func ClientSecretLogin(c *gin.Context) {
 	c.JSON(http.StatusOK, token)
 }
 
-func genCodeChallengeS256(s string) string {
+func (api *InternalAuthApi) genCodeChallengeS256(s string) string {
 	s256 := sha256.Sum256([]byte(s))
 	return base64.URLEncoding.EncodeToString(s256[:])
 }

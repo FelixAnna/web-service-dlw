@@ -8,8 +8,6 @@ import (
 	"os"
 	"time"
 
-	"github.com/FelixAnna/web-service-dlw/common/mesh"
-	"github.com/FelixAnna/web-service-dlw/common/middleware"
 	"github.com/FelixAnna/web-service-dlw/finance-api/di"
 	httpServer "github.com/asim/go-micro/plugins/server/http/v4"
 	"go-micro.dev/v4"
@@ -33,9 +31,10 @@ func main() {
 		log.Fatalln(err)
 	}
 
+	registery := di.InitialRegistry()
 	service := micro.NewService(
 		micro.Server(srv),
-		micro.Registry(mesh.GetRegistry()),
+		micro.Registry(registery.GetRegistry()),
 	)
 
 	service.Init()
@@ -51,7 +50,7 @@ func GetGinRouter() *gin.Engine {
 	//define middleware before apis
 	initialLogger()
 	router.Use(gin.Logger())
-	router.Use(middleware.ErrorHandler())
+	router.Use(di.InitialErrorMiddleware().ErrorHandler())
 	router.Use(gin.Recovery())
 
 	defineRoutes(router)
@@ -71,7 +70,7 @@ func defineRoutes(router *gin.Engine) {
 		return
 	}
 
-	userGroupRouter := router.Group("/zdj", middleware.AuthorizationHandler())
+	userGroupRouter := router.Group("/zdj", di.InitialAuthorizationMiddleware().AuthorizationHandler())
 	{
 		userGroupRouter.GET("/", zdjApi.GetAll)
 		userGroupRouter.POST("/search", zdjApi.Search)

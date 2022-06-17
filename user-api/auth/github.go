@@ -30,17 +30,19 @@ type GitHubUser struct {
 type GithubAuthApi struct {
 	ConfGitHub *oauth2.Config
 	Repo       repository.UserRepo
+
+	jwtService *jwt.TokenService
 }
 
-func ProvideGithubAuth(repo repository.UserRepo) GithubAuthApi {
+func ProvideGithubAuth(repo repository.UserRepo, awsService *aws.AWSService, jwtService *jwt.TokenService) GithubAuthApi {
 	confGitHub := &oauth2.Config{
-		ClientID:     aws.GetParameterByKey("githubClientId"),
-		ClientSecret: aws.GetParameterByKey("githubClientSecret"),
+		ClientID:     awsService.GetParameterByKey("githubClientId"),
+		ClientSecret: awsService.GetParameterByKey("githubClientSecret"),
 		Scopes:       []string{"read:user", "user:email", "read:repo_hook"},
 		Endpoint:     github.Endpoint,
 	}
 
-	return GithubAuthApi{ConfGitHub: confGitHub, Repo: repo}
+	return GithubAuthApi{ConfGitHub: confGitHub, Repo: repo, jwtService: jwtService}
 }
 
 /* AuthorizeGithub
@@ -102,7 +104,7 @@ GetNativeToken - Get github user info and register into to our database, finally
  4 return token
 */
 func (api *GithubAuthApi) GetNativeToken(c *gin.Context) {
-	token := jwt.GetToken(c)
+	token := api.jwtService.GetToken(c)
 
 	user, err := api.getGithubUser(githubUserUrl, token)
 	if err != nil {
@@ -127,7 +129,7 @@ func (api *GithubAuthApi) GetNativeToken(c *gin.Context) {
 		}
 	}
 
-	nativeToken, err := jwt.NewToken(nativeUser.Id, nativeUser.Email)
+	nativeToken, err := api.jwtService.NewToken(nativeUser.Id, nativeUser.Email)
 	if err != nil {
 		c.String(http.StatusInternalServerError, err.Error())
 	}
@@ -139,9 +141,9 @@ func (api *GithubAuthApi) GetNativeToken(c *gin.Context) {
 CheckNativeToken - verify native token
 */
 func (api *GithubAuthApi) CheckNativeToken(c *gin.Context) {
-	token := jwt.GetToken(c)
+	token := api.jwtService.GetToken(c)
 
-	claims, err := jwt.ParseToken(token)
+	claims, err := api.jwtService.ParseToken(token)
 	if err != nil {
 		c.String(http.StatusInternalServerError, err.Error())
 	}

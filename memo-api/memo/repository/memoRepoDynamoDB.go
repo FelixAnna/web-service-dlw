@@ -24,8 +24,8 @@ type MemoRepoDynamoDB struct {
 	Client    *dynamodb.DynamoDB
 }
 
-func ProvideMemoRepoDynamoDB() *MemoRepoDynamoDB {
-	return &MemoRepoDynamoDB{Client: config.GetDynamoDBClient(), TableName: "dlf.Memos"}
+func ProvideMemoRepoDynamoDB(awsService *config.AWSService) *MemoRepoDynamoDB {
+	return &MemoRepoDynamoDB{Client: awsService.GetDynamoDBClient(), TableName: "dlf.Memos"}
 }
 
 func (m *MemoRepoDynamoDB) Add(memo *entity.Memo) (*string, error) {

@@ -7,6 +7,11 @@
 package di
 
 import (
+	"github.com/FelixAnna/web-service-dlw/common/aws"
+	"github.com/FelixAnna/web-service-dlw/common/jwt"
+	"github.com/FelixAnna/web-service-dlw/common/mesh"
+	"github.com/FelixAnna/web-service-dlw/common/middleware"
+	"github.com/FelixAnna/web-service-dlw/common/mock"
 	"github.com/FelixAnna/web-service-dlw/user-api/auth"
 	"github.com/FelixAnna/web-service-dlw/user-api/users"
 	"github.com/FelixAnna/web-service-dlw/user-api/users/repository"
@@ -15,7 +20,9 @@ import (
 // Injectors from wire.go:
 
 func InitialUserApi() users.UserApi {
-	userRepoDynamoDB := repository.ProvideUserRepoDynamoDB()
+	awsHelper := aws.ProvideAwsHelper()
+	awsService := aws.ProvideAWSService(awsHelper)
+	userRepoDynamoDB := repository.ProvideUserRepoDynamoDB(awsService)
 	userApi := users.UserApi{
 		Repo: userRepoDynamoDB,
 	}
@@ -23,7 +30,37 @@ func InitialUserApi() users.UserApi {
 }
 
 func InitialGithubAuthApi() auth.GithubAuthApi {
-	userRepoDynamoDB := repository.ProvideUserRepoDynamoDB()
-	githubAuthApi := auth.ProvideGithubAuth(userRepoDynamoDB)
+	awsHelper := aws.ProvideAwsHelper()
+	awsService := aws.ProvideAWSService(awsHelper)
+	userRepoDynamoDB := repository.ProvideUserRepoDynamoDB(awsService)
+	tokenService := jwt.ProvideTokenService(awsService)
+	githubAuthApi := auth.ProvideGithubAuth(userRepoDynamoDB, awsService, tokenService)
 	return githubAuthApi
+}
+
+func InitialRegistry() *mesh.Registry {
+	awsHelper := aws.ProvideAwsHelper()
+	awsService := aws.ProvideAWSService(awsHelper)
+	registry := mesh.ProvideRegistry(awsService)
+	return registry
+}
+
+func InitialMockRegistry() *mesh.Registry {
+	mockAwsHelper := mock.ProvideMockAwsHelper()
+	awsService := aws.ProvideAWSService(mockAwsHelper)
+	registry := mesh.ProvideRegistry(awsService)
+	return registry
+}
+
+func InitialErrorMiddleware() *middleware.ErrorHandlingMiddleware {
+	errorHandlingMiddleware := middleware.ProvideErrorHandlingMiddleware()
+	return errorHandlingMiddleware
+}
+
+func InitialAuthorizationMiddleware() *middleware.AuthorizationMiddleware {
+	awsHelper := aws.ProvideAwsHelper()
+	awsService := aws.ProvideAWSService(awsHelper)
+	tokenService := jwt.ProvideTokenService(awsService)
+	authorizationMiddleware := middleware.ProvideAuthorizationMiddleware(tokenService)
+	return authorizationMiddleware
 }

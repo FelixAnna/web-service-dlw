@@ -8,8 +8,6 @@ import (
 	"os"
 	"time"
 
-	"github.com/FelixAnna/web-service-dlw/common/mesh"
-	"github.com/FelixAnna/web-service-dlw/common/middleware"
 	"github.com/FelixAnna/web-service-dlw/user-api/di"
 
 	httpServer "github.com/asim/go-micro/plugins/server/http/v4"
@@ -36,7 +34,7 @@ func main() {
 
 	service := micro.NewService(
 		micro.Server(srv),
-		micro.Registry(mesh.GetRegistry()),
+		micro.Registry(di.InitialRegistry().GetRegistry()),
 	)
 	service.Init()
 	service.Run()
@@ -48,7 +46,7 @@ func GetGinRouter() *gin.Engine {
 	//define middleware before apis
 	initialLogger()
 	router.Use(gin.Logger())
-	router.Use(middleware.ErrorHandler())
+	router.Use(di.InitialErrorMiddleware().ErrorHandler())
 	router.Use(gin.Recovery())
 
 	defineRoutes(router)
@@ -74,7 +72,7 @@ func defineRoutes(router *gin.Engine) {
 		authGitHubRouter.GET("/checktoken", authApi.CheckNativeToken)
 	}
 
-	userGroupRouter := router.Group("/users", middleware.AuthorizationHandler())
+	userGroupRouter := router.Group("/users", di.InitialAuthorizationMiddleware().AuthorizationHandler())
 	{
 		userGroupRouter.GET("/", userApi.GetAllUsers)
 		userGroupRouter.GET("/:userId", userApi.GetUserById)

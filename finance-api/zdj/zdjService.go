@@ -14,12 +14,13 @@ import (
 )
 
 type ZdjApi struct {
-	Repo repository.ZdjRepo
+	fileService *filesystem.FileService
+	Repo        repository.ZdjRepo
 }
 
 //provide for wire
-func ProvideZdjApi(repo repository.ZdjRepo) ZdjApi {
-	return ZdjApi{Repo: repo}
+func ProvideZdjApi(repo repository.ZdjRepo, fileService *filesystem.FileService) ZdjApi {
+	return ZdjApi{Repo: repo, fileService: fileService}
 }
 
 func (api *ZdjApi) GetAll(c *gin.Context) {
@@ -77,7 +78,7 @@ func (api *ZdjApi) Upload(c *gin.Context) {
 	c.SaveUploadedFile(file, tempPath)
 	defer os.Remove(tempPath)
 
-	lines := filesystem.ReadLines(tempPath)
+	lines := api.fileService.ReadLines(tempPath)
 
 	//convert to model list
 	models := parseModel(lines, int(iversion))

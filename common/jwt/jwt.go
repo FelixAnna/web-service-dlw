@@ -8,7 +8,11 @@ import (
 	"github.com/FelixAnna/web-service-dlw/common/aws"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
+	"github.com/google/wire"
 )
+
+var JwtSet = wire.NewSet(ProvideTokenService, aws.ProvideAWSService, aws.AwsSet)
+var JwtMockSet = wire.NewSet(ProvideTokenService, aws.ProvideAWSService, aws.AwsMockSet)
 
 type TokenService struct {
 	mySigningKey []byte

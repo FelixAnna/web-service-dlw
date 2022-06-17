@@ -31,8 +31,8 @@ type DateService struct {
 }
 
 //provide for wire
-func ProvideDateService() *DateService {
-	reg := mesh.GetRegistry()
+func ProvideDateService(registery *mesh.Registry) *DateService {
+	reg := registery.GetRegistry()
 	s := selector.NewSelector(selector.Registry(reg))
 	dlwClient := httpClient.NewClient(client.Selector(s))
 

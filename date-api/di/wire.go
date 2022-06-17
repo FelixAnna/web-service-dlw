@@ -12,15 +12,22 @@ import (
 	"github.com/google/wire"
 )
 
-func InitialDateApi() date.DateApi {
-	wire.Build(date.ProvideDateApi, services.ProvideCarbonService)
-	return date.DateApi{}
+func InitialDateApi() *date.DateApi {
+	wire.Build(date.ProvideDateApi, services.CarbonSet)
+	return &date.DateApi{}
 }
 
 func InitialRegistry() *mesh.Registry {
 	wire.Build(mesh.ProvideRegistry,
 		aws.ProvideAWSService,
 		aws.AwsSet)
+	return &mesh.Registry{}
+}
+
+func InitialMockRegistry() *mesh.Registry {
+	wire.Build(mesh.ProvideRegistry,
+		aws.ProvideAWSService,
+		aws.AwsMockSet)
 	return &mesh.Registry{}
 }
 

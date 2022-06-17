@@ -3,12 +3,14 @@ package aws
 import (
 	"log"
 
+	"github.com/FelixAnna/web-service-dlw/common/mock"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/google/wire"
 )
 
+var AwsMockSet = wire.NewSet(mock.ProvideMockAwsHelper, wire.Bind(new(AwsInterface), new(*mock.MockAwsHelper)))
 var AwsSet = wire.NewSet(ProvideAwsHelper, wire.Bind(new(AwsInterface), new(*AwsHelper)))
 
 type AwsInterface interface {

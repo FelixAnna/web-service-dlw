@@ -32,9 +32,10 @@ func main() {
 		log.Fatalln(err)
 	}
 
+	registry := di.InitialRegistry()
 	service := micro.NewService(
 		micro.Server(srv),
-		micro.Registry(di.InitialRegistry().GetRegistry()),
+		micro.Registry(registry.GetRegistry()),
 	)
 	service.Init()
 	service.Run()

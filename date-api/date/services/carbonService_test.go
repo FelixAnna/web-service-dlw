@@ -6,10 +6,10 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var service *CarbonService
+var service *CarbonInMemoryService
 
 func init() {
-	service = ProvideCarbonService()
+	service = ProvideCarbonInMemoryService()
 }
 
 func TestProvideCarbonService(t *testing.T) {

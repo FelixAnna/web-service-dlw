@@ -10,21 +10,29 @@ import (
 	"github.com/FelixAnna/web-service-dlw/common/aws"
 	"github.com/FelixAnna/web-service-dlw/common/mesh"
 	"github.com/FelixAnna/web-service-dlw/common/middleware"
+	"github.com/FelixAnna/web-service-dlw/common/mock"
 	"github.com/FelixAnna/web-service-dlw/date-api/date"
 	"github.com/FelixAnna/web-service-dlw/date-api/date/services"
 )
 
 // Injectors from wire.go:
 
-func InitialDateApi() date.DateApi {
-	carbonService := services.ProvideCarbonService()
-	dateApi := date.ProvideDateApi(carbonService)
+func InitialDateApi() *date.DateApi {
+	carbonInMemoryService := services.ProvideCarbonInMemoryService()
+	dateApi := date.ProvideDateApi(carbonInMemoryService)
 	return dateApi
 }
 
 func InitialRegistry() *mesh.Registry {
 	awsHelper := aws.ProvideAwsHelper()
 	awsService := aws.ProvideAWSService(awsHelper)
+	registry := mesh.ProvideRegistry(awsService)
+	return registry
+}
+
+func InitialMockRegistry() *mesh.Registry {
+	mockAwsHelper := mock.ProvideMockAwsHelper()
+	awsService := aws.ProvideAWSService(mockAwsHelper)
 	registry := mesh.ProvideRegistry(awsService)
 	return registry
 }

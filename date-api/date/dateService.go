@@ -11,12 +11,12 @@ import (
 )
 
 type DateApi struct {
-	CarbonService *services.CarbonService
+	CarbonService services.CarbonService
 }
 
 //provide for wire
-func ProvideDateApi(service *services.CarbonService) DateApi {
-	return DateApi{CarbonService: service}
+func ProvideDateApi(service services.CarbonService) *DateApi {
+	return &DateApi{CarbonService: service}
 }
 
 func (api *DateApi) GetMonthDate(c *gin.Context) {

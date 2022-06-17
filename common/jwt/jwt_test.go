@@ -77,6 +77,34 @@ func TestParseToken(t *testing.T) {
 	assert.NotNil(t, claims)
 }
 
-func SkipTestGetToken(t *testing.T) {
+func TestGetTokenByHeader(t *testing.T) {
+	ctx := test.GetGinContext("", map[string][]string{"Authorization": {"Bearer abc"}})
 
+	token := service.GetToken(ctx)
+
+	assert.NotEmpty(t, token)
+}
+
+func TestGetTokenByCode(t *testing.T) {
+	ctx := test.GetGinContext("access_code=abc", map[string][]string{})
+
+	token := service.GetToken(ctx)
+
+	assert.NotEmpty(t, token)
+}
+
+func TestGetTokenEmptyCodeAndHeader(t *testing.T) {
+	ctx := test.GetGinContext("", map[string][]string{})
+
+	token := service.GetToken(ctx)
+
+	assert.Empty(t, token)
+}
+
+func TestGetTokenInvalid(t *testing.T) {
+	ctx := test.GetGinContext("access_code=", map[string][]string{"Authorization": {"invalid"}})
+
+	token := service.GetToken(ctx)
+
+	assert.Empty(t, token)
 }

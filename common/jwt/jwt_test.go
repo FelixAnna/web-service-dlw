@@ -5,14 +5,14 @@ import (
 	"testing"
 
 	"github.com/FelixAnna/web-service-dlw/common/aws"
-	test "github.com/FelixAnna/web-service-dlw/common/testing"
+	mock "github.com/FelixAnna/web-service-dlw/common/mock"
 	"github.com/stretchr/testify/assert"
 )
 
 var service *TokenService
 
 func init() {
-	helper := test.MockAwsHelper{}
+	helper := mock.MockAwsHelper{}
 	service = ProvideTokenService(aws.ProvideAWSService(&helper))
 }
 
@@ -78,7 +78,7 @@ func TestParseToken(t *testing.T) {
 }
 
 func TestGetTokenByHeader(t *testing.T) {
-	ctx := test.GetGinContext("", map[string][]string{"Authorization": {"Bearer abc"}})
+	ctx := mock.GetGinContext("", map[string][]string{"Authorization": {"Bearer abc"}})
 
 	token := service.GetToken(ctx)
 
@@ -86,7 +86,7 @@ func TestGetTokenByHeader(t *testing.T) {
 }
 
 func TestGetTokenByCode(t *testing.T) {
-	ctx := test.GetGinContext("access_code=abc", map[string][]string{})
+	ctx := mock.GetGinContext("access_code=abc", map[string][]string{})
 
 	token := service.GetToken(ctx)
 
@@ -94,7 +94,7 @@ func TestGetTokenByCode(t *testing.T) {
 }
 
 func TestGetTokenEmptyCodeAndHeader(t *testing.T) {
-	ctx := test.GetGinContext("", map[string][]string{})
+	ctx := mock.GetGinContext("", map[string][]string{})
 
 	token := service.GetToken(ctx)
 
@@ -102,7 +102,7 @@ func TestGetTokenEmptyCodeAndHeader(t *testing.T) {
 }
 
 func TestGetTokenInvalid(t *testing.T) {
-	ctx := test.GetGinContext("access_code=", map[string][]string{"Authorization": {"invalid"}})
+	ctx := mock.GetGinContext("access_code=", map[string][]string{"Authorization": {"invalid"}})
 
 	token := service.GetToken(ctx)
 

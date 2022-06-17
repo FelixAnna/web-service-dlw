@@ -22,13 +22,13 @@ func ProvideRegistry(awsService *aws.AWSService) *Registry {
 func (service *Registry) GetRegistry() registry.Registry {
 	profile := os.Getenv("profile")
 	if profile == "dev" {
-		return service.GetConsulRegistry()
+		return service.getConsulRegistry()
 	}
 
-	return service.GetKubernetesRegistry()
+	return service.getKubernetesRegistry()
 }
 
-func (service *Registry) GetConsulRegistry() registry.Registry {
+func (service *Registry) getConsulRegistry() registry.Registry {
 	consulReg := consul.NewRegistry(registry.Addrs(service.consulRegAddr))
 
 	return consulReg
@@ -40,7 +40,7 @@ func (service *Registry) GetConsulRegistry() registry.Registry {
 	return etcdReg
 }*/
 
-func (service *Registry) GetKubernetesRegistry() registry.Registry {
+func (service *Registry) getKubernetesRegistry() registry.Registry {
 	k8sReg := kubernetes.NewRegistry()
 
 	return k8sReg

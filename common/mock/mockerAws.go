@@ -1,4 +1,4 @@
-package testing
+package mock
 
 import (
 	"net/http"
@@ -8,6 +8,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 )
 
+//mock of AwsInterface
 type MockAwsHelper struct {
 }
 
@@ -33,10 +34,11 @@ func (service *MockAwsHelper) CreateSess() *session.Session {
 
 func (service *MockAwsHelper) LoadParameters(sess *session.Session) map[string]string {
 	return map[string]string{
-		"/dlf/dev/key1":            "value1",
-		"/dlf/dev/key2":            "value2",
-		"/dlf/dev/jwt/issuer":      "issuer",
-		"/dlf/dev/jwt/signKey":     "signKey",
-		"/dlf/dev/jwt/expiryAfter": "3600",
+		"/dlf/dev/key1":               "value1",
+		"/dlf/dev/key2":               "value2",
+		"/dlf/dev/jwt/issuer":         "issuer",
+		"/dlf/dev/jwt/signKey":        "signKey",
+		"/dlf/dev/jwt/expiryAfter":    "3600",
+		"/dlf/dev/mesh/consulRegAddr": "devConsulRegAddr",
 	}
 }

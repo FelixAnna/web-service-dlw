@@ -9,9 +9,11 @@ import (
 )
 
 //mock of gin.Context
-func GetGinContext(query string, headers map[string][]string) *gin.Context {
-	ctx := &gin.Context{}
-	gin.CreateTestContext(httptest.NewRecorder())
+func GetGinContext(query string, headers map[string][]string) (*gin.Context, *httptest.ResponseRecorder) {
+	gin.SetMode(gin.TestMode)
+
+	writer := httptest.NewRecorder()
+	ctx, _ := gin.CreateTestContext(writer)
 
 	ctx.Request = &http.Request{
 		URL: &url.URL{
@@ -20,5 +22,5 @@ func GetGinContext(query string, headers map[string][]string) *gin.Context {
 		Header: headers,
 	}
 
-	return ctx
+	return ctx, writer
 }

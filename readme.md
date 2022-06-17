@@ -346,4 +346,7 @@ d. after deployed, ssh to minikube container to test the api after installed.
 ### delete stucked namespace
     https://phoenixnap.com/kb/kubernetes-delete-namespace
 ### ut
+    ```
+    go test -cover -v ./...
+    ```
 ### document api

@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/FelixAnna/web-service-dlw/common/aws"
-	mock "github.com/FelixAnna/web-service-dlw/common/mock"
+	"github.com/FelixAnna/web-service-dlw/common/mock"
 	"github.com/stretchr/testify/assert"
 )
 

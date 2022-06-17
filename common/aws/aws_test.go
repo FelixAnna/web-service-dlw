@@ -3,7 +3,7 @@ package aws
 import (
 	"testing"
 
-	mock "github.com/FelixAnna/web-service-dlw/common/mock"
+	"github.com/FelixAnna/web-service-dlw/common/mock"
 	"github.com/stretchr/testify/assert"
 )
 

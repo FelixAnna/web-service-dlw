@@ -5,15 +5,18 @@ import (
 	"testing"
 
 	commonmock "github.com/FelixAnna/web-service-dlw/common/mock"
+	"github.com/FelixAnna/web-service-dlw/date-api/date/entity"
 	"github.com/FelixAnna/web-service-dlw/date-api/mock"
 	"github.com/stretchr/testify/assert"
+	mockit "github.com/stretchr/testify/mock"
 )
 
+var mockService *mock.MockCarbonService
 var service *DateApi
 
 func init() {
-	carbonService := mock.MockCarbonService{}
-	service = ProvideDateApi(&carbonService)
+	mockService = &mock.MockCarbonService{}
+	service = ProvideDateApi(mockService)
 }
 
 func TestProvideDateApi(t *testing.T) {
@@ -23,6 +26,7 @@ func TestProvideDateApi(t *testing.T) {
 
 func TestGetMonthDateDefault(t *testing.T) {
 	ctx, writer := commonmock.GetGinContext("", map[string][]string{})
+	mockService.On("GetMonthDate", mockit.Anything).Return([]entity.DLWDate{})
 
 	//need mock gin.Context.Writer
 	service.GetMonthDate(ctx)
@@ -30,10 +34,12 @@ func TestGetMonthDateDefault(t *testing.T) {
 	assert.NotNil(t, ctx)
 	assert.NotNil(t, writer)
 	assert.Equal(t, writer.Code, http.StatusOK)
+	mockService.AssertExpectations(t)
 }
 
 func TestGetMonthDate(t *testing.T) {
 	ctx, writer := commonmock.GetGinContext("date=20200505", map[string][]string{})
+	mockService.On("GetMonthDate", mockit.Anything).Return([]entity.DLWDate{})
 
 	//need mock gin.Context.Writer
 	service.GetMonthDate(ctx)
@@ -41,20 +47,24 @@ func TestGetMonthDate(t *testing.T) {
 	assert.NotNil(t, ctx)
 	assert.NotNil(t, writer)
 	assert.Equal(t, writer.Code, http.StatusOK)
+	mockService.AssertExpectations(t)
 }
 
 func TestGetDateDistanceInvalidStart(t *testing.T) {
 	ctx, writer := commonmock.GetGinContext("start=&end=20200505", map[string][]string{})
+	mockService.On("GetCarbonDistanceWithCacheAside", mockit.Anything, mockit.Anything).Return(mockit.Anything, mockit.Anything)
 
 	service.GetDateDistance(ctx)
 
 	assert.NotNil(t, ctx)
 	assert.NotNil(t, writer)
 	assert.Equal(t, writer.Code, http.StatusBadRequest)
+	mockService.AssertNotCalled(t, "GetCarbonDistanceWithCacheAside", mockit.Anything, mockit.Anything)
 }
 
 func TestGetDateDistanceInvalidEnd(t *testing.T) {
 	ctx, writer := commonmock.GetGinContext("start=20200505&end=", map[string][]string{})
+	mockService.On("GetCarbonDistanceWithCacheAside", mockit.Anything, mockit.Anything).Return(mockit.Anything, mockit.Anything)
 
 	service.GetDateDistance(ctx)
 
@@ -62,30 +72,36 @@ func TestGetDateDistanceInvalidEnd(t *testing.T) {
 	assert.NotNil(t, writer)
 
 	assert.Equal(t, writer.Code, http.StatusBadRequest)
+	mockService.AssertNotCalled(t, "GetCarbonDistanceWithCacheAside", mockit.Anything, mockit.Anything)
 }
 
 func TestGetDateDistance(t *testing.T) {
 	ctx, writer := commonmock.GetGinContext("start=20200505&end=20200101", map[string][]string{})
+	mockService.On("GetCarbonDistanceWithCacheAside", mockit.Anything, mockit.Anything).Return(1, 2)
 
 	service.GetDateDistance(ctx)
 
 	assert.NotNil(t, ctx)
 	assert.NotNil(t, writer)
 	assert.Equal(t, writer.Code, http.StatusOK)
+	mockService.AssertExpectations(t)
 }
 
 func TestGetLunarDateDistanceInvalidStart(t *testing.T) {
 	ctx, writer := commonmock.GetGinContext("start=&end=20200505", map[string][]string{})
+	mockService.On("GetLunarDistanceWithCacheAside", mockit.Anything, mockit.Anything).Return(mockit.Anything, mockit.Anything)
 
 	service.GetLunarDateDistance(ctx)
 
 	assert.NotNil(t, ctx)
 	assert.NotNil(t, writer)
 	assert.Equal(t, writer.Code, http.StatusBadRequest)
+	mockService.AssertNotCalled(t, "GetLunarDistanceWithCacheAside", mockit.Anything, mockit.Anything)
 }
 
 func TestGetLunarDateDistanceInvalidEnd(t *testing.T) {
 	ctx, writer := commonmock.GetGinContext("start=20200505&end=", map[string][]string{})
+	mockService.On("GetLunarDistanceWithCacheAside", mockit.Anything, mockit.Anything).Return(mockit.Anything, mockit.Anything)
 
 	service.GetLunarDateDistance(ctx)
 
@@ -93,14 +109,17 @@ func TestGetLunarDateDistanceInvalidEnd(t *testing.T) {
 	assert.NotNil(t, writer)
 
 	assert.Equal(t, writer.Code, http.StatusBadRequest)
+	mockService.AssertNotCalled(t, "GetLunarDistanceWithCacheAside", mockit.Anything, mockit.Anything)
 }
 
 func TestGetLunarDateDistance(t *testing.T) {
 	ctx, writer := commonmock.GetGinContext("start=20200505&end=20200101", map[string][]string{})
+	mockService.On("GetLunarDistanceWithCacheAside", mockit.Anything, mockit.Anything).Return(1, 2)
 
 	service.GetLunarDateDistance(ctx)
 
 	assert.NotNil(t, ctx)
 	assert.NotNil(t, writer)
 	assert.Equal(t, writer.Code, http.StatusOK)
+	mockService.AssertExpectations(t)
 }

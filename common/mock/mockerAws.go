@@ -6,10 +6,12 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/stretchr/testify/mock"
 )
 
 //mock of AwsInterface
 type MockAwsHelper struct {
+	mock.Mock
 }
 
 func ProvideMockAwsHelper() *MockAwsHelper {

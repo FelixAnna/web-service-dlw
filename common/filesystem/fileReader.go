@@ -4,7 +4,15 @@ import (
 	"bufio"
 	"log"
 	"os"
+
+	"github.com/google/wire"
 )
+
+var FileSet = wire.NewSet(ProvideFileService, wire.Bind(new(FileInterface), new(*FileService)))
+
+type FileInterface interface {
+	ReadLines(path string) []string
+}
 
 type FileService struct {
 }

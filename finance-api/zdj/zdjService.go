@@ -14,12 +14,12 @@ import (
 )
 
 type ZdjApi struct {
-	fileService *filesystem.FileService
+	fileService filesystem.FileInterface
 	Repo        repository.ZdjRepo
 }
 
 //provide for wire
-func ProvideZdjApi(repo repository.ZdjRepo, fileService *filesystem.FileService) ZdjApi {
+func ProvideZdjApi(repo repository.ZdjRepo, fileService filesystem.FileInterface) ZdjApi {
 	return ZdjApi{Repo: repo, fileService: fileService}
 }
 

@@ -15,7 +15,7 @@ import (
 )
 
 func InitializeApi() (zdj.ZdjApi, error) {
-	wire.Build(zdj.ProvideZdjApi, repository.SqlRepoSet, filesystem.ProvideFileService, aws.ProvideAWSService, aws.AwsSet) //sql
+	wire.Build(zdj.ProvideZdjApi, repository.SqlRepoSet, filesystem.FileSet, aws.ProvideAWSService, aws.AwsSet) //sql
 	//wire.Build(zdj.ProvideZdjApi, repository.MemoryRepoSet) //InMemory
 	return zdj.ZdjApi{}, nil
 }

@@ -5,15 +5,15 @@ import (
 	"testing"
 
 	"github.com/FelixAnna/web-service-dlw/common/filesystem"
-	commonmock "github.com/FelixAnna/web-service-dlw/common/mock"
-	"github.com/FelixAnna/web-service-dlw/finance-api/mock"
+	commonmock "github.com/FelixAnna/web-service-dlw/common/mocks"
+	"github.com/FelixAnna/web-service-dlw/finance-api/mocks"
 	"github.com/FelixAnna/web-service-dlw/finance-api/zdj/entity"
 	"github.com/stretchr/testify/assert"
 	mockit "github.com/stretchr/testify/mock"
 )
 
-func setupService() (*mock.ZdjMockRepo, filesystem.FileInterface, *ZdjApi) {
-	mockRepo := &mock.ZdjMockRepo{}
+func setupService() (*mocks.ZdjMockRepo, filesystem.FileInterface, *ZdjApi) {
+	mockRepo := &mocks.ZdjMockRepo{}
 	mockFileService := &commonmock.MockFileService{}
 	service := ProvideZdjApi(mockRepo, mockFileService)
 

@@ -12,7 +12,7 @@ import (
 	"github.com/FelixAnna/web-service-dlw/common/jwt"
 	"github.com/FelixAnna/web-service-dlw/common/mesh"
 	"github.com/FelixAnna/web-service-dlw/common/middleware"
-	"github.com/FelixAnna/web-service-dlw/common/mock"
+	"github.com/FelixAnna/web-service-dlw/common/mocks"
 	"github.com/FelixAnna/web-service-dlw/finance-api/zdj"
 	"github.com/FelixAnna/web-service-dlw/finance-api/zdj/repository"
 )
@@ -46,7 +46,7 @@ func InitialRegistry() *mesh.Registry {
 }
 
 func InitialMockRegistry() *mesh.Registry {
-	mockAwsHelper := mock.ProvideMockAwsHelper()
+	mockAwsHelper := mocks.ProvideMockAwsHelper()
 	awsService := aws.ProvideAWSService(mockAwsHelper)
 	registry := mesh.ProvideRegistry(awsService)
 	return registry

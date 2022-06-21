@@ -1,4 +1,4 @@
-package mock
+package mocks
 
 import (
 	"github.com/FelixAnna/web-service-dlw/finance-api/zdj/entity"

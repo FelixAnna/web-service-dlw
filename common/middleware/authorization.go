@@ -10,25 +10,25 @@ import (
 )
 
 type AuthorizationMiddleware struct {
-	tokenService *jwt.TokenService
+	TokenService *jwt.TokenService
 }
 
 func ProvideAuthorizationMiddleware(service *jwt.TokenService) *AuthorizationMiddleware {
-	return &AuthorizationMiddleware{tokenService: service}
+	return &AuthorizationMiddleware{TokenService: service}
 }
 
 func (service *AuthorizationMiddleware) AuthorizationHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Set example variable
-		token := service.tokenService.GetToken(c)
+		token := service.TokenService.GetToken(c)
 
 		if token == "" {
-			c.String(http.StatusForbidden, "token not found!")
+			c.String(http.StatusUnauthorized, "token not found!")
 			c.Abort()
 			return
 		}
 
-		claims, err := service.tokenService.ParseToken(token)
+		claims, err := service.TokenService.ParseToken(token)
 		if err != nil {
 			log.Println(err.Error())
 			c.String(http.StatusForbidden, err.Error())

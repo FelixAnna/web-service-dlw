@@ -44,7 +44,7 @@ func (api *ZdjApi) Search(c *gin.Context) {
 
 func (api *ZdjApi) MemoryCosty(c *gin.Context) {
 	//get result from somewhere
-	times := c.DefaultQuery("times", "1000000")
+	times := c.DefaultQuery("times", "1000")
 	itimes, err := strconv.ParseInt(times, 10, 32)
 	if err != nil {
 		itimes = 100000
@@ -98,12 +98,12 @@ func (api *ZdjApi) Delete(c *gin.Context) {
 	sversion := c.DefaultQuery("version", "2021")
 	id, err := strconv.ParseInt(sid, 10, 32)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err)
+		c.JSON(http.StatusBadRequest, err)
 		return
 	}
 	version, err := strconv.ParseInt(sversion, 10, 32)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err)
+		c.JSON(http.StatusBadRequest, err)
 		return
 	}
 

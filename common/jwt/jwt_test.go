@@ -78,7 +78,7 @@ func TestParseToken(t *testing.T) {
 }
 
 func TestGetTokenByHeader(t *testing.T) {
-	ctx, _ := mock.GetGinContext("", map[string][]string{"Authorization": {"Bearer abc"}})
+	ctx, _ := mock.GetGinContext(&mock.Parameter{Headers: map[string][]string{"Authorization": {"Bearer abc"}}})
 
 	token := service.GetToken(ctx)
 
@@ -86,7 +86,7 @@ func TestGetTokenByHeader(t *testing.T) {
 }
 
 func TestGetTokenByCode(t *testing.T) {
-	ctx, _ := mock.GetGinContext("access_code=abc", map[string][]string{})
+	ctx, _ := mock.GetGinContext(&mock.Parameter{Query: "access_code=abc"})
 
 	token := service.GetToken(ctx)
 
@@ -94,7 +94,7 @@ func TestGetTokenByCode(t *testing.T) {
 }
 
 func TestGetTokenEmptyCodeAndHeader(t *testing.T) {
-	ctx, _ := mock.GetGinContext("", map[string][]string{})
+	ctx, _ := mock.GetGinContext(&mock.Parameter{Headers: map[string][]string{}})
 
 	token := service.GetToken(ctx)
 
@@ -102,7 +102,7 @@ func TestGetTokenEmptyCodeAndHeader(t *testing.T) {
 }
 
 func TestGetTokenInvalid(t *testing.T) {
-	ctx, _ := mock.GetGinContext("access_code=", map[string][]string{"Authorization": {"invalid"}})
+	ctx, _ := mock.GetGinContext(&mock.Parameter{Query: "access_code=", Headers: map[string][]string{"Authorization": {"invalid"}}})
 
 	token := service.GetToken(ctx)
 

@@ -20,6 +20,12 @@ func InitializeApi() (zdj.ZdjApi, error) {
 	return zdj.ZdjApi{}, nil
 }
 
+func InitializeMockApi() (zdj.ZdjApi, error) {
+	wire.Build(zdj.ProvideZdjApi, repository.MemoryRepoSet, filesystem.FileSet) //sql
+	//wire.Build(zdj.ProvideZdjApi, repository.MemoryRepoSet) //InMemory
+	return zdj.ZdjApi{}, nil
+}
+
 func InitialRegistry() *mesh.Registry {
 	wire.Build(mesh.ProvideRegistry,
 		aws.ProvideAWSService,

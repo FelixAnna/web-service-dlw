@@ -31,6 +31,13 @@ func InitializeApi() (zdj.ZdjApi, error) {
 	return zdjApi, nil
 }
 
+func InitializeMockApi() (zdj.ZdjApi, error) {
+	zdjInMemoryRepo := repository.ProvideZdjInMemoryRepo()
+	fileService := filesystem.ProvideFileService()
+	zdjApi := zdj.ProvideZdjApi(zdjInMemoryRepo, fileService)
+	return zdjApi, nil
+}
+
 func InitialRegistry() *mesh.Registry {
 	awsHelper := aws.ProvideAwsHelper()
 	awsService := aws.ProvideAWSService(awsHelper)

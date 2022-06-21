@@ -54,6 +54,20 @@ type ApiBoot struct {
 
 var apiBoot *ApiBoot
 
+func initialDependency() {
+	apiBoot = &ApiBoot{}
+	zdjApi, err := di.InitializeApi()
+	if err != nil {
+		log.Panic(err)
+		return
+	}
+
+	apiBoot.ZdjApi = &zdjApi
+	apiBoot.AuthorizationHandler = di.InitialAuthorizationMiddleware()
+	apiBoot.ErrorHandler = di.InitialErrorMiddleware()
+	apiBoot.Registry = di.InitialRegistry()
+}
+
 func GetGinRouter() *gin.Engine {
 	router := gin.New()
 	initialDependency()
@@ -71,20 +85,6 @@ func GetGinRouter() *gin.Engine {
 
 	//router.Run(":8484")
 	return router
-}
-
-func initialDependency() {
-	apiBoot = &ApiBoot{}
-	zdjApi, err := di.InitializeApi()
-	if err != nil {
-		log.Panic(err)
-		return
-	}
-
-	apiBoot.ZdjApi = &zdjApi
-	apiBoot.AuthorizationHandler = di.InitialAuthorizationMiddleware()
-	apiBoot.ErrorHandler = di.InitialErrorMiddleware()
-	apiBoot.Registry = di.InitialRegistry()
 }
 
 func defineRoutes(router *gin.Engine) {

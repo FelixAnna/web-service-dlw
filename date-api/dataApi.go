@@ -8,6 +8,9 @@ import (
 	"os"
 	"time"
 
+	"github.com/FelixAnna/web-service-dlw/common/mesh"
+	"github.com/FelixAnna/web-service-dlw/common/middleware"
+	"github.com/FelixAnna/web-service-dlw/date-api/date"
 	"github.com/FelixAnna/web-service-dlw/date-api/di"
 
 	httpServer "github.com/asim/go-micro/plugins/server/http/v4"
@@ -25,6 +28,7 @@ func main() {
 		server.Address(":8383"),
 	)
 
+	initialDependency()
 	router := GetGinRouter()
 
 	hd := srv.NewHandler(router)
@@ -32,7 +36,7 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	registry := di.InitialRegistry()
+	registry := apiBoot.Registry
 	service := micro.NewService(
 		micro.Server(srv),
 		micro.Registry(registry.GetRegistry()),
@@ -41,13 +45,32 @@ func main() {
 	service.Run()
 }
 
+type ApiBoot struct {
+	DateApi      *date.DateApi
+	ErrorHandler *middleware.ErrorHandlingMiddleware
+	//AuthorizationHandler *middleware.AuthorizationMiddleware
+	Registry *mesh.Registry
+}
+
+var apiBoot *ApiBoot
+
+func initialDependency() {
+	apiBoot = &ApiBoot{}
+	dateApi := di.InitialDateApi()
+
+	apiBoot.DateApi = dateApi
+	//apiBoot.AuthorizationHandler = di.InitialAuthorizationMiddleware()
+	apiBoot.ErrorHandler = di.InitialErrorMiddleware()
+	apiBoot.Registry = di.InitialRegistry()
+}
+
 func GetGinRouter() *gin.Engine {
 	router := gin.New()
 
 	//define middleware before apis
 	initialLogger()
 	router.Use(gin.Logger())
-	router.Use(di.InitialErrorMiddleware().ErrorHandler())
+	router.Use(apiBoot.ErrorHandler.ErrorHandler())
 	router.Use(gin.Recovery())
 
 	defineRoutes(router)
@@ -61,12 +84,11 @@ func defineRoutes(router *gin.Engine) {
 		c.String(http.StatusOK, "running")
 	})
 
-	var dateApi = di.InitialDateApi()
 	userGroupRouter := router.Group("/date")
 	{
-		userGroupRouter.GET("/current/month", dateApi.GetMonthDate)
-		userGroupRouter.GET("/distance", dateApi.GetDateDistance)
-		userGroupRouter.GET("/distance/lunar", dateApi.GetLunarDateDistance)
+		userGroupRouter.GET("/current/month", apiBoot.DateApi.GetMonthDate)
+		userGroupRouter.GET("/distance", apiBoot.DateApi.GetDateDistance)
+		userGroupRouter.GET("/distance/lunar", apiBoot.DateApi.GetLunarDateDistance)
 	}
 }
 

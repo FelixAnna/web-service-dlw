@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
+	"io"
 	"log"
 	"net/http"
 	"net/http/httptest"
@@ -28,7 +30,7 @@ func init() {
 
 func TestRunning(t *testing.T) {
 
-	w := performRequest(router, "GET", "/status")
+	w := performRequest(router, "GET", "/status", nil)
 
 	assert.Equal(t, http.StatusOK, w.Code)
 	assert.Equal(t, "running", w.Body.String())
@@ -36,7 +38,7 @@ func TestRunning(t *testing.T) {
 
 func TestGetZdjUnAuthorized(t *testing.T) {
 	//Act
-	w := performRequest(router, "GET", "/zdj/")
+	w := performRequest(router, "GET", "/zdj/", nil)
 
 	var response []entity.Zhidaojia
 	err := json.Unmarshal(w.Body.Bytes(), &response)
@@ -48,7 +50,7 @@ func TestGetZdjUnAuthorized(t *testing.T) {
 
 func TestGetZdjForbidden(t *testing.T) {
 	//Act
-	w := performRequest(router, "GET", "/zdj/?access_code=123")
+	w := performRequest(router, "GET", "/zdj/?access_code=123", nil)
 
 	var response []entity.Zhidaojia
 	err := json.Unmarshal(w.Body.Bytes(), &response)
@@ -60,7 +62,7 @@ func TestGetZdjForbidden(t *testing.T) {
 
 func TestGetZdjAuthorized(t *testing.T) {
 	//Act
-	w := performRequest(router, "GET", "/zdj/?access_code="+validToken)
+	w := performRequest(router, "GET", "/zdj/?access_code="+validToken, nil)
 
 	var response []entity.Zhidaojia
 	err := json.Unmarshal(w.Body.Bytes(), &response)
@@ -71,8 +73,53 @@ func TestGetZdjAuthorized(t *testing.T) {
 	assert.NotNil(t, response)
 }
 
-func performRequest(r http.Handler, method, path string) *httptest.ResponseRecorder {
-	req, _ := http.NewRequest(method, path, nil)
+func TestSearchAuthorized(t *testing.T) {
+	//Act
+	w := performRequest(router, "POST", "/zdj/search?access_code="+validToken, entity.Criteria{Page: 1, Size: 20})
+
+	var response []entity.Zhidaojia
+	err := json.Unmarshal(w.Body.Bytes(), &response)
+
+	//Assert
+	assert.Equal(t, http.StatusOK, w.Code)
+	assert.Nil(t, err)
+	assert.NotNil(t, response)
+}
+
+func TestDeleteAuthorized(t *testing.T) {
+	//Act
+	w := performRequest(router, "DELETE", "/zdj/123?access_code="+validToken, nil)
+
+	//Assert
+	assert.Equal(t, http.StatusOK, w.Code)
+	assert.EqualValues(t, w.Body.String(), "\"Data deleted.\"")
+}
+
+func TestSlowAuthorized(t *testing.T) {
+	//Act
+	w := performRequest(router, "GET", "/zdj/slow?access_code="+validToken, nil)
+
+	var response map[int]int
+	err := json.Unmarshal(w.Body.Bytes(), &response)
+
+	//Assert
+	assert.Equal(t, http.StatusOK, w.Code)
+	assert.Nil(t, err)
+	assert.NotNil(t, response)
+}
+
+func performRequest(r http.Handler, method, path string, body interface{}) *httptest.ResponseRecorder {
+	var readerOfBody io.Reader = nil
+	if body != nil {
+		data, err := json.Marshal(body)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		readerOfBody = bytes.NewReader(data)
+	}
+
+	req, _ := http.NewRequest(method, path, readerOfBody)
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 	return w

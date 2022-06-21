@@ -96,7 +96,7 @@ func (repo *ZdjInMemoryRepo) Search(criteria *entity.Criteria) ([]entity.Zhidaoj
 		}
 	}
 
-	var items []entity.Zhidaojia
+	var items []entity.Zhidaojia = []entity.Zhidaojia{}
 	query.Skip((criteria.Page - 1) * criteria.Size).Take(criteria.Size).ToSlice(&items)
 
 	return items, nil

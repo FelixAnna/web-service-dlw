@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/FelixAnna/web-service-dlw/date-api/date/entity"
+	"github.com/FelixAnna/web-service-dlw/date-api/di"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 )
@@ -14,7 +15,9 @@ import (
 var router *gin.Engine
 
 func init() {
+	gin.SetMode(gin.TestMode)
 	router = gin.New()
+	initialMockDependency()
 	defineRoutes(router)
 }
 
@@ -105,4 +108,14 @@ func performRequest(r http.Handler, method, path string) *httptest.ResponseRecor
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 	return w
+}
+
+func initialMockDependency() {
+	apiBoot = &ApiBoot{}
+	dateApi := di.InitialDateApi()
+
+	apiBoot.DateApi = dateApi
+	//apiBoot.AuthorizationHandler = di.InitialAuthorizationMiddleware()
+	apiBoot.ErrorHandler = di.InitialErrorMiddleware()
+	apiBoot.Registry = di.InitialMockRegistry()
 }

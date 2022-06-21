@@ -19,7 +19,7 @@ func init() {
 
 func TestProvideAuthorizationMiddleware(t *testing.T) {
 	assert.NotNil(t, authService)
-	assert.NotEmpty(t, authService.tokenService)
+	assert.NotEmpty(t, authService.TokenService)
 }
 
 func TestAuthorizationHandler(t *testing.T) {

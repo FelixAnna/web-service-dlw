@@ -5,14 +5,14 @@ import (
 
 	"github.com/FelixAnna/web-service-dlw/common/aws"
 	"github.com/FelixAnna/web-service-dlw/common/jwt"
-	"github.com/FelixAnna/web-service-dlw/common/mock"
+	"github.com/FelixAnna/web-service-dlw/common/mocks"
 	"github.com/stretchr/testify/assert"
 )
 
 var authService *AuthorizationMiddleware
 
 func init() {
-	helper := mock.MockAwsHelper{}
+	helper := mocks.MockAwsHelper{}
 	tokenService := jwt.ProvideTokenService(aws.ProvideAWSService(&helper))
 	authService = ProvideAuthorizationMiddleware(tokenService)
 }

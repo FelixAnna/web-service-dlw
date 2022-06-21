@@ -9,6 +9,8 @@ import (
 	httpClient "github.com/asim/go-micro/plugins/client/http/v4"
 	"go-micro.dev/v4/client"
 	"go-micro.dev/v4/selector"
+
+	"github.com/google/wire"
 )
 
 const serviceName = "date-api"
@@ -25,6 +27,8 @@ type Distance struct {
 	Before    int64
 	After     int64
 }
+
+var DateSet = wire.NewSet(ProvideDateService, wire.Bind(new(DateInterface), new(*DateService)))
 
 type DateService struct {
 	DlwClient client.Client

@@ -5,14 +5,14 @@ import (
 	"testing"
 
 	"github.com/FelixAnna/web-service-dlw/common/aws"
-	"github.com/FelixAnna/web-service-dlw/common/mock"
+	"github.com/FelixAnna/web-service-dlw/common/mocks"
 	"github.com/stretchr/testify/assert"
 )
 
 var service *Registry
 
 func init() {
-	helper := mock.MockAwsHelper{}
+	helper := mocks.MockAwsHelper{}
 	service = ProvideRegistry(aws.ProvideAWSService(&helper))
 }
 

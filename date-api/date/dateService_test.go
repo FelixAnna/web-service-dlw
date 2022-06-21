@@ -4,15 +4,15 @@ import (
 	"net/http"
 	"testing"
 
-	commonmock "github.com/FelixAnna/web-service-dlw/common/mock"
+	commonmock "github.com/FelixAnna/web-service-dlw/common/mocks"
 	"github.com/FelixAnna/web-service-dlw/date-api/date/entity"
-	"github.com/FelixAnna/web-service-dlw/date-api/mock"
+	"github.com/FelixAnna/web-service-dlw/date-api/mocks"
 	"github.com/stretchr/testify/assert"
 	mockit "github.com/stretchr/testify/mock"
 )
 
-func setupService() (*mock.MockCarbonService, *DateApi) {
-	mockService := &mock.MockCarbonService{}
+func setupService() (*mocks.MockCarbonService, *DateApi) {
+	mockService := &mocks.MockCarbonService{}
 	service := ProvideDateApi(mockService)
 
 	return mockService, service

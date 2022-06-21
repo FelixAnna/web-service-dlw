@@ -3,14 +3,14 @@ package aws
 import (
 	"testing"
 
-	"github.com/FelixAnna/web-service-dlw/common/mock"
+	"github.com/FelixAnna/web-service-dlw/common/mocks"
 	"github.com/stretchr/testify/assert"
 )
 
 var service *AWSService
 
 func init() {
-	helper := mock.MockAwsHelper{}
+	helper := mocks.MockAwsHelper{}
 	service = ProvideAWSService(&helper)
 }
 

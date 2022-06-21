@@ -17,7 +17,7 @@ var MemoSet = wire.NewSet(wire.Struct(new(MemoApi), "*"))
 
 type MemoApi struct {
 	Repo        repository.MemoRepo
-	DateService *services.DateService
+	DateService services.DateInterface
 }
 
 func (api *MemoApi) AddMemo(c *gin.Context) {

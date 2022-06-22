@@ -336,20 +336,3 @@ d. after deployed, ssh to minikube container to test the api after installed.
  deploy ingress, metric server, microservices use either helm or kubectl.
 
  known issue is the metric server need longer `--metric-resolution`, refer [metric server](#metric-server)
-
-
-## TODO list
-### research on DI 
-    -- wire : compile-time dependency injection
-    -- dig /inject: runtime dependency injection
-### research helm upgrade not update replicaset + pod when image version changed
-### delete stucked namespace
-    https://phoenixnap.com/kb/kubernetes-delete-namespace
-### ut
-    ```
-    go test -cover -v ./...
-    ```
-### document api
-
-### ut with mockery
-mockery --all --recursive --output=./mocks --with-expecter

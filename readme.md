@@ -1,5 +1,8 @@
 # dlw - daily life web microservices
 
+[![Build Status](https://github.com/FelixAnna/web-service-dlw/workflows/Run%20Tests/badge.svg?branch=master)](https://github.com/FelixAnna/web-service-dlw/actions?query=branch%3Amaster)
+[![codecov](https://codecov.io/gh/FelixAnna/web-service-dlw/branch/master/graph/badge.svg)](https://codecov.io/gh/FelixAnna/web-service-dlw)
+
 # Table of Contents
 
 - 1. [Prepare](#prepare)

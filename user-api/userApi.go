@@ -8,8 +8,12 @@ import (
 	"os"
 	"time"
 
+	"github.com/FelixAnna/web-service-dlw/user-api/auth"
 	"github.com/FelixAnna/web-service-dlw/user-api/di"
+	"github.com/FelixAnna/web-service-dlw/user-api/users"
 
+	"github.com/FelixAnna/web-service-dlw/common/mesh"
+	"github.com/FelixAnna/web-service-dlw/common/middleware"
 	httpServer "github.com/asim/go-micro/plugins/server/http/v4"
 	"go-micro.dev/v4"
 
@@ -34,19 +38,42 @@ func main() {
 
 	service := micro.NewService(
 		micro.Server(srv),
-		micro.Registry(di.InitialRegistry().GetRegistry()),
+		micro.Registry(apiBoot.Registry.GetRegistry()),
 	)
 	service.Init()
 	service.Run()
 }
 
+type ApiBoot struct {
+	UserApi              *users.UserApi
+	AuthApi              *auth.GithubAuthApi
+	ErrorHandler         *middleware.ErrorHandlingMiddleware
+	AuthorizationHandler *middleware.AuthorizationMiddleware
+	Registry             *mesh.Registry
+}
+
+var apiBoot *ApiBoot
+
+func initialDependency() {
+	apiBoot = &ApiBoot{}
+	userApi := di.InitialUserApi()
+	authApi := di.InitialGithubAuthApi()
+
+	apiBoot.UserApi = &userApi
+	apiBoot.AuthApi = &authApi
+	apiBoot.AuthorizationHandler = di.InitialAuthorizationMiddleware()
+	apiBoot.ErrorHandler = di.InitialErrorMiddleware()
+	apiBoot.Registry = di.InitialRegistry()
+}
+
 func GetGinRouter() *gin.Engine {
 	router := gin.New()
+	initialDependency()
 
 	//define middleware before apis
 	initialLogger()
 	router.Use(gin.Logger())
-	router.Use(di.InitialErrorMiddleware().ErrorHandler())
+	router.Use(apiBoot.ErrorHandler.ErrorHandler())
 	router.Use(gin.Recovery())
 
 	defineRoutes(router)
@@ -60,30 +87,27 @@ func defineRoutes(router *gin.Engine) {
 		c.String(http.StatusOK, "running")
 	})
 
-	var authApi = di.InitialGithubAuthApi()
-	var userApi = di.InitialUserApi()
-
 	authGitHubRouter := router.Group("/oauth2/github")
 	{
-		authGitHubRouter.GET("/authorize", authApi.AuthorizeGithub)
-		authGitHubRouter.GET("/authorize/url", authApi.AuthorizeGithubUrl)
-		authGitHubRouter.GET("/redirect", authApi.GetGithubToken)
-		authGitHubRouter.GET("/user", authApi.GetNativeToken)
-		authGitHubRouter.GET("/checktoken", authApi.CheckNativeToken)
+		authGitHubRouter.GET("/authorize", apiBoot.AuthApi.AuthorizeGithub)
+		authGitHubRouter.GET("/authorize/url", apiBoot.AuthApi.AuthorizeGithubUrl)
+		authGitHubRouter.GET("/redirect", apiBoot.AuthApi.GetGithubToken)
+		authGitHubRouter.GET("/user", apiBoot.AuthApi.GetNativeToken)
+		authGitHubRouter.GET("/checktoken", apiBoot.AuthApi.CheckNativeToken)
 	}
 
 	userGroupRouter := router.Group("/users", di.InitialAuthorizationMiddleware().AuthorizationHandler())
 	{
-		userGroupRouter.GET("/", userApi.GetAllUsers)
-		userGroupRouter.GET("/:userId", userApi.GetUserById)
-		userGroupRouter.GET("/email/:email", userApi.GetUserByEmail)
+		userGroupRouter.GET("/", apiBoot.UserApi.GetAllUsers)
+		userGroupRouter.GET("/:userId", apiBoot.UserApi.GetUserById)
+		userGroupRouter.GET("/email/:email", apiBoot.UserApi.GetUserByEmail)
 
-		userGroupRouter.POST("/:userId", userApi.UpdateUserBirthdayById)
-		userGroupRouter.POST("/:userId/address", userApi.UpdateUserAddressById)
+		userGroupRouter.POST("/:userId", apiBoot.UserApi.UpdateUserBirthdayById)
+		userGroupRouter.POST("/:userId/address", apiBoot.UserApi.UpdateUserAddressById)
 
-		userGroupRouter.PUT("/", userApi.AddUser)
+		userGroupRouter.PUT("/", apiBoot.UserApi.AddUser)
 
-		userGroupRouter.DELETE("/:userId", userApi.RemoveUser)
+		userGroupRouter.DELETE("/:userId", apiBoot.UserApi.RemoveUser)
 	}
 }
 

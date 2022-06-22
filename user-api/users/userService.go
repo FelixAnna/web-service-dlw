@@ -20,7 +20,7 @@ type UserApi struct {
 func (api *UserApi) GetAllUsers(c *gin.Context) {
 	users, err := api.Repo.GetAll()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err)
+		c.String(http.StatusInternalServerError, err.Error())
 		return
 	}
 
@@ -31,7 +31,7 @@ func (api *UserApi) GetUserByEmail(c *gin.Context) {
 	email := c.Param("email")
 	user, err := api.Repo.GetByEmail(email)
 	if err != nil {
-		c.JSON(http.StatusNotFound, err.Error())
+		c.String(http.StatusNotFound, err.Error())
 		return
 	}
 
@@ -42,7 +42,7 @@ func (api *UserApi) GetUserById(c *gin.Context) {
 	strId := c.Param("userId")
 	user, err := api.Repo.GetById(strId)
 	if err != nil {
-		c.JSON(http.StatusNotFound, err.Error())
+		c.String(http.StatusNotFound, err.Error())
 		return
 	}
 
@@ -54,7 +54,7 @@ func (api *UserApi) UpdateUserBirthdayById(c *gin.Context) {
 	birthday := c.Query("birthday")
 	err := api.Repo.UpdateBirthday(userId, birthday)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err.Error())
+		c.String(http.StatusInternalServerError, err.Error())
 		return
 	}
 
@@ -66,13 +66,13 @@ func (api *UserApi) UpdateUserAddressById(c *gin.Context) {
 	var addresses []entity.Address
 	if err := c.BindJSON(&addresses); err != nil {
 		log.Println(err)
-		c.JSON(http.StatusInternalServerError, err.Error())
+		c.String(http.StatusBadRequest, err.Error())
 		return
 	}
 
 	err := api.Repo.UpdateAddress(userId, addresses)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err.Error())
+		c.String(http.StatusInternalServerError, err.Error())
 		return
 	}
 
@@ -83,13 +83,13 @@ func (api *UserApi) AddUser(c *gin.Context) {
 	var new_user entity.User
 	if err := c.BindJSON(&new_user); err != nil {
 		log.Println(err)
-		c.JSON(http.StatusInternalServerError, err.Error())
+		c.String(http.StatusBadRequest, err.Error())
 		return
 	}
 
 	id, err := api.Repo.Add(&new_user)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err.Error())
+		c.String(http.StatusInternalServerError, err.Error())
 		return
 	}
 
@@ -100,7 +100,7 @@ func (api *UserApi) RemoveUser(c *gin.Context) {
 	userId := c.Param("userId")
 	err := api.Repo.Delete(userId)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err.Error())
+		c.String(http.StatusInternalServerError, err.Error())
 		return
 	}
 

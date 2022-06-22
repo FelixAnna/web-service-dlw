@@ -46,7 +46,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-go-
       - name: Run Tests
-        run: go test ./date-api/...
+        run: go test ./date-api/... -coverprofile=date-coverage.txt &&
+              go test ./memo-api/... -coverprofile=memo-coverage.txt &&
+              go test ./finance-api/... -coverprofile=finance-coverage.txt &&
+              go test ./user-api/... -coverprofile=user-coverage.txt &&
+              go test ./common/... -coverprofile=common-coverage.txt
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3

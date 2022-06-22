@@ -64,3 +64,11 @@ func InitialAuthorizationMiddleware() *middleware.AuthorizationMiddleware {
 	authorizationMiddleware := middleware.ProvideAuthorizationMiddleware(tokenService)
 	return authorizationMiddleware
 }
+
+func InitialMockAuthorizationMiddleware() *middleware.AuthorizationMiddleware {
+	mockAwsHelper := mocks.ProvideMockAwsHelper()
+	awsService := aws.ProvideAWSService(mockAwsHelper)
+	tokenService := jwt.ProvideTokenService(awsService)
+	authorizationMiddleware := middleware.ProvideAuthorizationMiddleware(tokenService)
+	return authorizationMiddleware
+}

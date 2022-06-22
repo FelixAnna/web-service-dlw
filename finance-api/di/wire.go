@@ -49,3 +49,8 @@ func InitialAuthorizationMiddleware() *middleware.AuthorizationMiddleware {
 	wire.Build(middleware.ProvideAuthorizationMiddleware, jwt.JwtSet)
 	return &middleware.AuthorizationMiddleware{}
 }
+
+func InitialMockAuthorizationMiddleware() *middleware.AuthorizationMiddleware {
+	wire.Build(middleware.ProvideAuthorizationMiddleware, jwt.JwtMockSet)
+	return &middleware.AuthorizationMiddleware{}
+}

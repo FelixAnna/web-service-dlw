@@ -215,7 +215,7 @@ func setupService(t *testing.T) *mocks.UserRepo {
 	apiBoot.UserApi = service
 
 	apiBoot.Registry = di.InitialMockRegistry()
-	apiBoot.AuthorizationHandler = di.InitialAuthorizationMiddleware()
+	apiBoot.AuthorizationHandler = di.InitialMockAuthorizationMiddleware()
 	apiBoot.ErrorHandler = di.InitialErrorMiddleware()
 
 	router = gin.New()

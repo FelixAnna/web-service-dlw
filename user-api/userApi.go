@@ -96,7 +96,7 @@ func defineRoutes(router *gin.Engine) {
 		authGitHubRouter.GET("/checktoken", apiBoot.AuthApi.CheckNativeToken)
 	}
 
-	userGroupRouter := router.Group("/users", di.InitialAuthorizationMiddleware().AuthorizationHandler())
+	userGroupRouter := router.Group("/users", apiBoot.AuthorizationHandler.AuthorizationHandler())
 	{
 		userGroupRouter.GET("/", apiBoot.UserApi.GetAllUsers)
 		userGroupRouter.GET("/:userId", apiBoot.UserApi.GetUserById)

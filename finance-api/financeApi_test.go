@@ -135,6 +135,6 @@ func initialMockDependency() {
 
 	apiBoot.ZdjApi = &zdjApi
 	apiBoot.Registry = di.InitialMockRegistry()
-	apiBoot.AuthorizationHandler = di.InitialAuthorizationMiddleware()
+	apiBoot.AuthorizationHandler = di.InitialMockAuthorizationMiddleware()
 	apiBoot.ErrorHandler = di.InitialErrorMiddleware()
 }

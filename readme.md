@@ -350,3 +350,6 @@ d. after deployed, ssh to minikube container to test the api after installed.
     go test -cover -v ./...
     ```
 ### document api
+
+### ut with mockery
+mockery --all --recursive --output=./mocks --with-expecter

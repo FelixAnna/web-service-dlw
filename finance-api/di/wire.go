@@ -21,7 +21,7 @@ func InitializeApi() (zdj.ZdjApi, error) {
 }
 
 func InitializeMockApi() (zdj.ZdjApi, error) {
-	wire.Build(zdj.ProvideZdjApi, repository.MemoryRepoSet, filesystem.FileSet) //sql
+	wire.Build(zdj.ProvideZdjApi, repository.MemoryRepoSet, filesystem.FileSet) //inmemory
 	//wire.Build(zdj.ProvideZdjApi, repository.MemoryRepoSet) //InMemory
 	return zdj.ZdjApi{}, nil
 }

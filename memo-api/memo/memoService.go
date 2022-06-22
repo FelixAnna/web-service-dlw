@@ -44,7 +44,7 @@ func (api *MemoApi) AddMemo(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, fmt.Sprintf("Memo %v created!", *id))
+	c.JSON(http.StatusOK, fmt.Sprintf("Memo %v created!", id))
 }
 
 func (api *MemoApi) GetMemoById(c *gin.Context) {
@@ -66,7 +66,7 @@ func (api *MemoApi) GetMemosByUserId(c *gin.Context) {
 	userId := api.getUserIdFromContext(c)
 	memos, err := api.Repo.GetByUserId(userId)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err)
+		c.String(http.StatusInternalServerError, err.Error())
 		return
 	}
 
@@ -89,7 +89,7 @@ func (api *MemoApi) GetRecentMemos(c *gin.Context) {
 	//TODO - calculate distance
 	memos, err := api.Repo.GetByDateRange(start, end, userId)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err)
+		c.String(http.StatusInternalServerError, err.Error())
 		return
 	}
 
@@ -110,7 +110,7 @@ func (api *MemoApi) UpdateMemoById(c *gin.Context) {
 	var request entity.MemoRequest
 	if err := c.BindJSON(&request); err != nil {
 		log.Println(err)
-		c.JSON(http.StatusBadRequest, err.Error())
+		c.String(http.StatusBadRequest, err.Error())
 		return
 	}
 
@@ -126,7 +126,7 @@ func (api *MemoApi) UpdateMemoById(c *gin.Context) {
 
 	err := api.Repo.Update(new_memo)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err.Error())
+		c.String(http.StatusInternalServerError, err.Error())
 		return
 	}
 
@@ -137,7 +137,7 @@ func (api *MemoApi) RemoveMemo(c *gin.Context) {
 	id := c.Param("id")
 	err := api.Repo.Delete(id)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err.Error())
+		c.String(http.StatusInternalServerError, err.Error())
 	} else {
 		c.JSON(http.StatusOK, fmt.Sprintf("Memo %v deleted!", id))
 	}

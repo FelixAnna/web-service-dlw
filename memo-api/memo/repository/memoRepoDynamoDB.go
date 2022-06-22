@@ -28,7 +28,7 @@ func ProvideMemoRepoDynamoDB(awsService *config.AWSService) *MemoRepoDynamoDB {
 	return &MemoRepoDynamoDB{Client: awsService.GetDynamoDBClient(), TableName: "dlf.Memos"}
 }
 
-func (m *MemoRepoDynamoDB) Add(memo *entity.Memo) (*string, error) {
+func (m *MemoRepoDynamoDB) Add(memo *entity.Memo) (string, error) {
 	randId := fmt.Sprintf("%d%03d", time.Now().Unix(), rand.Intn(1000))
 	memo.Id = randId
 	memo.CreateTime = strconv.FormatInt(time.Now().UTC().Unix(), 10)
@@ -36,7 +36,7 @@ func (m *MemoRepoDynamoDB) Add(memo *entity.Memo) (*string, error) {
 	memoJson, err := dynamodbattribute.MarshalMap(memo)
 	if err != nil {
 		log.Printf("Got error marshalling new memo item: %s", err)
-		return nil, err
+		return "", err
 	}
 
 	_, err = m.Client.PutItem(&dynamodb.PutItemInput{
@@ -46,10 +46,10 @@ func (m *MemoRepoDynamoDB) Add(memo *entity.Memo) (*string, error) {
 
 	if err != nil {
 		log.Printf("Got error calling PutItem: %s", err)
-		return nil, err
+		return "", err
 	}
 
-	return &memo.Id, nil
+	return memo.Id, nil
 }
 
 func (m *MemoRepoDynamoDB) GetById(id string) (*entity.Memo, error) {

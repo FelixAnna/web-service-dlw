@@ -8,7 +8,10 @@ import (
 	"os"
 	"time"
 
+	"github.com/FelixAnna/web-service-dlw/common/mesh"
+	"github.com/FelixAnna/web-service-dlw/common/middleware"
 	"github.com/FelixAnna/web-service-dlw/memo-api/di"
+	"github.com/FelixAnna/web-service-dlw/memo-api/memo"
 	httpServer "github.com/asim/go-micro/plugins/server/http/v4"
 	"go-micro.dev/v4"
 
@@ -33,20 +36,40 @@ func main() {
 
 	service := micro.NewService(
 		micro.Server(srv),
-		micro.Registry(di.InitialRegistry().GetRegistry()),
+		micro.Registry(apiBoot.Registry.GetRegistry()),
 	)
 
 	service.Init()
 	service.Run()
 }
 
+type ApiBoot struct {
+	MemoApi              *memo.MemoApi
+	ErrorHandler         *middleware.ErrorHandlingMiddleware
+	AuthorizationHandler *middleware.AuthorizationMiddleware
+	Registry             *mesh.Registry
+}
+
+var apiBoot *ApiBoot
+
+func initialDependency() {
+	apiBoot = &ApiBoot{}
+	memoApi := di.InitialMemoApi()
+
+	apiBoot.MemoApi = &memoApi
+	apiBoot.AuthorizationHandler = di.InitialAuthorizationMiddleware()
+	apiBoot.ErrorHandler = di.InitialErrorMiddleware()
+	apiBoot.Registry = di.InitialRegistry()
+}
+
 func GetGinRouter() *gin.Engine {
 	router := gin.New()
+	initialDependency()
 
 	//define middleware before apis
 	initialLogger()
 	router.Use(gin.Logger())
-	router.Use(di.InitialErrorMiddleware().ErrorHandler())
+	router.Use(apiBoot.ErrorHandler.ErrorHandler())
 	router.Use(gin.Recovery())
 
 	defineRoutes(router)
@@ -60,17 +83,16 @@ func defineRoutes(router *gin.Engine) {
 		c.String(http.StatusOK, "running")
 	})
 
-	var memoApi = di.InitialMemoApi()
-	userGroupRouter := router.Group("/memos", di.InitialAuthorizationMiddleware().AuthorizationHandler())
+	userGroupRouter := router.Group("/memos", apiBoot.AuthorizationHandler.AuthorizationHandler())
 	{
-		userGroupRouter.PUT("/", memoApi.AddMemo)
+		userGroupRouter.GET("/", apiBoot.MemoApi.GetMemosByUserId)
+		userGroupRouter.GET("/:id", apiBoot.MemoApi.GetMemoById)
+		userGroupRouter.GET("/recent", apiBoot.MemoApi.GetRecentMemos)
 
-		userGroupRouter.GET("/:id", memoApi.GetMemoById)
-		userGroupRouter.GET("/", memoApi.GetMemosByUserId)
-		userGroupRouter.GET("/recent", memoApi.GetRecentMemos)
+		userGroupRouter.PUT("/", apiBoot.MemoApi.AddMemo)
 
-		userGroupRouter.POST("/:id", memoApi.UpdateMemoById)
-		userGroupRouter.DELETE("/:id", memoApi.RemoveMemo)
+		userGroupRouter.POST("/:id", apiBoot.MemoApi.UpdateMemoById)
+		userGroupRouter.DELETE("/:id", apiBoot.MemoApi.RemoveMemo)
 	}
 }
 

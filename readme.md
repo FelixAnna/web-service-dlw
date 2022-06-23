@@ -2,7 +2,12 @@
 
 [![Build Status](https://github.com/FelixAnna/web-service-dlw/workflows/Run%20Tests/badge.svg?branch=master)](https://github.com/FelixAnna/web-service-dlw/actions?query=branch%3Amaster)
 [![codecov](https://codecov.io/gh/FelixAnna/web-service-dlw/branch/master/graph/badge.svg)](https://codecov.io/gh/FelixAnna/web-service-dlw)
+[![Go Report Card](https://goreportcard.com/badge/github.com/FelixAnna/web-service-dlw/common)](https://goreportcard.com/report/github.com/FelixAnna/web-service-dlw/common)
+[![Go Report Card](https://goreportcard.com/badge/github.com/FelixAnna/web-service-dlw/date-api)](https://goreportcard.com/report/github.com/FelixAnna/web-service-dlw/date-api)
+[![Go Report Card](https://goreportcard.com/badge/github.com/FelixAnna/web-service-dlw/memo-api)](https://goreportcard.com/report/github.com/FelixAnna/web-service-dlw/memo-api)
+[![Go Report Card](https://goreportcard.com/badge/github.com/FelixAnna/web-service-dlw/finance-api)](https://goreportcard.com/report/github.com/FelixAnna/web-service-dlw/finance-api)
 [![Go Report Card](https://goreportcard.com/badge/github.com/FelixAnna/web-service-dlw/user-api)](https://goreportcard.com/report/github.com/FelixAnna/web-service-dlw/user-api)
+
 
 # Table of Contents
 

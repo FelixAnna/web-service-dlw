@@ -69,7 +69,7 @@ func (c *CarbonInMemoryService) GetCarbonDistanceWithCacheAside(alignToDate, tar
 		_, alignToMonthDay := alignToDate/10000, alignToDate%10000
 		targetYear, targetMonthDay := targetDate/10000, targetDate%10000
 
-		if alignToMonthDay < targetMonthDay {
+		if alignToMonthDay <= targetMonthDay {
 			//targetYear + alignToMonthDay
 			//targetYear+1 + alignToMonthDay
 			preDate, nextDate := targetYear*10000+alignToMonthDay, (targetYear+1)*10000+alignToMonthDay
@@ -81,7 +81,7 @@ func (c *CarbonInMemoryService) GetCarbonDistanceWithCacheAside(alignToDate, tar
 				return
 			}
 
-		} else if alignToMonthDay > targetMonthDay {
+		} else { //alignToMonthDay > targetMonthDay
 			//targetYear-1 + alignToMonthDay
 			//targetYear + alignToMonthDay
 			preDate, nextDate := (targetYear-1)*10000+alignToMonthDay, targetYear*10000+alignToMonthDay
@@ -92,9 +92,6 @@ func (c *CarbonInMemoryService) GetCarbonDistanceWithCacheAside(alignToDate, tar
 				after = int64(nextDateValue) - int64(targetValue)
 				return
 			}
-
-		} else {
-			return 0, 0
 		}
 	}
 
@@ -128,7 +125,7 @@ func (c *CarbonInMemoryService) GetLunarDistanceWithCacheAside(alignToDate, targ
 		_, alignToMonthDay, _ := alignToDate/100000, (alignToDate%100000)/10, alignToDate%10
 		targetYear, targetMonthDay, _ := targetDate/100000, (targetDate%100000)/10, targetDate%10
 
-		if alignToMonthDay < targetMonthDay {
+		if alignToMonthDay <= targetMonthDay {
 			//targetYear + alignToMonthDay
 			//targetYear+1 + alignToMonthDay
 			preDate, nextDate := targetYear*100000+alignToMonthDay*10, (targetYear+1)*100000+alignToMonthDay*10
@@ -140,7 +137,7 @@ func (c *CarbonInMemoryService) GetLunarDistanceWithCacheAside(alignToDate, targ
 				return
 			}
 
-		} else if alignToMonthDay > targetMonthDay {
+		} else { //alignToMonthDay > targetMonthDay
 			//targetYear-1 + alignToMonthDay
 			//targetYear + alignToMonthDay
 			preDate, nextDate := (targetYear-1)*100000+alignToMonthDay*10, targetYear*100000+alignToMonthDay*10
@@ -150,9 +147,6 @@ func (c *CarbonInMemoryService) GetLunarDistanceWithCacheAside(alignToDate, targ
 				after = int64(nextDateFinal) - int64(targetValue)
 				return
 			}
-
-		} else {
-			return 0, 0
 		}
 	}
 
@@ -236,18 +230,16 @@ func (c *CarbonInMemoryService) getCarbonDistance(alignToDate, targetDate int) (
 	alignToCarbonThisYear := alignToCarbon.AddYears(int(diffYear))
 	diffDays := targetCarbon.DiffInDays(alignToCarbonThisYear)
 
-	if diffDays < 0 { //target after alignToDate - n days before were alignToDate in MMdd, then find m days later when it will be alignToDate in MMdd again
+	if diffDays <= 0 { //target after alignToDate - n days before were alignToDate in MMdd, then find m days later when it will be alignToDate in MMdd again
 		before = diffDays
 
 		alignToCarbonNextYear := alignToCarbonThisYear.AddYear()
 		after = targetCarbon.DiffInDays(alignToCarbonNextYear)
-	} else if diffDays > 0 { //target before alignToDate - n days later will be alignToDate in MMdd, then find m days before when it was alignToDate in MMdd
+	} else { //if diffDays > 0 { //target before alignToDate - n days later will be alignToDate in MMdd, then find m days before when it was alignToDate in MMdd
 		after = diffDays
 
 		alignToCarbonPreYear := alignToCarbonThisYear.SubYear()
 		before = targetCarbon.DiffInDays(alignToCarbonPreYear)
-	} else {
-		return 0, 0
 	}
 
 	return

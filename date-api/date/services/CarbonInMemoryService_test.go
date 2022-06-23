@@ -46,6 +46,18 @@ func TestGetCarbonDistanceWithCacheAsideInCacheAfter(t *testing.T) {
 	assert.EqualValues(t, 57, after)
 }
 
+func TestGetCarbonDistanceWithCacheAsideInCacheSame(t *testing.T) {
+	//Arrange
+	alignToDate, targetDate := 20200505, 20200505
+
+	//Act
+	before, after := service.GetCarbonDistanceWithCacheAside(alignToDate, targetDate)
+
+	//Assert
+	assert.EqualValues(t, 0, before)
+	assert.EqualValues(t, 365, after)
+}
+
 func TestGetCarbonDistanceWithCacheAsideRealTimeCalcBefore(t *testing.T) {
 	//Arrange
 	alignToDate, targetDate := 20790101, 20800505
@@ -94,6 +106,18 @@ func TestGetLunarDistanceWithCacheAsideAfter(t *testing.T) {
 	assert.EqualValues(t, 27, after)
 }
 
+func TestGetLunarDistanceWithCacheAsideSame(t *testing.T) {
+	//Arrange
+	alignToDate, targetDate := 20200505, 20200505
+
+	//Act
+	before, after := service.GetLunarDistanceWithCacheAside(alignToDate, targetDate)
+
+	//Assert
+	assert.EqualValues(t, 0, before)
+	assert.EqualValues(t, 354, after)
+}
+
 func TestGetLunarDistanceWithCacheAsideRealTimeCalcBefore(t *testing.T) {
 	//Arrange
 	alignToDate, targetDate := 20790101, 20800505
@@ -129,7 +153,7 @@ func TestGetMonthDate(t *testing.T) {
 	assert.GreaterOrEqual(t, len(dateList), 31)
 }
 
-func SkipTestGetCarbonDate(t *testing.T) {
+func TestGetCarbonDate(t *testing.T) {
 	//Arrange
 	date := 20200101
 
@@ -147,7 +171,7 @@ func SkipTestGetCarbonDate(t *testing.T) {
 	assert.Equal(t, result.Lunar().Day(), 7)
 }
 
-func SkipTestGetLunarDistanceOneWayForward(t *testing.T) {
+func TestGetLunarDistanceOneWayForward(t *testing.T) {
 	//Arrange
 	alignToDate, targetDate := 20200101, 20200505
 	alignToCarbon := service.getCarbonDate(alignToDate)
@@ -160,7 +184,7 @@ func SkipTestGetLunarDistanceOneWayForward(t *testing.T) {
 	assert.EqualValues(t, 259, result)
 }
 
-func SkipTestGetLunarDistanceOneWayAfterword(t *testing.T) {
+func TestGetLunarDistanceOneWayAfterword(t *testing.T) {
 	//Arrange
 	alignToDate, targetDate := 20200101, 20200505
 	alignToCarbon := service.getCarbonDate(alignToDate)
@@ -173,7 +197,7 @@ func SkipTestGetLunarDistanceOneWayAfterword(t *testing.T) {
 	assert.EqualValues(t, -125, result)
 }
 
-func SkipTestGetLunarDistance(t *testing.T) {
+func TestGetLunarDistance(t *testing.T) {
 	//Arrange
 	alignToDate, targetDate := 20200101, 20200505
 
@@ -185,7 +209,7 @@ func SkipTestGetLunarDistance(t *testing.T) {
 	assert.EqualValues(t, 259, after)
 }
 
-func SkipTestGetCarbonDistanceBefore(t *testing.T) {
+func TestGetCarbonDistanceBefore(t *testing.T) {
 	//Arrange
 	alignToDate, targetDate := 20200101, 20200505
 
@@ -197,7 +221,7 @@ func SkipTestGetCarbonDistanceBefore(t *testing.T) {
 	assert.EqualValues(t, 241, after)
 }
 
-func SkipTestGetCarbonDistanceAfter(t *testing.T) {
+func TestGetCarbonDistanceAfter(t *testing.T) {
 	//Arrange
 	alignToDate, targetDate := 20190701, 20200505
 

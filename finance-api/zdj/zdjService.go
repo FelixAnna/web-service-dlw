@@ -47,7 +47,7 @@ func (api *ZdjApi) MemoryCosty(c *gin.Context) {
 	times := c.DefaultQuery("times", "1000")
 	itimes, err := strconv.ParseInt(times, 10, 32)
 	if err != nil {
-		itimes = 100000
+		itimes = 1000
 	}
 
 	results := make(map[int]int, itimes)

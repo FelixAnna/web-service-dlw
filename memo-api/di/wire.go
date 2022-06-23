@@ -14,9 +14,9 @@ import (
 	"github.com/google/wire"
 )
 
-func InitialMemoApi() memo.MemoApi {
+func InitialMemoApi() *memo.MemoApi {
 	wire.Build(memo.MemoSet, repository.RepoSet, services.DateSet, aws.ProvideAWSService, aws.AwsSet, mesh.ProvideRegistry)
-	return memo.MemoApi{}
+	return &memo.MemoApi{}
 }
 
 func InitialRegistry() *mesh.Registry {

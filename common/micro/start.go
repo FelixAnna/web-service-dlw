@@ -1,7 +1,11 @@
 package micro
 
 import (
+	"fmt"
+	"io"
 	"log"
+	"os"
+	"time"
 
 	"go-micro.dev/v4"
 
@@ -28,4 +32,19 @@ func StartApp(serverName, port string, router *gin.Engine, reg registry.Registry
 	)
 	service.Init()
 	service.Run()
+}
+
+func RegisterMiddlewares(router *gin.Engine, errorHandler gin.HandlerFunc) {
+	//define middleware before apis
+	initialLogger()
+	router.Use(gin.Logger())
+	router.Use(errorHandler)
+	router.Use(gin.Recovery())
+}
+
+func initialLogger() {
+	year, month, day := time.Now().UTC().Date()
+	date := fmt.Sprintf("%v%v%v", year, int(month), day)
+	f, _ := os.Create("../logs/" + date + ".log")
+	gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
 }

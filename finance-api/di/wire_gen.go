@@ -19,19 +19,19 @@ import (
 
 // Injectors from wire.go:
 
-func InitializeApi() (zdj.ZdjApi, error) {
+func InitializeApi() (*zdj.ZdjApi, error) {
 	awsHelper := aws.ProvideAwsHelper()
 	awsService := aws.ProvideAWSService(awsHelper)
 	zdjSqlServerRepo, err := repository.ProvideZdjSqlServerRepo(awsService)
 	if err != nil {
-		return zdj.ZdjApi{}, err
+		return nil, err
 	}
 	fileService := filesystem.ProvideFileService()
 	zdjApi := zdj.ProvideZdjApi(zdjSqlServerRepo, fileService)
 	return zdjApi, nil
 }
 
-func InitializeMockApi() (zdj.ZdjApi, error) {
+func InitializeMockApi() (*zdj.ZdjApi, error) {
 	zdjInMemoryRepo := repository.ProvideZdjInMemoryRepo()
 	fileService := filesystem.ProvideFileService()
 	zdjApi := zdj.ProvideZdjApi(zdjInMemoryRepo, fileService)

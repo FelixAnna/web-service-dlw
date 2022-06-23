@@ -14,14 +14,14 @@ import (
 	"github.com/google/wire"
 )
 
-func InitialUserApi() users.UserApi {
+func InitialUserApi() *users.UserApi {
 	wire.Build(users.UserSet, repository.RepoSet, aws.ProvideAWSService, aws.AwsSet)
-	return users.UserApi{}
+	return &users.UserApi{}
 }
 
-func InitialGithubAuthApi() auth.GithubAuthApi {
+func InitialGithubAuthApi() *auth.GithubAuthApi {
 	wire.Build(auth.ProvideGithubAuth, repository.RepoSet, jwt.JwtSet)
-	return auth.GithubAuthApi{}
+	return &auth.GithubAuthApi{}
 }
 
 func InitialRegistry() *mesh.Registry {

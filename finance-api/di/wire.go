@@ -14,16 +14,16 @@ import (
 	"github.com/google/wire"
 )
 
-func InitializeApi() (zdj.ZdjApi, error) {
+func InitializeApi() (*zdj.ZdjApi, error) {
 	wire.Build(zdj.ProvideZdjApi, repository.SqlRepoSet, filesystem.FileSet, aws.ProvideAWSService, aws.AwsSet) //sql
 	//wire.Build(zdj.ProvideZdjApi, repository.MemoryRepoSet) //InMemory
-	return zdj.ZdjApi{}, nil
+	return &zdj.ZdjApi{}, nil
 }
 
-func InitializeMockApi() (zdj.ZdjApi, error) {
+func InitializeMockApi() (*zdj.ZdjApi, error) {
 	wire.Build(zdj.ProvideZdjApi, repository.MemoryRepoSet, filesystem.FileSet) //inmemory
 	//wire.Build(zdj.ProvideZdjApi, repository.MemoryRepoSet) //InMemory
-	return zdj.ZdjApi{}, nil
+	return &zdj.ZdjApi{}, nil
 }
 
 func InitialRegistry() *mesh.Registry {

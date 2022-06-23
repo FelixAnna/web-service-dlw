@@ -19,13 +19,13 @@ import (
 
 // Injectors from wire.go:
 
-func InitialMemoApi() memo.MemoApi {
+func InitialMemoApi() *memo.MemoApi {
 	awsHelper := aws.ProvideAwsHelper()
 	awsService := aws.ProvideAWSService(awsHelper)
 	memoRepoDynamoDB := repository.ProvideMemoRepoDynamoDB(awsService)
 	registry := mesh.ProvideRegistry(awsService)
 	dateService := services.ProvideDateService(registry)
-	memoApi := memo.MemoApi{
+	memoApi := &memo.MemoApi{
 		Repo:        memoRepoDynamoDB,
 		DateService: dateService,
 	}

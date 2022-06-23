@@ -1,11 +1,7 @@
 package main
 
 import (
-	"fmt"
-	"io"
 	"net/http"
-	"os"
-	"time"
 
 	"github.com/FelixAnna/web-service-dlw/common/mesh"
 	"github.com/FelixAnna/web-service-dlw/common/micro"
@@ -32,13 +28,11 @@ type ApiBoot struct {
 var apiBoot *ApiBoot
 
 func initialDependency() {
-	apiBoot = &ApiBoot{}
-	dateApi := di.InitialDateApi()
-
-	apiBoot.DateApi = dateApi
-	//apiBoot.AuthorizationHandler = di.InitialAuthorizationMiddleware()
-	apiBoot.ErrorHandler = di.InitialErrorMiddleware()
-	apiBoot.Registry = di.InitialRegistry()
+	apiBoot = &ApiBoot{
+		DateApi:      di.InitialDateApi(),
+		ErrorHandler: di.InitialErrorMiddleware(),
+		Registry:     di.InitialRegistry(),
+	}
 }
 
 func GetGinRouter() *gin.Engine {
@@ -46,11 +40,7 @@ func GetGinRouter() *gin.Engine {
 	initialDependency()
 
 	//define middleware before apis
-	initialLogger()
-	router.Use(gin.Logger())
-	router.Use(apiBoot.ErrorHandler.ErrorHandler())
-	router.Use(gin.Recovery())
-
+	micro.RegisterMiddlewares(router, apiBoot.ErrorHandler.ErrorHandler())
 	defineRoutes(router)
 
 	//router.Run(":8383")
@@ -68,11 +58,4 @@ func defineRoutes(router *gin.Engine) {
 		userGroupRouter.GET("/distance", apiBoot.DateApi.GetDateDistance)
 		userGroupRouter.GET("/distance/lunar", apiBoot.DateApi.GetLunarDateDistance)
 	}
-}
-
-func initialLogger() {
-	year, month, day := time.Now().UTC().Date()
-	date := fmt.Sprintf("%v%v%v", year, int(month), day)
-	f, _ := os.Create("../logs/" + date + ".log")
-	gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
 }

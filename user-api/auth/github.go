@@ -34,7 +34,7 @@ type GithubAuthApi struct {
 	jwtService *jwt.TokenService
 }
 
-func ProvideGithubAuth(repo repository.UserRepo, awsService *aws.AWSService, jwtService *jwt.TokenService) GithubAuthApi {
+func ProvideGithubAuth(repo repository.UserRepo, awsService *aws.AWSService, jwtService *jwt.TokenService) *GithubAuthApi {
 	confGitHub := &oauth2.Config{
 		ClientID:     awsService.GetParameterByKey("githubClientId"),
 		ClientSecret: awsService.GetParameterByKey("githubClientSecret"),
@@ -42,7 +42,7 @@ func ProvideGithubAuth(repo repository.UserRepo, awsService *aws.AWSService, jwt
 		Endpoint:     github.Endpoint,
 	}
 
-	return GithubAuthApi{ConfGitHub: confGitHub, Repo: repo, jwtService: jwtService}
+	return &GithubAuthApi{ConfGitHub: confGitHub, Repo: repo, jwtService: jwtService}
 }
 
 /* AuthorizeGithub

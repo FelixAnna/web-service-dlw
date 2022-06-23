@@ -1,11 +1,7 @@
 package main
 
 import (
-	"fmt"
-	"io"
 	"net/http"
-	"os"
-	"time"
 
 	"github.com/FelixAnna/web-service-dlw/user-api/auth"
 	"github.com/FelixAnna/web-service-dlw/user-api/di"
@@ -35,15 +31,13 @@ type ApiBoot struct {
 var apiBoot *ApiBoot
 
 func initialDependency() {
-	apiBoot = &ApiBoot{}
-	userApi := di.InitialUserApi()
-	authApi := di.InitialGithubAuthApi()
-
-	apiBoot.UserApi = &userApi
-	apiBoot.AuthApi = &authApi
-	apiBoot.AuthorizationHandler = di.InitialAuthorizationMiddleware()
-	apiBoot.ErrorHandler = di.InitialErrorMiddleware()
-	apiBoot.Registry = di.InitialRegistry()
+	apiBoot = &ApiBoot{
+		UserApi:              di.InitialUserApi(),
+		AuthApi:              di.InitialGithubAuthApi(),
+		AuthorizationHandler: di.InitialAuthorizationMiddleware(),
+		ErrorHandler:         di.InitialErrorMiddleware(),
+		Registry:             di.InitialRegistry(),
+	}
 }
 
 func GetGinRouter() *gin.Engine {
@@ -51,11 +45,7 @@ func GetGinRouter() *gin.Engine {
 	initialDependency()
 
 	//define middleware before apis
-	initialLogger()
-	router.Use(gin.Logger())
-	router.Use(apiBoot.ErrorHandler.ErrorHandler())
-	router.Use(gin.Recovery())
-
+	micro.RegisterMiddlewares(router, apiBoot.ErrorHandler.ErrorHandler())
 	defineRoutes(router)
 
 	//router.Run(":8181")
@@ -89,11 +79,4 @@ func defineRoutes(router *gin.Engine) {
 
 		userGroupRouter.DELETE("/:userId", apiBoot.UserApi.RemoveUser)
 	}
-}
-
-func initialLogger() {
-	year, month, day := time.Now().UTC().Date()
-	date := fmt.Sprintf("%v%v%v", year, int(month), day)
-	f, _ := os.Create("../logs/" + date + ".log")
-	gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
 }

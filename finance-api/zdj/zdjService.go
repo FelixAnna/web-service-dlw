@@ -19,8 +19,8 @@ type ZdjApi struct {
 }
 
 //provide for wire
-func ProvideZdjApi(repo repository.ZdjRepo, fileService filesystem.FileInterface) ZdjApi {
-	return ZdjApi{Repo: repo, fileService: fileService}
+func ProvideZdjApi(repo repository.ZdjRepo, fileService filesystem.FileInterface) *ZdjApi {
+	return &ZdjApi{Repo: repo, fileService: fileService}
 }
 
 func (api *ZdjApi) GetAll(c *gin.Context) {

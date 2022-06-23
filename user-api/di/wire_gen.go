@@ -19,17 +19,17 @@ import (
 
 // Injectors from wire.go:
 
-func InitialUserApi() users.UserApi {
+func InitialUserApi() *users.UserApi {
 	awsHelper := aws.ProvideAwsHelper()
 	awsService := aws.ProvideAWSService(awsHelper)
 	userRepoDynamoDB := repository.ProvideUserRepoDynamoDB(awsService)
-	userApi := users.UserApi{
+	userApi := &users.UserApi{
 		Repo: userRepoDynamoDB,
 	}
 	return userApi
 }
 
-func InitialGithubAuthApi() auth.GithubAuthApi {
+func InitialGithubAuthApi() *auth.GithubAuthApi {
 	awsHelper := aws.ProvideAwsHelper()
 	awsService := aws.ProvideAWSService(awsHelper)
 	userRepoDynamoDB := repository.ProvideUserRepoDynamoDB(awsService)

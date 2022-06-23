@@ -1,11 +1,7 @@
 package main
 
 import (
-	"fmt"
-	"io"
 	"net/http"
-	"os"
-	"time"
 
 	"github.com/FelixAnna/web-service-dlw/common/mesh"
 	"github.com/FelixAnna/web-service-dlw/common/micro"
@@ -32,13 +28,12 @@ type ApiBoot struct {
 var apiBoot *ApiBoot
 
 func initialDependency() {
-	apiBoot = &ApiBoot{}
-	memoApi := di.InitialMemoApi()
-
-	apiBoot.MemoApi = &memoApi
-	apiBoot.AuthorizationHandler = di.InitialAuthorizationMiddleware()
-	apiBoot.ErrorHandler = di.InitialErrorMiddleware()
-	apiBoot.Registry = di.InitialRegistry()
+	apiBoot = &ApiBoot{
+		MemoApi:              di.InitialMemoApi(),
+		AuthorizationHandler: di.InitialAuthorizationMiddleware(),
+		ErrorHandler:         di.InitialErrorMiddleware(),
+		Registry:             di.InitialRegistry(),
+	}
 }
 
 func GetGinRouter() *gin.Engine {
@@ -46,11 +41,7 @@ func GetGinRouter() *gin.Engine {
 	initialDependency()
 
 	//define middleware before apis
-	initialLogger()
-	router.Use(gin.Logger())
-	router.Use(apiBoot.ErrorHandler.ErrorHandler())
-	router.Use(gin.Recovery())
-
+	micro.RegisterMiddlewares(router, apiBoot.ErrorHandler.ErrorHandler())
 	defineRoutes(router)
 
 	//router.Run(":8282")
@@ -73,11 +64,4 @@ func defineRoutes(router *gin.Engine) {
 		userGroupRouter.POST("/:id", apiBoot.MemoApi.UpdateMemoById)
 		userGroupRouter.DELETE("/:id", apiBoot.MemoApi.RemoveMemo)
 	}
-}
-
-func initialLogger() {
-	year, month, day := time.Now().UTC().Date()
-	date := fmt.Sprintf("%v%v%v", year, int(month), day)
-	f, _ := os.Create("../logs/" + date + ".log")
-	gin.DefaultWriter = io.MultiWriter(f, os.Stdout)
 }

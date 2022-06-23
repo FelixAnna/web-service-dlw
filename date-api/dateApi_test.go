@@ -111,11 +111,9 @@ func performRequest(r http.Handler, method, path string) *httptest.ResponseRecor
 }
 
 func initialMockDependency() {
-	apiBoot = &ApiBoot{}
-	dateApi := di.InitialDateApi()
-
-	apiBoot.DateApi = dateApi
-	//apiBoot.AuthorizationHandler = di.InitialAuthorizationMiddleware()
-	apiBoot.ErrorHandler = di.InitialErrorMiddleware()
-	apiBoot.Registry = di.InitialMockRegistry()
+	apiBoot = &ApiBoot{
+		DateApi:      di.InitialDateApi(),
+		ErrorHandler: di.InitialErrorMiddleware(),
+		Registry:     di.InitialMockRegistry(),
+	}
 }

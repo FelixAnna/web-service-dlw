@@ -211,12 +211,13 @@ func setupService(t *testing.T) *mocks.UserRepo {
 	mockRepo := mocks.NewUserRepo(t)
 	service := &users.UserApi{Repo: mockRepo}
 
-	apiBoot = &ApiBoot{}
-	apiBoot.UserApi = service
-
-	apiBoot.Registry = di.InitialMockRegistry()
-	apiBoot.AuthorizationHandler = di.InitialMockAuthorizationMiddleware()
-	apiBoot.ErrorHandler = di.InitialErrorMiddleware()
+	apiBoot = &ApiBoot{
+		UserApi: service,
+		//AuthApi:              di.InitialGithubAuthApi(),
+		AuthorizationHandler: di.InitialMockAuthorizationMiddleware(),
+		ErrorHandler:         di.InitialErrorMiddleware(),
+		Registry:             di.InitialMockRegistry(),
+	}
 
 	router = gin.New()
 	defineRoutes(router)

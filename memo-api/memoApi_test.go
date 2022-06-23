@@ -213,14 +213,14 @@ func setupService(t *testing.T) (*mocks.MemoRepo, *mocks.DateInterface) {
 
 	mockRepo := mocks.NewMemoRepo(t)
 	dateService := mocks.NewDateInterface(t)
-	service := &memo.MemoApi{Repo: mockRepo, DateService: dateService}
+	service := memo.MemoApi{Repo: mockRepo, DateService: dateService}
 
-	apiBoot = &ApiBoot{}
-	apiBoot.MemoApi = service
-
-	apiBoot.Registry = di.InitialMockRegistry()
-	apiBoot.AuthorizationHandler = di.InitialMockAuthorizationMiddleware()
-	apiBoot.ErrorHandler = di.InitialErrorMiddleware()
+	apiBoot = &ApiBoot{
+		MemoApi:              &service,
+		AuthorizationHandler: di.InitialMockAuthorizationMiddleware(),
+		ErrorHandler:         di.InitialErrorMiddleware(),
+		Registry:             di.InitialMockRegistry(),
+	}
 
 	router = gin.New()
 	defineRoutes(router)

@@ -18,7 +18,7 @@ func setupService() (*mocks.ZdjMockRepo, filesystem.FileInterface, *ZdjApi) {
 	mockFileService := &commonmock.MockFileService{}
 	service := ProvideZdjApi(mockRepo, mockFileService)
 
-	return mockRepo, mockFileService, &service
+	return mockRepo, mockFileService, service
 }
 
 func TestProvideZdjApi(t *testing.T) {

@@ -203,11 +203,14 @@ func TestGetTempPath(t *testing.T) {
 }
 
 func TestParseModel(t *testing.T) {
-	text := []string{"1",
+	text := []string{
+		"", "", "", "",
+		"1",
 		"罗湖",
 		"黄贝",
 		"安业花园",
 		"45000",
+		"----",
 		"2",
 		"罗湖",
 		"黄贝",

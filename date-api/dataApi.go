@@ -3,46 +3,23 @@ package main
 import (
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"os"
 	"time"
 
 	"github.com/FelixAnna/web-service-dlw/common/mesh"
+	"github.com/FelixAnna/web-service-dlw/common/micro"
 	"github.com/FelixAnna/web-service-dlw/common/middleware"
 	"github.com/FelixAnna/web-service-dlw/date-api/date"
 	"github.com/FelixAnna/web-service-dlw/date-api/di"
-
-	httpServer "github.com/asim/go-micro/plugins/server/http/v4"
-	"go-micro.dev/v4"
-
 	"github.com/gin-gonic/gin"
-	"go-micro.dev/v4/server"
 )
 
 const SERVER_NAME = "date-api"
 
 func main() {
-	srv := httpServer.NewServer(
-		server.Name(SERVER_NAME),
-		server.Address(":8383"),
-	)
-
-	initialDependency()
 	router := GetGinRouter()
-
-	hd := srv.NewHandler(router)
-	if err := srv.Handle(hd); err != nil {
-		log.Fatalln(err)
-	}
-
-	registry := apiBoot.Registry
-	service := micro.NewService(
-		micro.Server(srv),
-		micro.Registry(registry.GetRegistry()),
-	)
-	service.Init()
-	service.Run()
+	micro.StartApp(SERVER_NAME, ":8383", router, apiBoot.Registry.GetRegistry())
 }
 
 type ApiBoot struct {
@@ -66,6 +43,7 @@ func initialDependency() {
 
 func GetGinRouter() *gin.Engine {
 	router := gin.New()
+	initialDependency()
 
 	//define middleware before apis
 	initialLogger()

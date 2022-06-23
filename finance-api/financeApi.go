@@ -9,13 +9,10 @@ import (
 	"time"
 
 	"github.com/FelixAnna/web-service-dlw/common/mesh"
+	"github.com/FelixAnna/web-service-dlw/common/micro"
 	"github.com/FelixAnna/web-service-dlw/common/middleware"
 	"github.com/FelixAnna/web-service-dlw/finance-api/di"
 	"github.com/FelixAnna/web-service-dlw/finance-api/zdj"
-	httpServer "github.com/asim/go-micro/plugins/server/http/v4"
-
-	"go-micro.dev/v4"
-	"go-micro.dev/v4/server"
 
 	"github.com/gin-gonic/gin"
 )
@@ -23,26 +20,8 @@ import (
 const SERVER_NAME = "finance-api"
 
 func main() {
-	srv := httpServer.NewServer(
-		server.Name(SERVER_NAME),
-		server.Address(":8484"),
-	)
-
 	router := GetGinRouter()
-
-	hd := srv.NewHandler(router)
-	if err := srv.Handle(hd); err != nil {
-		log.Fatalln(err)
-	}
-
-	registery := apiBoot.Registry
-	service := micro.NewService(
-		micro.Server(srv),
-		micro.Registry(registery.GetRegistry()),
-	)
-
-	service.Init()
-	service.Run()
+	micro.StartApp(SERVER_NAME, ":8484", router, apiBoot.Registry.GetRegistry())
 }
 
 type ApiBoot struct {

@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"os"
 	"time"
@@ -13,35 +12,16 @@ import (
 	"github.com/FelixAnna/web-service-dlw/user-api/users"
 
 	"github.com/FelixAnna/web-service-dlw/common/mesh"
+	"github.com/FelixAnna/web-service-dlw/common/micro"
 	"github.com/FelixAnna/web-service-dlw/common/middleware"
-	httpServer "github.com/asim/go-micro/plugins/server/http/v4"
-	"go-micro.dev/v4"
-
 	"github.com/gin-gonic/gin"
-	"go-micro.dev/v4/server"
 )
 
 const SERVER_NAME = "user-api"
 
 func main() {
-	srv := httpServer.NewServer(
-		server.Name(SERVER_NAME),
-		server.Address(":8181"),
-	)
-
 	router := GetGinRouter()
-
-	hd := srv.NewHandler(router)
-	if err := srv.Handle(hd); err != nil {
-		log.Fatalln(err)
-	}
-
-	service := micro.NewService(
-		micro.Server(srv),
-		micro.Registry(apiBoot.Registry.GetRegistry()),
-	)
-	service.Init()
-	service.Run()
+	micro.StartApp(SERVER_NAME, ":8181", router, apiBoot.Registry.GetRegistry())
 }
 
 type ApiBoot struct {

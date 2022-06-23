@@ -3,44 +3,23 @@ package main
 import (
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"os"
 	"time"
 
 	"github.com/FelixAnna/web-service-dlw/common/mesh"
+	"github.com/FelixAnna/web-service-dlw/common/micro"
 	"github.com/FelixAnna/web-service-dlw/common/middleware"
 	"github.com/FelixAnna/web-service-dlw/memo-api/di"
 	"github.com/FelixAnna/web-service-dlw/memo-api/memo"
-	httpServer "github.com/asim/go-micro/plugins/server/http/v4"
-	"go-micro.dev/v4"
-
 	"github.com/gin-gonic/gin"
-	"go-micro.dev/v4/server"
 )
 
 const SERVER_NAME = "memo-api"
 
 func main() {
-	srv := httpServer.NewServer(
-		server.Name(SERVER_NAME),
-		server.Address(":8282"),
-	)
-
 	router := GetGinRouter()
-
-	hd := srv.NewHandler(router)
-	if err := srv.Handle(hd); err != nil {
-		log.Fatalln(err)
-	}
-
-	service := micro.NewService(
-		micro.Server(srv),
-		micro.Registry(apiBoot.Registry.GetRegistry()),
-	)
-
-	service.Init()
-	service.Run()
+	micro.StartApp(SERVER_NAME, ":8282", router, apiBoot.Registry.GetRegistry())
 }
 
 type ApiBoot struct {

@@ -1,5 +1,5 @@
 # kind
-To work with kind, you need docker installed first, kind create docker containers and use them as nodes to construct the cluster. You may have mutiple control plane to make the cluster high available.
+To work with kind, you need docker installed first, kind create docker containers and use them as nodes to construct the cluster. You may have multiple control planes to make the cluster high availability.
 
 ## install kind
 install kind with go: [install kind with go](https://kind.sigs.k8s.io/docs/user/quick-start/#installing-with-go-get--go-install)
@@ -16,6 +16,6 @@ kind don't support Loadbalance type service, so please use below nginx for kind:
 
 ## pull image issue
 
-in case pull image is very slow, pull it to local first and then load to kind's docker containers by:
+in case pull image is very slow in kind cluster's node, you can pull it to local first and then load to kind's nodes by:
 
     `kind load docker-image xxx:versionxxx --name yourclustername`

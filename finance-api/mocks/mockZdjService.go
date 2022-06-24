@@ -11,7 +11,7 @@ type ZdjMockRepo struct {
 
 func (repo *ZdjMockRepo) Append(zdj *[]entity.Zhidaojia) error {
 	args := repo.Called(zdj)
-	return args.Get(0).(error)
+	return args.Error(0)
 }
 
 func (repo *ZdjMockRepo) Search(criteria *entity.Criteria) ([]entity.Zhidaojia, error) {

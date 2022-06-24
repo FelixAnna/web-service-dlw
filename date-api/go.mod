@@ -3,7 +3,7 @@ module github.com/FelixAnna/web-service-dlw/date-api
 go 1.18
 
 require (
-	github.com/FelixAnna/web-service-dlw/common v0.0.0-20220623084313-9559dbf134fb
+	github.com/FelixAnna/web-service-dlw/common v0.0.0-20220624094455-2f57c6d56a1b
 	github.com/gin-gonic/gin v1.8.1
 	github.com/golang-module/carbon/v2 v2.1.8
 	go-micro.dev/v4 v4.7.0 // indirect
@@ -11,18 +11,18 @@ require (
 
 require (
 	github.com/google/wire v0.5.0
-	github.com/stretchr/testify v1.7.4
+	github.com/stretchr/testify v1.7.5
 )
 
 require (
 	github.com/Microsoft/go-winio v0.5.2 // indirect
-	github.com/ProtonMail/go-crypto v0.0.0-20220517143526-88bb52951d5b // indirect
+	github.com/ProtonMail/go-crypto v0.0.0-20220623141421-5afb4c282135 // indirect
 	github.com/acomagu/bufpipe v1.0.3 // indirect
 	github.com/armon/go-metrics v0.4.0 // indirect
 	github.com/asim/go-micro/plugins/registry/consul/v4 v4.0.0-20220622010113-107bd74187e7 // indirect
 	github.com/asim/go-micro/plugins/registry/kubernetes/v4 v4.0.0-20220622010113-107bd74187e7 // indirect
 	github.com/asim/go-micro/plugins/server/http/v4 v4.0.0-20220622010113-107bd74187e7 // indirect
-	github.com/aws/aws-sdk-go v1.44.40 // indirect
+	github.com/aws/aws-sdk-go v1.44.41 // indirect
 	github.com/bitly/go-simplejson v0.5.0 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect

@@ -65,25 +65,20 @@ func (api *ZdjApi) MemoryCosty(c *gin.Context) {
 }
 
 func (api *ZdjApi) Upload(c *gin.Context) {
-	file, _ := c.FormFile("file")
+	tempPath := api.getTempFile(c)
+	defer os.Remove(tempPath)
+	api.uploadInternal(c, tempPath)
+}
+
+func (api *ZdjApi) uploadInternal(c *gin.Context, tempPath string) {
 	version := c.DefaultQuery("version", "2021")
 	iversion, err := strconv.ParseInt(version, 10, 32)
 	if err != nil {
 		iversion = 2021
 	}
 
-	log.Println(file.Filename)
-
-	tempPath := getTempPath()
-	c.SaveUploadedFile(file, tempPath)
-	defer os.Remove(tempPath)
-
 	lines := api.fileService.ReadLines(tempPath)
-
-	//convert to model list
 	models := parseModel(lines, int(iversion))
-
-	//save to somewhere
 	err = api.Repo.Append(&models)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
@@ -91,6 +86,13 @@ func (api *ZdjApi) Upload(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, "Data uploaded.")
+}
+
+func (api *ZdjApi) getTempFile(c *gin.Context) string {
+	file, _ := c.FormFile("file")
+	tempPath := getTempPath()
+	c.SaveUploadedFile(file, tempPath)
+	return tempPath
 }
 
 func (api *ZdjApi) Delete(c *gin.Context) {
@@ -101,6 +103,7 @@ func (api *ZdjApi) Delete(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, err)
 		return
 	}
+
 	version, err := strconv.ParseInt(sversion, 10, 32)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err)

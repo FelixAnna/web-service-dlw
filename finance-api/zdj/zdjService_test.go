@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/FelixAnna/web-service-dlw/common/filesystem"
 	commonmock "github.com/FelixAnna/web-service-dlw/common/mocks"
 	"github.com/FelixAnna/web-service-dlw/finance-api/mocks"
 	"github.com/FelixAnna/web-service-dlw/finance-api/zdj/entity"
@@ -13,7 +12,7 @@ import (
 	mockit "github.com/stretchr/testify/mock"
 )
 
-func setupService() (*mocks.ZdjMockRepo, filesystem.FileInterface, *ZdjApi) {
+func setupService() (*mocks.ZdjMockRepo, *commonmock.MockFileService, *ZdjApi) {
 	mockRepo := &mocks.ZdjMockRepo{}
 	mockFileService := &commonmock.MockFileService{}
 	service := ProvideZdjApi(mockRepo, mockFileService)
@@ -114,6 +113,44 @@ func TestMemoryCosty(t *testing.T) {
 	assert.NotNil(t, ctx)
 	assert.NotNil(t, writer)
 	assert.Equal(t, writer.Code, http.StatusOK)
+}
+
+func TestUploadInternalFailed(t *testing.T) {
+	mockRepo, fileService, service := setupService()
+
+	filePath := "any path"
+	query := "version=2021"
+	ctx, writer := commonmock.GetGinContext(&commonmock.Parameter{Query: query})
+	fileService.On("ReadLines", mockit.Anything).Return([]string{"1", "罗湖", "黄贝", "安业花园", "45000"})
+	mockRepo.On("Append", mockit.AnythingOfType("*[]entity.Zhidaojia")).Return(errors.New("any error"))
+
+	//need mock gin.Context.Writer
+	service.uploadInternal(ctx, filePath)
+
+	assert.NotNil(t, ctx)
+	assert.NotNil(t, writer)
+	assert.Equal(t, writer.Code, http.StatusInternalServerError)
+	fileService.AssertCalled(t, "ReadLines", mockit.Anything)
+	mockRepo.AssertCalled(t, "Append", mockit.AnythingOfType("*[]entity.Zhidaojia"))
+}
+
+func TestUploadInternal(t *testing.T) {
+	mockRepo, fileService, service := setupService()
+
+	filePath := "any path"
+	query := "version=2021"
+	ctx, writer := commonmock.GetGinContext(&commonmock.Parameter{Query: query})
+	fileService.On("ReadLines", filePath).Return([]string{"1", "罗湖", "黄贝", "安业花园", "45000"})
+	mockRepo.On("Append", mockit.AnythingOfType("*[]entity.Zhidaojia")).Return(nil)
+
+	//need mock gin.Context.Writer
+	service.uploadInternal(ctx, filePath)
+
+	assert.NotNil(t, ctx)
+	assert.NotNil(t, writer)
+	assert.Equal(t, writer.Code, http.StatusOK)
+	fileService.AssertCalled(t, "ReadLines", filePath)
+	mockRepo.AssertCalled(t, "Append", mockit.AnythingOfType("*[]entity.Zhidaojia"))
 }
 
 func TestDeleteInvalidId(t *testing.T) {

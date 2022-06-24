@@ -20,6 +20,7 @@ var validToken string
 
 func init() {
 	gin.SetMode(gin.TestMode)
+	initialMockDependency()
 	router = GetGinRouter()
 
 	token, _ := apiBoot.AuthorizationHandler.TokenService.NewToken("testuser", "test@email.com")

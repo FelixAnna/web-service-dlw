@@ -3,11 +3,6 @@
 [![Build Status](https://github.com/FelixAnna/web-service-dlw/workflows/Run%20Tests/badge.svg?branch=master)](https://github.com/FelixAnna/web-service-dlw/actions?query=branch%3Amaster)
 [![codecov](https://codecov.io/gh/FelixAnna/web-service-dlw/branch/master/graph/badge.svg)](https://codecov.io/gh/FelixAnna/web-service-dlw)
 [![Go Report Card](https://goreportcard.com/badge/github.com/FelixAnna/web-service-dlw/common)](https://goreportcard.com/report/github.com/FelixAnna/web-service-dlw/common)
-[![Go Report Card](https://goreportcard.com/badge/github.com/FelixAnna/web-service-dlw/date-api)](https://goreportcard.com/report/github.com/FelixAnna/web-service-dlw/date-api)
-[![Go Report Card](https://goreportcard.com/badge/github.com/FelixAnna/web-service-dlw/memo-api)](https://goreportcard.com/report/github.com/FelixAnna/web-service-dlw/memo-api)
-[![Go Report Card](https://goreportcard.com/badge/github.com/FelixAnna/web-service-dlw/finance-api)](https://goreportcard.com/report/github.com/FelixAnna/web-service-dlw/finance-api)
-[![Go Report Card](https://goreportcard.com/badge/github.com/FelixAnna/web-service-dlw/user-api)](https://goreportcard.com/report/github.com/FelixAnna/web-service-dlw/user-api)
-
 
 # Table of Contents
 
@@ -62,10 +57,10 @@ kubectl config use-context kind-dlw-cluster
 ## Components
 ### Microservices
 
-1. user api service: [user api service](/user-api/readme.md)
-2. memo api service: [memo api service](/memo-api/readme.md)
-3. date api service: [date api service](/date-api/readme.md)
-4. finance api service: [finance api service](/finance-api/readme.md)
+1. User api service: [user api service](/user-api/readme.md) [![Go Report Card](https://goreportcard.com/badge/github.com/FelixAnna/web-service-dlw/user-api)](https://goreportcard.com/report/github.com/FelixAnna/web-service-dlw/user-api)
+2. Memo api service: [memo api service](/memo-api/readme.md) [![Go Report Card](https://goreportcard.com/badge/github.com/FelixAnna/web-service-dlw/memo-api)](https://goreportcard.com/report/github.com/FelixAnna/web-service-dlw/memo-api)
+3. Date api service: [date api service](/date-api/readme.md) [![Go Report Card](https://goreportcard.com/badge/github.com/FelixAnna/web-service-dlw/date-api)](https://goreportcard.com/report/github.com/FelixAnna/web-service-dlw/date-api)
+4. Finance api service: [finance api service](/finance-api/readme.md) [![Go Report Card](https://goreportcard.com/badge/github.com/FelixAnna/web-service-dlw/finance-api)](https://goreportcard.com/report/github.com/FelixAnna/web-service-dlw/finance-api)
 
 #### kubectl deployment templetes
 `deployment/kubernetes/*.yaml`: native kubernetes deployments templements, include microservices and nginx ingress.

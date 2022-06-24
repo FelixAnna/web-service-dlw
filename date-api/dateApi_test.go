@@ -16,9 +16,7 @@ var router *gin.Engine
 
 func init() {
 	gin.SetMode(gin.TestMode)
-	router = gin.New()
-	initialMockDependency()
-	defineRoutes(router)
+	router = GetGinRouter()
 }
 
 func TestRunning(t *testing.T) {

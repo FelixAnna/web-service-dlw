@@ -188,6 +188,10 @@ func TestDeleteUserAuthorized(t *testing.T) {
 	assert.NotEmpty(t, w.Body.String())
 }
 
+func TestGetGinRouter(t *testing.T) {
+
+}
+
 func performRequest(r http.Handler, method, path string, body interface{}) *httptest.ResponseRecorder {
 	var readerOfBody io.Reader = nil
 	if body != nil {
@@ -210,7 +214,6 @@ func setupService(t *testing.T) *mocks.UserRepo {
 
 	mockRepo := mocks.NewUserRepo(t)
 	service := &users.UserApi{Repo: mockRepo}
-
 	apiBoot = &ApiBoot{
 		UserApi: service,
 		//AuthApi:              di.InitialGithubAuthApi(),
@@ -219,8 +222,7 @@ func setupService(t *testing.T) *mocks.UserRepo {
 		Registry:             di.InitialMockRegistry(),
 	}
 
-	router = gin.New()
-	defineRoutes(router)
+	router = GetGinRouter()
 
 	token, _ := apiBoot.AuthorizationHandler.TokenService.NewToken("testuser", "test@email.com")
 	validToken = token.Token

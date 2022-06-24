@@ -16,6 +16,7 @@ import (
 const SERVER_NAME = "finance-api"
 
 func main() {
+	initialDependency()
 	router := GetGinRouter()
 	micro.StartApp(SERVER_NAME, ":8484", router, apiBoot.Registry.GetRegistry())
 }
@@ -46,7 +47,6 @@ func initialDependency() {
 
 func GetGinRouter() *gin.Engine {
 	router := gin.New()
-	initialDependency()
 
 	// Set a lower memory limit for multipart forms (default is 32 MiB)
 	router.MaxMultipartMemory = 8 << 20 // 8 MiB

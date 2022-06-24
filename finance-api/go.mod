@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	//github.com/FelixAnna/web-service-dlw/common v0.0.0-00010101000000-000000000000
-	github.com/FelixAnna/web-service-dlw/common v0.0.0-20220624094455-2f57c6d56a1b
+	github.com/FelixAnna/web-service-dlw/common v0.0.0-20220624134446-d2ee160eb924
 	github.com/gin-gonic/gin v1.8.1
 	go-micro.dev/v4 v4.7.0 // indirect
 )
@@ -79,7 +79,7 @@ require (
 	github.com/sergi/go-diff v1.2.0 // indirect
 	github.com/stretchr/objx v0.4.0 // indirect
 	github.com/ugorji/go/codec v1.2.7 // indirect
-	github.com/urfave/cli/v2 v2.10.2 // indirect
+	github.com/urfave/cli/v2 v2.10.3 // indirect
 	github.com/xanzy/ssh-agent v0.3.1 // indirect
 	github.com/xrash/smetrics v0.0.0-20201216005158-039620a65673 // indirect
 	golang.org/x/crypto v0.0.0-20220622213112-05595931fe9d // indirect

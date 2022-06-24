@@ -222,8 +222,7 @@ func setupService(t *testing.T) (*mocks.MemoRepo, *mocks.DateInterface) {
 		Registry:             di.InitialMockRegistry(),
 	}
 
-	router = gin.New()
-	defineRoutes(router)
+	router = GetGinRouter()
 
 	token, _ := apiBoot.AuthorizationHandler.TokenService.NewToken("testuser", "test@email.com")
 	validToken = token.Token

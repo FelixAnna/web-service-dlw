@@ -14,6 +14,7 @@ import (
 const SERVER_NAME = "memo-api"
 
 func main() {
+	initialDependency()
 	router := GetGinRouter()
 	micro.StartApp(SERVER_NAME, ":8282", router, apiBoot.Registry.GetRegistry())
 }
@@ -38,7 +39,6 @@ func initialDependency() {
 
 func GetGinRouter() *gin.Engine {
 	router := gin.New()
-	initialDependency()
 
 	//define middleware before apis
 	micro.RegisterMiddlewares(router, apiBoot.ErrorHandler.ErrorHandler())

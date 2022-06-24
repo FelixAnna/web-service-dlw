@@ -133,7 +133,24 @@ func TestUploadInternalFailed(t *testing.T) {
 	fileService.AssertCalled(t, "ReadLines", mockit.Anything)
 	mockRepo.AssertCalled(t, "Append", mockit.AnythingOfType("*[]entity.Zhidaojia"))
 }
+func TestUploadInternalDefault(t *testing.T) {
+	mockRepo, fileService, service := setupService()
 
+	filePath := "any path"
+	query := "version=2021a"
+	ctx, writer := commonmock.GetGinContext(&commonmock.Parameter{Query: query})
+	fileService.On("ReadLines", filePath).Return([]string{"1", "罗湖", "黄贝", "安业花园", "45000"})
+	mockRepo.On("Append", mockit.AnythingOfType("*[]entity.Zhidaojia")).Return(nil)
+
+	//need mock gin.Context.Writer
+	service.uploadInternal(ctx, filePath)
+
+	assert.NotNil(t, ctx)
+	assert.NotNil(t, writer)
+	assert.Equal(t, writer.Code, http.StatusOK)
+	fileService.AssertCalled(t, "ReadLines", filePath)
+	mockRepo.AssertCalled(t, "Append", mockit.AnythingOfType("*[]entity.Zhidaojia"))
+}
 func TestUploadInternal(t *testing.T) {
 	mockRepo, fileService, service := setupService()
 

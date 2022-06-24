@@ -2,14 +2,19 @@
 ### research on DI 
     -- wire : compile-time dependency injection  (done)
     -- dig /inject: runtime dependency injection
-### research helm upgrade not update replicaset + pod when image version changed
-### delete stucked namespace
+
+
+### delete stucked namespace (done)
     https://phoenixnap.com/kb/kubernetes-delete-namespace
-### ut
+    
+### ut   (done)
     ```
     go test -cover -v ./...
     ```
-### document api
-
-### ut with mockery
+    
+### ut with mockery   (done)
 mockery --all --recursive --output=./mocks --with-expecter
+
+### document api    
+
+### research helm upgrade not update replicaset + pod when image version changed

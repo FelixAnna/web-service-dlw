@@ -23,7 +23,7 @@ func InitializeTwoPlusService() problem.ProblemService {
 
 func InitializeTwoMinusService() problem.ProblemService {
 	randomService := data.CreateRandomService()
-	twoMinusStratergy := stratergy.NewTwoMunisStratergy(randomService)
+	twoMinusStratergy := stratergy.NewTwoMinusStratergy(randomService)
 	twoProblem := problem.NewTwoProblem(twoMinusStratergy)
 	return twoProblem
 }

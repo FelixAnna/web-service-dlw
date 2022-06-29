@@ -23,7 +23,7 @@ func NewTwoProblem(stratergy stratergy.Stratergy) *TwoProblem {
 }
 
 func (tp *TwoProblem) GenerateProblem(criteria ...interface{}) *entity.Problem {
-	nums := tp.Stratergy.Generate(criteria)
+	nums := tp.Stratergy.Generate(criteria...)
 
 	var op rune
 	switch tp.Stratergy.(type) {

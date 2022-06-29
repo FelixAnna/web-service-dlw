@@ -10,6 +10,8 @@ import (
 	"testing"
 
 	"github.com/FelixAnna/web-service-dlw/finance-api/di"
+	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals"
+	mathEntity "github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem/entity"
 	"github.com/FelixAnna/web-service-dlw/finance-api/zdj/entity"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
@@ -85,6 +87,32 @@ func TestSearchAuthorized(t *testing.T) {
 	assert.NotNil(t, response)
 }
 
+func TestGetQuestions(t *testing.T) {
+	//Act
+	w := performRequest(router, "POST", "/homework/math/", mathematicals.Criteria{Min: 10, Max: 20, Category: '+'})
+
+	var response []mathEntity.Problem
+	err := json.Unmarshal(w.Body.Bytes(), &response)
+
+	//Assert
+	assert.Equal(t, http.StatusOK, w.Code)
+	assert.Nil(t, err)
+	assert.NotNil(t, response)
+}
+
+func TestGetQuestionsMultiple(t *testing.T) {
+	//Act
+	w := performRequest(router, "POST", "/homework/math/multiple", []mathematicals.Criteria{{Min: 10, Max: 20, Category: '+'}})
+
+	var response []mathEntity.Problem
+	err := json.Unmarshal(w.Body.Bytes(), &response)
+
+	//Assert
+	assert.Equal(t, http.StatusOK, w.Code)
+	assert.Nil(t, err)
+	assert.NotNil(t, response)
+}
+
 func TestDeleteAuthorized(t *testing.T) {
 	//Act
 	w := performRequest(router, "DELETE", "/zdj/123?access_code="+validToken, nil)
@@ -134,6 +162,7 @@ func initialMockDependency() {
 
 	apiBoot = &ApiBoot{
 		ZdjApi:               zdjApi,
+		MathApi:              di.InitializeMathApi(),
 		AuthorizationHandler: di.InitialMockAuthorizationMiddleware(),
 		ErrorHandler:         di.InitialErrorMiddleware(),
 		Registry:             di.InitialMockRegistry(),

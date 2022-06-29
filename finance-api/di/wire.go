@@ -9,15 +9,22 @@ import (
 	"github.com/FelixAnna/web-service-dlw/common/jwt"
 	"github.com/FelixAnna/web-service-dlw/common/mesh"
 	"github.com/FelixAnna/web-service-dlw/common/middleware"
+	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals"
 	"github.com/FelixAnna/web-service-dlw/finance-api/zdj"
 	"github.com/FelixAnna/web-service-dlw/finance-api/zdj/repository"
 	"github.com/google/wire"
 )
 
-func InitializeApi() (*zdj.ZdjApi, error) {
+func InitializeZdjApi() (*zdj.ZdjApi, error) {
 	wire.Build(zdj.ProvideZdjApi, repository.SqlRepoSet, filesystem.FileSet, aws.ProvideAWSService, aws.AwsSet) //sql
 	//wire.Build(zdj.ProvideZdjApi, repository.MemoryRepoSet) //InMemory
 	return &zdj.ZdjApi{}, nil
+}
+
+func InitializeMathApi() *mathematicals.MathApi {
+	wire.Build(mathematicals.ProvideMathApi, mathematicals.NewMathService) //sql
+	//wire.Build(zdj.ProvideZdjApi, repository.MemoryRepoSet) //InMemory
+	return &mathematicals.MathApi{}
 }
 
 func InitializeMockApi() (*zdj.ZdjApi, error) {

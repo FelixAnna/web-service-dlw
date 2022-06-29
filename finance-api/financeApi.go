@@ -8,6 +8,7 @@ import (
 	"github.com/FelixAnna/web-service-dlw/common/micro"
 	"github.com/FelixAnna/web-service-dlw/common/middleware"
 	"github.com/FelixAnna/web-service-dlw/finance-api/di"
+	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals"
 	"github.com/FelixAnna/web-service-dlw/finance-api/zdj"
 
 	"github.com/gin-gonic/gin"
@@ -23,6 +24,7 @@ func main() {
 
 type ApiBoot struct {
 	ZdjApi               *zdj.ZdjApi
+	MathApi              *mathematicals.MathApi
 	ErrorHandler         *middleware.ErrorHandlingMiddleware
 	AuthorizationHandler *middleware.AuthorizationMiddleware
 	Registry             *mesh.Registry
@@ -31,7 +33,7 @@ type ApiBoot struct {
 var apiBoot *ApiBoot
 
 func initialDependency() {
-	zdjApi, err := di.InitializeApi()
+	zdjApi, err := di.InitializeZdjApi()
 	if err != nil {
 		log.Panic(err)
 		return
@@ -39,6 +41,7 @@ func initialDependency() {
 
 	apiBoot = &ApiBoot{
 		ZdjApi:               zdjApi,
+		MathApi:              di.InitializeMathApi(),
 		AuthorizationHandler: di.InitialAuthorizationMiddleware(),
 		ErrorHandler:         di.InitialErrorMiddleware(),
 		Registry:             di.InitialRegistry(),
@@ -64,12 +67,18 @@ func defineRoutes(router *gin.Engine) {
 		c.String(http.StatusOK, "running")
 	})
 
-	userGroupRouter := router.Group("/zdj", apiBoot.AuthorizationHandler.AuthorizationHandler())
+	zdjGroupRouter := router.Group("/zdj", apiBoot.AuthorizationHandler.AuthorizationHandler())
 	{
-		userGroupRouter.GET("/", apiBoot.ZdjApi.GetAll)
-		userGroupRouter.POST("/search", apiBoot.ZdjApi.Search)
-		userGroupRouter.POST("/upload", apiBoot.ZdjApi.Upload)
-		userGroupRouter.DELETE("/:id", apiBoot.ZdjApi.Delete)
-		userGroupRouter.GET("/slow", apiBoot.ZdjApi.MemoryCosty)
+		zdjGroupRouter.GET("/", apiBoot.ZdjApi.GetAll)
+		zdjGroupRouter.POST("/search", apiBoot.ZdjApi.Search)
+		zdjGroupRouter.POST("/upload", apiBoot.ZdjApi.Upload)
+		zdjGroupRouter.DELETE("/:id", apiBoot.ZdjApi.Delete)
+		zdjGroupRouter.GET("/slow", apiBoot.ZdjApi.MemoryCosty)
+	}
+
+	mathGroupRouter := router.Group("/homework/math")
+	{
+		mathGroupRouter.POST("/", apiBoot.MathApi.GetQuestions)
+		mathGroupRouter.POST("/multiple", apiBoot.MathApi.GetAllQuestions)
 	}
 }

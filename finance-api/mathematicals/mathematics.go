@@ -33,6 +33,10 @@ func (service *MathService) GenerateProblems(criteria *Criteria) []entity.Proble
 		postiveOnly = 1
 	}
 
+	if criteria.Quantity == 0 {
+		criteria.Quantity = 10
+	}
+
 	var problems []entity.Problem = []entity.Problem{}
 
 	switch criteria.Category {

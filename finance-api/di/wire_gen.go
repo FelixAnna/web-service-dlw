@@ -13,13 +13,14 @@ import (
 	"github.com/FelixAnna/web-service-dlw/common/mesh"
 	"github.com/FelixAnna/web-service-dlw/common/middleware"
 	"github.com/FelixAnna/web-service-dlw/common/mocks"
+	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals"
 	"github.com/FelixAnna/web-service-dlw/finance-api/zdj"
 	"github.com/FelixAnna/web-service-dlw/finance-api/zdj/repository"
 )
 
 // Injectors from wire.go:
 
-func InitializeApi() (*zdj.ZdjApi, error) {
+func InitializeZdjApi() (*zdj.ZdjApi, error) {
 	awsHelper := aws.ProvideAwsHelper()
 	awsService := aws.ProvideAWSService(awsHelper)
 	zdjSqlServerRepo, err := repository.ProvideZdjSqlServerRepo(awsService)
@@ -29,6 +30,12 @@ func InitializeApi() (*zdj.ZdjApi, error) {
 	fileService := filesystem.ProvideFileService()
 	zdjApi := zdj.ProvideZdjApi(zdjSqlServerRepo, fileService)
 	return zdjApi, nil
+}
+
+func InitializeMathApi() *mathematicals.MathApi {
+	mathService := mathematicals.NewMathService()
+	mathApi := mathematicals.ProvideMathApi(mathService)
+	return mathApi
 }
 
 func InitializeMockApi() (*zdj.ZdjApi, error) {

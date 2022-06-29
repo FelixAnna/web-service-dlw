@@ -6,7 +6,21 @@ a. 深圳住房指导价查询
 
     1. 上传深圳二手房指导价数据 [SQL Server (default) / InMemory]；
     2. 查询, 过滤小区指导价。
+    
+b. 家庭作业
 
+    1. 数学加减法算术题生成，支持格式；
+        * a + ? = c
+        * ? + b = c
+        * a + b = ?
+        
+        * a - ? = c
+        * ? - b = c
+        * a - b = ?
+        
+        减法支持仅正数模式
+        
+        
 ## usage
 1. upload file
 
@@ -36,7 +50,37 @@ a. 深圳住房指导价查询
         "Size":3
     }'
     ```
+3. generate mathematicals problems:
+    ```
+    curl --location --request POST 'localhost:8484/homework/math/multiple' \
+    --header 'Content-Type: application/json' \
+    --data-raw '[
+        {
+            "Min": 10,
+            "Max": 100,
+            "Quantity": 3,
 
+            "Category": "+",
+            "Kind": "first"
+        },
+        {
+            "Min": 10,
+            "Max": 100,
+            "Quantity": 1,
+
+            "Category": "+",
+            "Kind": "second"
+        },
+        {
+            "Min": 10,
+            "Max": 100,
+            "Quantity": 2,
+
+            "Category": "+",
+            "Kind": "last"
+        }
+    ]'
+    ```
 ## Docker Guide
 
 ### Build

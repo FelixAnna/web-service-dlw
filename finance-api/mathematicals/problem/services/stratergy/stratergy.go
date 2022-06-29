@@ -17,8 +17,8 @@ func NewTwoNumStratergy(service data.DataService) *TwoNumStratergy {
 }
 
 func (ts *TwoNumStratergy) Generate(criteria ...interface{}) []int {
-	a := ts.DataService.GetData(criteria)
-	b := ts.DataService.GetData(criteria)
+	a := ts.DataService.GetData(criteria...)
+	b := ts.DataService.GetData(criteria...)
 
 	return []int{a, b}
 }

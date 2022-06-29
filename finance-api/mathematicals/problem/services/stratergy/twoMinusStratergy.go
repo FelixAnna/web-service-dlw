@@ -5,13 +5,13 @@ import (
 	"github.com/google/wire"
 )
 
-var TwoMinusStratergySet = wire.NewSet(NewTwoMunisStratergy, wire.Bind(new(Stratergy), new(*TwoMinusStratergy)))
+var TwoMinusStratergySet = wire.NewSet(NewTwoMinusStratergy, wire.Bind(new(Stratergy), new(*TwoMinusStratergy)))
 
 type TwoMinusStratergy struct {
 	*TwoNumStratergy
 }
 
-func NewTwoMunisStratergy(service data.DataService) *TwoMinusStratergy {
+func NewTwoMinusStratergy(service data.DataService) *TwoMinusStratergy {
 	return &TwoMinusStratergy{
 		TwoNumStratergy: NewTwoNumStratergy(service),
 	}
@@ -20,12 +20,12 @@ func NewTwoMunisStratergy(service data.DataService) *TwoMinusStratergy {
 /* TwoMinusStratergy.Generate
 criteria[0]: bottom num
 criteria[1]: ceiling num
-criteria[2]: allow negative (1: allow)
+criteria[2]: positive Only (1: pos only)
 */
 func (tp *TwoMinusStratergy) Generate(criteria ...interface{}) []int {
-	nums := tp.TwoNumStratergy.Generate(criteria)
+	nums := tp.TwoNumStratergy.Generate(criteria...)
 
-	if len(criteria) > 2 && criteria[2] != 1 {
+	if len(criteria) > 2 && criteria[2] == 1 {
 		if nums[0] < nums[1] {
 			nums[0], nums[1] = nums[1], nums[0]
 		}

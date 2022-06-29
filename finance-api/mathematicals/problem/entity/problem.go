@@ -11,17 +11,17 @@ type Problem struct {
 }
 
 func (p *Problem) PrintAll() string {
-	return fmt.Sprintf("%v %v %v = %v", p.A, p.Op, p.B, p.C)
+	return fmt.Sprintf("%v %c %v = %v", p.A, p.Op, p.B, p.C)
 }
 
 func (p *Problem) QuestFirst() string {
-	return fmt.Sprintf("? %v %v = %v", p.Op, p.B, p.C)
+	return fmt.Sprintf("? %c %v = %v", p.Op, p.B, p.C)
 }
 
 func (p *Problem) QuestSecond() string {
-	return fmt.Sprintf("%v %v ? = %v", p.A, p.Op, p.C)
+	return fmt.Sprintf("%v %c ? = %v", p.A, p.Op, p.C)
 }
 
 func (p *Problem) QuestResult() string {
-	return fmt.Sprintf("%v %v %v = ?", p.A, p.Op, p.B)
+	return fmt.Sprintf("%v %c %v = ?", p.A, p.Op, p.B)
 }

@@ -22,7 +22,7 @@ criteria[0]: bottom num
 criteria[1]: ceiling num
 */
 func (tp *TwoPlusStratergy) Generate(criteria ...interface{}) []int {
-	nums := tp.TwoNumStratergy.Generate(criteria)
+	nums := tp.TwoNumStratergy.Generate(criteria...)
 
 	nums = append(nums, nums[0]+nums[1])
 	return nums

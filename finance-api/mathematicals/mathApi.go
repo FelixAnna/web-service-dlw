@@ -26,7 +26,7 @@ func (api *MathApi) GetQuestions(c *gin.Context) {
 	}
 
 	results := api.mathService.GenerateProblems(&criteria)
-	c.JSON(http.StatusOK, results)
+	c.JSON(http.StatusOK, GetResponse(results, criteria.Kind))
 }
 
 func (api *MathApi) GetAllQuestions(c *gin.Context) {
@@ -37,10 +37,34 @@ func (api *MathApi) GetAllQuestions(c *gin.Context) {
 		return
 	}
 
-	var results []entity.Problem
+	var results []QuestionModel
 	for _, criteria := range criterias {
-		results = append(results, api.mathService.GenerateProblems(&criteria)...)
+		problems := GetResponse(api.mathService.GenerateProblems(&criteria), criteria.Kind)
+		results = append(results, problems...)
 	}
 
 	c.JSON(http.StatusOK, results)
+}
+
+func GetResponse(results []entity.Problem, kind string) []QuestionModel {
+	questions := []QuestionModel{}
+
+	for _, problem := range results {
+		model := QuestionModel{
+			Answer: problem.PrintAll(),
+		}
+
+		switch kind {
+		case "first":
+			model.Question = problem.QuestFirst()
+		case "second":
+			model.Question = problem.QuestSecond()
+		case "last":
+			model.Question = problem.QuestResult()
+		}
+
+		questions = append(questions, model)
+	}
+
+	return questions
 }

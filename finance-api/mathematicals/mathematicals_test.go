@@ -25,7 +25,7 @@ func TestGetQuestions(t *testing.T) {
 
 		Quantity: 5,
 
-		Category: '+',
+		Category: "+",
 	}
 
 	problems := mathService.GenerateProblems(criteria)
@@ -49,7 +49,7 @@ func TestGenerateProblemsMinus(t *testing.T) {
 
 		Quantity: 5,
 
-		Category: '-',
+		Category: "-",
 	}
 
 	problems := mathService.GenerateProblems(criteria)
@@ -70,7 +70,7 @@ func TestGenerateProblemsMinusPos(t *testing.T) {
 
 		PositiveOnly: true,
 
-		Category: '-',
+		Category: "-",
 	}
 
 	problems := mathService.GenerateProblems(criteria)

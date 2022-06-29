@@ -17,7 +17,16 @@ type Criteria struct {
 
 	PositiveOnly bool
 
-	Category rune
+	//+, -
+	Category string
+
+	//first, second, last
+	Kind string
+}
+
+type QuestionModel struct {
+	Question string
+	Answer   string
 }
 
 func NewMathService() *MathService {
@@ -40,9 +49,9 @@ func (service *MathService) GenerateProblems(criteria *Criteria) []entity.Proble
 	var problems []entity.Problem = []entity.Problem{}
 
 	switch criteria.Category {
-	case '-':
+	case "-":
 		service.GenerateMinusProblem(criteria, postiveOnly, &problems)
-	case '+':
+	case "+":
 		service.GeneratePlusProblem(criteria, &problems)
 	}
 

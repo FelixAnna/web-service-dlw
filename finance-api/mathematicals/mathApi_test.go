@@ -17,7 +17,7 @@ func init() {
 		Max:      200,
 		Quantity: 10,
 
-		Category: '+',
+		Category: "+",
 	}
 
 	mathService := NewMathService()

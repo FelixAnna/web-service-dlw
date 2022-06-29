@@ -89,7 +89,7 @@ func TestSearchAuthorized(t *testing.T) {
 
 func TestGetQuestions(t *testing.T) {
 	//Act
-	w := performRequest(router, "POST", "/homework/math/", mathematicals.Criteria{Min: 10, Max: 20, Category: '+'})
+	w := performRequest(router, "POST", "/homework/math/", mathematicals.Criteria{Min: 10, Max: 20, Category: "+"})
 
 	var response []mathEntity.Problem
 	err := json.Unmarshal(w.Body.Bytes(), &response)
@@ -102,7 +102,7 @@ func TestGetQuestions(t *testing.T) {
 
 func TestGetQuestionsMultiple(t *testing.T) {
 	//Act
-	w := performRequest(router, "POST", "/homework/math/multiple", []mathematicals.Criteria{{Min: 10, Max: 20, Category: '+'}})
+	w := performRequest(router, "POST", "/homework/math/multiple", []mathematicals.Criteria{{Min: 10, Max: 20, Category: "+"}})
 
 	var response []mathEntity.Problem
 	err := json.Unmarshal(w.Body.Bytes(), &response)

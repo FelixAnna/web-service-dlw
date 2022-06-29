@@ -11,6 +11,17 @@ type MathService struct {
 	TwoMinusService problem.ProblemService
 }
 
+const (
+	KindQuestFirst  int = 1
+	KindQuestSecond int = 2
+	KindQeustLast   int = 3
+)
+
+const (
+	CategoryPlus int = iota
+	CategoryMinus
+)
+
 type Criteria struct {
 	Min, Max int
 	Quantity int
@@ -18,10 +29,10 @@ type Criteria struct {
 	PositiveOnly bool
 
 	//+, -
-	Category string
+	Category int
 
 	//first, second, last
-	Kind string
+	Kind int
 }
 
 type QuestionModel struct {
@@ -49,9 +60,9 @@ func (service *MathService) GenerateProblems(criteria *Criteria) []entity.Proble
 	var problems []entity.Problem = []entity.Problem{}
 
 	switch criteria.Category {
-	case "-":
+	case CategoryMinus:
 		service.GenerateMinusProblem(criteria, postiveOnly, &problems)
-	case "+":
+	case CategoryPlus:
 		service.GeneratePlusProblem(criteria, &problems)
 	}
 

@@ -46,7 +46,7 @@ func (api *MathApi) GetAllQuestions(c *gin.Context) {
 	c.JSON(http.StatusOK, results)
 }
 
-func GetResponse(results []entity.Problem, kind string) []QuestionModel {
+func GetResponse(results []entity.Problem, kind int) []QuestionModel {
 	questions := []QuestionModel{}
 
 	for _, problem := range results {
@@ -55,11 +55,11 @@ func GetResponse(results []entity.Problem, kind string) []QuestionModel {
 		}
 
 		switch kind {
-		case "first":
+		case KindQuestFirst:
 			model.Question = problem.QuestFirst()
-		case "second":
+		case KindQuestSecond:
 			model.Question = problem.QuestSecond()
-		case "last":
+		case KindQeustLast:
 			model.Question = problem.QuestResult()
 		}
 

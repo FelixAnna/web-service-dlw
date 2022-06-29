@@ -1,6 +1,7 @@
 package mathematicals
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -25,7 +26,7 @@ func TestGetQuestions(t *testing.T) {
 
 		Quantity: 5,
 
-		Category: "+",
+		Category: CategoryPlus,
 	}
 
 	problems := mathService.GenerateProblems(criteria)
@@ -49,7 +50,7 @@ func TestGenerateProblemsMinus(t *testing.T) {
 
 		Quantity: 5,
 
-		Category: "-",
+		Category: CategoryMinus,
 	}
 
 	problems := mathService.GenerateProblems(criteria)
@@ -70,7 +71,7 @@ func TestGenerateProblemsMinusPos(t *testing.T) {
 
 		PositiveOnly: true,
 
-		Category: "-",
+		Category: CategoryMinus,
 	}
 
 	problems := mathService.GenerateProblems(criteria)
@@ -78,6 +79,7 @@ func TestGenerateProblemsMinusPos(t *testing.T) {
 	assert.NotNil(t, problems)
 	assert.Equal(t, len(problems), 10)
 	for _, problem := range problems {
+		fmt.Println(problem)
 		assert.True(t, problem.A >= criteria.Min && problem.A < criteria.Max)
 		assert.True(t, problem.B >= criteria.Min && problem.B < criteria.Max)
 		assert.Equal(t, problem.Op, '-')

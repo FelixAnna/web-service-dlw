@@ -10,6 +10,8 @@ import (
 
 var service *MathApi
 var criteria Criteria
+var criteria2 Criteria
+var criteria3 Criteria
 
 func init() {
 	criteria = Criteria{
@@ -17,7 +19,29 @@ func init() {
 		Max:      200,
 		Quantity: 10,
 
+		Kind: KindQuestFirst,
+
 		Category: CategoryPlus,
+	}
+
+	criteria2 = Criteria{
+		Min:      100,
+		Max:      200,
+		Quantity: 10,
+
+		Kind: KindQuestSecond,
+
+		Category: CategoryPlus,
+	}
+
+	criteria3 = Criteria{
+		Min:      100,
+		Max:      200,
+		Quantity: 10,
+
+		Kind: KindQeustLast,
+
+		Category: CategoryMinus,
 	}
 
 	mathService := NewMathService()
@@ -58,7 +82,7 @@ func TestGetAllQuestionsFailed(t *testing.T) {
 }
 
 func TestGetAllQuestionsOk(t *testing.T) {
-	ctx, writer := commonmock.GetGinContext(&commonmock.Parameter{Body: []Criteria{criteria, criteria}})
+	ctx, writer := commonmock.GetGinContext(&commonmock.Parameter{Body: []Criteria{criteria, criteria2, criteria3}})
 	service.GetAllQuestions(ctx)
 
 	assert.NotNil(t, ctx)

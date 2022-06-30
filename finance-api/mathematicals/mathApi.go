@@ -49,6 +49,10 @@ func (api *MathApi) GetAllQuestions(c *gin.Context) {
 func GetResponse(results []entity.Problem, kind int) []QuestionModel {
 	questions := []QuestionModel{}
 
+	if kind < KindQuestFirst || kind > KindQeustLast {
+		log.Printf("Kind not within supported range: [%v, %v] \r\n", KindQuestFirst, KindQeustLast)
+	}
+
 	for _, problem := range results {
 		model := QuestionModel{
 			FullText: problem.PrintAll(),

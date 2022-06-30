@@ -87,9 +87,26 @@ func TestSearchAuthorized(t *testing.T) {
 	assert.NotNil(t, response)
 }
 
+func TestGetQuestionsInvalid(t *testing.T) {
+	//Act
+	w := performRequest(router, "POST", "/homework/math/", mathematicals.Criteria{Min: 10, Max: 20, Category: 1000})
+
+	var response []mathEntity.Problem
+	err := json.Unmarshal(w.Body.Bytes(), &response)
+
+	//Assert
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+	assert.NotNil(t, err)
+}
+
 func TestGetQuestions(t *testing.T) {
 	//Act
-	w := performRequest(router, "POST", "/homework/math/", mathematicals.Criteria{Min: 10, Max: 20, Category: mathematicals.CategoryPlus})
+	w := performRequest(router, "POST", "/homework/math/", mathematicals.Criteria{
+		Min:      10,
+		Max:      20,
+		Quantity: 100,
+		Category: mathematicals.CategoryPlus,
+		Kind:     mathematicals.KindQeustLast})
 
 	var response []mathEntity.Problem
 	err := json.Unmarshal(w.Body.Bytes(), &response)
@@ -102,7 +119,15 @@ func TestGetQuestions(t *testing.T) {
 
 func TestGetQuestionsMultiple(t *testing.T) {
 	//Act
-	w := performRequest(router, "POST", "/homework/math/multiple", []mathematicals.Criteria{{Min: 10, Max: 20, Category: mathematicals.CategoryPlus}})
+	w := performRequest(router, "POST", "/homework/math/multiple", []mathematicals.Criteria{
+		{
+			Min:      10,
+			Max:      20,
+			Quantity: 100,
+			Category: mathematicals.CategoryPlus,
+			Kind:     mathematicals.KindQeustLast,
+		},
+	})
 
 	var response []mathEntity.Problem
 	err := json.Unmarshal(w.Body.Bytes(), &response)

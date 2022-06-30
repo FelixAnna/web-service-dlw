@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem/entity"
+	"github.com/FelixAnna/web-service-dlw/finance-api/mocks"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -138,4 +140,35 @@ func TestGenerateProblemsMinusImpossible(t *testing.T) {
 
 	assert.NotNil(t, problems)
 	assert.Equal(t, len(problems), 0)
+}
+
+func TestGenerateProblemsNoDuplocates(t *testing.T) {
+	criteria := &Criteria{
+		Min: 10,
+		Max: 100,
+
+		Quantity: 10,
+
+		Range: &Range{
+			Min: 0,
+			Max: 30,
+		},
+		Category: CategoryMinus,
+	}
+
+	problemService := mocks.NewProblemService(t)
+
+	problems := []entity.Problem{}
+
+	problemService.EXPECT().GenerateProblem(criteria.Min, criteria.Max).Return(
+		&entity.Problem{
+			A:  15,
+			B:  12,
+			C:  3,
+			Op: '-',
+		}).Times(MaxGenerateTimes)
+
+	GenerateProblems(criteria, problemService, &problems)
+
+	assert.Equal(t, len(problems), 1)
 }

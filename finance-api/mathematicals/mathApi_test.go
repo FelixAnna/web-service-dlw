@@ -63,6 +63,18 @@ func TestGetQuestionsFailed(t *testing.T) {
 	assert.Equal(t, writer.Code, http.StatusBadRequest)
 }
 
+func TestGetQuestionsInvalid(t *testing.T) {
+	criteriaInvalid := Criteria{
+		Kind: 255,
+	}
+	ctx, writer := commonmock.GetGinContext(&commonmock.Parameter{Body: criteriaInvalid})
+	service.GetQuestions(ctx)
+
+	assert.NotNil(t, ctx)
+	assert.NotNil(t, writer)
+	assert.Equal(t, writer.Code, http.StatusBadRequest)
+}
+
 func TestGetQuestionsOk(t *testing.T) {
 	ctx, writer := commonmock.GetGinContext(&commonmock.Parameter{Body: criteria})
 	service.GetQuestions(ctx)
@@ -82,8 +94,8 @@ func TestGetAllQuestionsFailed(t *testing.T) {
 }
 
 func TestGetAllQuestionsOk(t *testing.T) {
-	ctx, writer := commonmock.GetGinContext(&commonmock.Parameter{Body: []Criteria{criteria, criteria2, criteria3}})
-	service.GetAllQuestions(ctx)
+	ctx, writer := commonmock.GetGinContext(&commonmock.Parameter{Body: criteria})
+	service.GetQuestions(ctx)
 
 	assert.NotNil(t, ctx)
 	assert.NotNil(t, writer)

@@ -20,7 +20,6 @@ func NewTwoMinusStratergy(service data.DataService) *TwoMinusStratergy {
 /* TwoMinusStratergy.Generate
 criteria[0]: bottom num
 criteria[1]: ceiling num
-criteria[2]: positive Only (1: pos only)
 */
 func (tp *TwoMinusStratergy) Generate(criteria ...interface{}) []int {
 	nums := tp.TwoNumStratergy.Generate(criteria...)

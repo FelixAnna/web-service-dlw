@@ -8,10 +8,6 @@ import (
 
 var ProblemServiceSet = wire.NewSet(NewTwoProblem, wire.Bind(new(ProblemService), new(*TwoProblem)))
 
-type ProblemService interface {
-	GenerateProblem(criteria ...interface{}) *entity.Problem
-}
-
 type TwoProblem struct {
 	Stratergy stratergy.Stratergy
 }

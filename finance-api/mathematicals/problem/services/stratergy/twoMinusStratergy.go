@@ -25,12 +25,6 @@ criteria[2]: positive Only (1: pos only)
 func (tp *TwoMinusStratergy) Generate(criteria ...interface{}) []int {
 	nums := tp.TwoNumStratergy.Generate(criteria...)
 
-	if len(criteria) > 2 && criteria[2] == 1 {
-		if nums[0] < nums[1] {
-			nums[0], nums[1] = nums[1], nums[0]
-		}
-	}
-
 	nums = append(nums, nums[0]-nums[1])
 	return nums
 }

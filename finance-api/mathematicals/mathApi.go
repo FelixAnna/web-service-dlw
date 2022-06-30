@@ -51,16 +51,20 @@ func GetResponse(results []entity.Problem, kind int) []QuestionModel {
 
 	for _, problem := range results {
 		model := QuestionModel{
-			Answer: problem.PrintAll(),
+			FullText: problem.PrintAll(),
+			Kind:     kind,
 		}
 
 		switch kind {
 		case KindQuestFirst:
 			model.Question = problem.QuestFirst()
+			model.Answer = problem.A
 		case KindQuestSecond:
 			model.Question = problem.QuestSecond()
+			model.Answer = problem.B
 		case KindQeustLast:
 			model.Question = problem.QuestResult()
+			model.Answer = problem.C
 		}
 
 		questions = append(questions, model)

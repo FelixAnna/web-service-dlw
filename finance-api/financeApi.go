@@ -19,6 +19,8 @@ const SERVER_NAME = "finance-api"
 func main() {
 	initialDependency()
 	router := GetGinRouter()
+
+	//router.Run(":8484")
 	micro.StartApp(SERVER_NAME, ":8484", router, apiBoot.Registry.GetRegistry())
 }
 
@@ -58,7 +60,6 @@ func GetGinRouter() *gin.Engine {
 	micro.RegisterMiddlewares(router, apiBoot.ErrorHandler.ErrorHandler())
 	defineRoutes(router)
 
-	//router.Run(":8484")
 	return router
 }
 

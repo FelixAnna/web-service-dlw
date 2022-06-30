@@ -94,8 +94,8 @@ func TestGetAllQuestionsFailed(t *testing.T) {
 }
 
 func TestGetAllQuestionsOk(t *testing.T) {
-	ctx, writer := commonmock.GetGinContext(&commonmock.Parameter{Body: criteria})
-	service.GetQuestions(ctx)
+	ctx, writer := commonmock.GetGinContext(&commonmock.Parameter{Body: []Criteria{criteria, criteria2, criteria3}})
+	service.GetAllQuestions(ctx)
 
 	assert.NotNil(t, ctx)
 	assert.NotNil(t, writer)

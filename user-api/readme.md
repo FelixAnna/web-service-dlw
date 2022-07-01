@@ -4,7 +4,7 @@
 
 1. user can login by github account
 
-2. user can fire CRUD operations on user table after login /register
+2. fire CRUD operations on user table after login /register
 
 3. generate native jwt token for user after login
 

@@ -10,7 +10,7 @@ type Problem struct {
 	Op rune
 }
 
-func (p *Problem) PrintAll() string {
+func (p *Problem) String() string {
 	return fmt.Sprintf("%v %c %v = %v", p.A, p.Op, p.B, p.C)
 }
 

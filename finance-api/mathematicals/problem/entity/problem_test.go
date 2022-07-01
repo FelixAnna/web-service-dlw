@@ -26,7 +26,7 @@ func init() {
 }
 
 func TestPrintAll(t *testing.T) {
-	result := plusProblem.PrintAll()
+	result := plusProblem.String()
 	assert.EqualValues(t, "1 + 2 = 3", result)
 }
 

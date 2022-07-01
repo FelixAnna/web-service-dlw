@@ -51,7 +51,7 @@ func GetResponse(results []entity.Problem, kind int) []QuestionModel {
 
 	for _, problem := range results {
 		model := QuestionModel{
-			FullText: problem.PrintAll(),
+			FullText: problem.String(),
 			Kind:     kind,
 		}
 

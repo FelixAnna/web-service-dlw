@@ -101,3 +101,21 @@ func TestGetAllQuestionsOk(t *testing.T) {
 	assert.NotNil(t, writer)
 	assert.Equal(t, writer.Code, http.StatusOK)
 }
+
+func TestGetAllQuestionFeedsFailed(t *testing.T) {
+	ctx, writer := commonmock.GetGinContext(&commonmock.Parameter{Body: "invalid"})
+	service.GetAllQuestionFeeds(ctx)
+
+	assert.NotNil(t, ctx)
+	assert.NotNil(t, writer)
+	assert.Equal(t, writer.Code, http.StatusBadRequest)
+}
+
+func TestGetAllQuestionFeedsOk(t *testing.T) {
+	ctx, writer := commonmock.GetGinContext(&commonmock.Parameter{Body: []Criteria{criteria, criteria2, criteria3}})
+	service.GetAllQuestionFeeds(ctx)
+
+	assert.NotNil(t, ctx)
+	assert.NotNil(t, writer)
+	assert.Equal(t, writer.Code, http.StatusOK)
+}

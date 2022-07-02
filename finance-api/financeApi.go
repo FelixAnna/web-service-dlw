@@ -20,8 +20,8 @@ func main() {
 	initialDependency()
 	router := GetGinRouter()
 
-	//router.Run(":8484")
-	micro.StartApp(SERVER_NAME, ":8484", router, apiBoot.Registry.GetRegistry())
+	router.Run(":8484")
+	//micro.StartApp(SERVER_NAME, ":8484", router, apiBoot.Registry.GetRegistry())
 }
 
 type ApiBoot struct {
@@ -81,5 +81,6 @@ func defineRoutes(router *gin.Engine) {
 	{
 		mathGroupRouter.POST("/", apiBoot.MathApi.GetQuestions)
 		mathGroupRouter.POST("/multiple", apiBoot.MathApi.GetAllQuestions)
+		mathGroupRouter.POST("/multiple/feeds", apiBoot.MathApi.GetAllQuestionFeeds)
 	}
 }

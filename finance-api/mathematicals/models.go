@@ -50,3 +50,9 @@ type QuestionModel struct {
 	Kind     int
 	FullText string
 }
+
+type QuestionFeedModel struct {
+	Questions []string
+	Answers   []int
+	FullText  []string
+}

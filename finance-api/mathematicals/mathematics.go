@@ -58,12 +58,12 @@ func GenerateProblems(criteria *Criteria, problemService problem.ProblemService,
 		minResult, maxResult := criteria.GetRange()
 		if problem.C > maxResult ||
 			problem.C < minResult ||
-			problemTexts[problem.String()] {
+			problemTexts[problem.IndenticalString()] {
 			i--
 			continue
 		}
 
-		problemTexts[problem.String()] = true
+		problemTexts[problem.IndenticalString()] = true
 		*problems = append(*problems, *problem)
 	}
 }

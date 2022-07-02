@@ -46,6 +46,22 @@ func (api *MathApi) GetAllQuestions(c *gin.Context) {
 	c.JSON(http.StatusOK, results)
 }
 
+func (api *MathApi) GetAllQuestionFeeds(c *gin.Context) {
+	var criterias []Criteria
+	if err := c.BindJSON(&criterias); err != nil {
+		log.Println(err)
+		c.String(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	var result = &QuestionFeedModel{}
+	for _, criteria := range criterias {
+		GetResponseFeed(api.mathService.GenerateProblems(&criteria), criteria.Kind, result)
+	}
+
+	c.JSON(http.StatusOK, result)
+}
+
 func GetResponse(results []entity.Problem, kind int) []QuestionModel {
 	questions := []QuestionModel{}
 
@@ -71,4 +87,26 @@ func GetResponse(results []entity.Problem, kind int) []QuestionModel {
 	}
 
 	return questions
+}
+
+func GetResponseFeed(results []entity.Problem, kind int, feeds *QuestionFeedModel) {
+	for _, problem := range results {
+		var question string
+		var answer int
+		switch kind {
+		case KindQuestFirst:
+			question = problem.QuestFirst()
+			answer = problem.A
+		case KindQuestSecond:
+			question = problem.QuestSecond()
+			answer = problem.B
+		case KindQeustLast:
+			question = problem.QuestResult()
+			answer = problem.C
+		}
+
+		feeds.Questions = append(feeds.Questions, question)
+		feeds.Answers = append(feeds.Answers, answer)
+		feeds.FullText = append(feeds.FullText, problem.String())
+	}
 }

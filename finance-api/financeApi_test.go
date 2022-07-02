@@ -129,13 +129,40 @@ func TestGetQuestionsMultiple(t *testing.T) {
 		},
 	})
 
-	var response []mathEntity.Problem
+	var response []mathematicals.QuestionModel
 	err := json.Unmarshal(w.Body.Bytes(), &response)
 
 	//Assert
 	assert.Equal(t, http.StatusOK, w.Code)
 	assert.Nil(t, err)
 	assert.NotNil(t, response)
+	for _, val := range response {
+		assert.True(t, val.Answer > 0)
+	}
+}
+
+func TestGetQuestionFeedsMultiple(t *testing.T) {
+	//Act
+	w := performRequest(router, "POST", "/homework/math/multiple/feeds", []mathematicals.Criteria{
+		{
+			Min:      10,
+			Max:      20,
+			Quantity: 100,
+			Category: mathematicals.CategoryPlus,
+			Kind:     mathematicals.KindQeustLast,
+		},
+	})
+
+	var response mathematicals.QuestionFeedModel
+	err := json.Unmarshal(w.Body.Bytes(), &response)
+
+	//Assert
+	assert.Equal(t, http.StatusOK, w.Code)
+	assert.Nil(t, err)
+	assert.NotNil(t, response)
+	for _, val := range response.Answers {
+		assert.True(t, val > 0)
+	}
 }
 
 func TestDeleteAuthorized(t *testing.T) {

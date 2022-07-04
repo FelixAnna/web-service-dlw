@@ -1,6 +1,8 @@
 package mathematicals
 
-import "math"
+import (
+	"math"
+)
 
 const (
 	KindQuestFirst  int = 1
@@ -53,6 +55,6 @@ type QuestionModel struct {
 
 type QuestionFeedModel struct {
 	Questions []string
-	Answers   []int
+	Answers   []string
 	FullText  []string
 }

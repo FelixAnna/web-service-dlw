@@ -1,8 +1,10 @@
 package mathematicals
 
 import (
+	"fmt"
 	"log"
 	"net/http"
+	"sync"
 
 	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem/entity"
 	"github.com/gin-gonic/gin"
@@ -54,10 +56,21 @@ func (api *MathApi) GetAllQuestionFeeds(c *gin.Context) {
 		return
 	}
 
-	var result = &QuestionFeedModel{}
+	ch := make(chan []string)
+	wg := &sync.WaitGroup{}
+	wg.Add(len(criterias))
 	for _, criteria := range criterias {
-		GetResponseFeed(api.mathService.GenerateProblems(&criteria), criteria.Kind, result)
+		go GetResponseFeed(api.mathService.GenerateProblems(&criteria), criteria.Kind, wg, ch)
 	}
+
+	result, wg2 := processingResults(ch)
+
+	//wait for generating
+	wg.Wait()
+	close(ch)
+
+	//wait for result processing
+	wg2.Wait()
 
 	c.JSON(http.StatusOK, result)
 }
@@ -89,7 +102,9 @@ func GetResponse(results []entity.Problem, kind int) []QuestionModel {
 	return questions
 }
 
-func GetResponseFeed(results []entity.Problem, kind int, feeds *QuestionFeedModel) {
+func GetResponseFeed(results []entity.Problem, kind int, wg *sync.WaitGroup, ch chan<- []string) {
+	defer wg.Done()
+
 	for _, problem := range results {
 		var question string
 		var answer int
@@ -105,8 +120,27 @@ func GetResponseFeed(results []entity.Problem, kind int, feeds *QuestionFeedMode
 			answer = problem.C
 		}
 
-		feeds.Questions = append(feeds.Questions, question)
-		feeds.Answers = append(feeds.Answers, answer)
-		feeds.FullText = append(feeds.FullText, problem.String())
+		ch <- []string{question, fmt.Sprintf("%v", answer), problem.String()}
 	}
+}
+
+func formart(input interface{}, idx int) string {
+	return fmt.Sprintf("%v. %v", idx, input)
+}
+
+func processingResults(ch chan []string) (*QuestionFeedModel, *sync.WaitGroup) {
+	var result = &QuestionFeedModel{}
+	wg2 := &sync.WaitGroup{}
+	wg2.Add(1)
+	go func(wg *sync.WaitGroup) {
+		defer wg2.Done()
+		idx := 0
+		for vals := range ch {
+			idx++
+			result.Questions = append(result.Questions, formart(vals[0], idx))
+			result.Answers = append(result.Answers, formart(vals[1], idx))
+			result.FullText = append(result.Answers, formart(vals[2], idx))
+		}
+	}(wg2)
+	return result, wg2
 }

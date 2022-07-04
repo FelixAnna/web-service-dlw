@@ -3,10 +3,13 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"net/http/httptest"
+	"strconv"
+	"strings"
 	"testing"
 
 	"github.com/FelixAnna/web-service-dlw/finance-api/di"
@@ -161,7 +164,12 @@ func TestGetQuestionFeedsMultiple(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, response)
 	for _, val := range response.Answers {
-		assert.True(t, val > 0)
+		vals := strings.Split(val, ". ")
+		fmt.Println(val, vals)
+		assert.True(t, len(vals) == 2)
+		answer, err := strconv.ParseInt(vals[1], 10, 32)
+		assert.Nil(t, err)
+		assert.Greater(t, answer, int64(0))
 	}
 }
 

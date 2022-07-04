@@ -13,9 +13,10 @@
     ```
     
 ### ut with mockery   (done)
-mockery --all --recursive --output=./mocks --with-expecter
-mockery --name=ProblemService --recursive --output=./mocks --with-expecter
-
+     ```
+    mockery --all --recursive --output=./mocks --with-expecter
+    mockery --name=ProblemService --recursive --output=./mocks --with-expecter
+     ```
 ### document api    
 
 ### research helm upgrade not update replicaset + pod when image version changed

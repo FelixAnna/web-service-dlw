@@ -33,28 +33,14 @@ func init() {
 	}
 }
 
-func TestString(t *testing.T) {
-	result := plusProblem.String()
-	assert.EqualValues(t, "1 + 2 = 3", result)
-}
-
 func TestIdenticalString(t *testing.T) {
 	result := plusProblem.IndenticalString()
 	result2 := plusProblem2.IndenticalString()
 	assert.EqualValues(t, result2, result)
 }
 
-func TestPrintFirst(t *testing.T) {
-	result := plusProblem.QuestFirst()
-	assert.EqualValues(t, "(  ) + 2 = 3", result)
-}
-
-func TestPrintSecond(t *testing.T) {
-	result := plusProblem.QuestSecond()
-	assert.EqualValues(t, "1 + (  ) = 3", result)
-}
-
-func TestPrintLast(t *testing.T) {
-	result := plusProblem.QuestResult()
-	assert.EqualValues(t, "1 + 2 = (  )", result)
+func TestNotIdenticalString(t *testing.T) {
+	result := plusProblem.IndenticalString()
+	result2 := minusProblem.IndenticalString()
+	assert.NotEqualValues(t, result2, result)
 }

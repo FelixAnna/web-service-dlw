@@ -7,6 +7,7 @@ import (
 	"sync"
 
 	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem/entity"
+	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem/format"
 	"github.com/gin-gonic/gin"
 )
 
@@ -79,20 +80,23 @@ func GetResponse(results []entity.Problem, kind int) []QuestionModel {
 	questions := []QuestionModel{}
 
 	for _, problem := range results {
+		expression := &format.PlainExpression{
+			Problem: problem,
+		}
 		model := QuestionModel{
-			FullText: problem.String(),
+			FullText: expression.String(),
 			Kind:     kind,
 		}
 
 		switch kind {
 		case KindQuestFirst:
-			model.Question = problem.QuestFirst()
+			model.Question = expression.QuestFirst()
 			model.Answer = problem.A
 		case KindQuestSecond:
-			model.Question = problem.QuestSecond()
+			model.Question = expression.QuestSecond()
 			model.Answer = problem.B
 		case KindQeustLast:
-			model.Question = problem.QuestResult()
+			model.Question = expression.QuestResult()
 			model.Answer = problem.C
 		}
 
@@ -106,21 +110,24 @@ func GetResponseFeed(results []entity.Problem, kind int, wg *sync.WaitGroup, ch 
 	defer wg.Done()
 
 	for _, problem := range results {
+		expression := &format.PlainApplication{
+			Problem: problem,
+		}
 		var question string
 		var answer int
 		switch kind {
 		case KindQuestFirst:
-			question = problem.QuestFirst()
+			question = expression.QuestFirst()
 			answer = problem.A
 		case KindQuestSecond:
-			question = problem.QuestSecond()
+			question = expression.QuestSecond()
 			answer = problem.B
 		case KindQeustLast:
-			question = problem.QuestResult()
+			question = expression.QuestResult()
 			answer = problem.C
 		}
 
-		ch <- []string{question, fmt.Sprintf("%v", answer), problem.String()}
+		ch <- []string{question, fmt.Sprintf("%v", answer), expression.String()}
 	}
 }
 
@@ -139,7 +146,7 @@ func processingResults(ch chan []string) (*QuestionFeedModel, *sync.WaitGroup) {
 			idx++
 			result.Questions = append(result.Questions, formart(vals[0], idx))
 			result.Answers = append(result.Answers, formart(vals[1], idx))
-			result.FullText = append(result.Answers, formart(vals[2], idx))
+			result.FullText = append(result.FullText, formart(vals[2], idx))
 		}
 	}(wg2)
 	return result, wg2

@@ -45,7 +45,7 @@
    
 4. Prepare an SQL Server instance to store data for finance api, table will be automatic migrated
 
-## Swith kubectl context
+## Switch kubectl context
 
 after you connected to aks, you context is attached to aks by default, if you want to check your local kubernetes status, you need switch context:
 

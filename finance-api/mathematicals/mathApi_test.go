@@ -49,15 +49,13 @@ func init() {
 		Type:     problem.TypePlainApplication,
 	}
 
-	mathService := problem.NewMathService()
+	mathService := problem.NewMathService(problem.NewTwoGenerationService())
 	service = ProvideMathApi(mathService)
 }
 
 func TestProvideMathApi(t *testing.T) {
 	assert.NotNil(t, service)
 	assert.NotNil(t, service.mathService)
-	assert.NotNil(t, service.mathService.TwoPlusService)
-	assert.NotNil(t, service.mathService.TwoMinusService)
 }
 func TestGetQuestionsFailed(t *testing.T) {
 	ctx, writer := commonmock.GetGinContext(&commonmock.Parameter{Body: "invalid"})

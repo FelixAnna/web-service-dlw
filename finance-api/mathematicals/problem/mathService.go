@@ -1,69 +1,135 @@
 package problem
 
 import (
-	"log"
+	"fmt"
+	"sync"
 
-	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/di"
 	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem/entity"
-	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem/services"
+	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem/format"
 )
 
-const MaxGenerateTimes = 10000
-
 type MathService struct {
-	TwoPlusService  services.ProblemService
-	TwoMinusService services.ProblemService
+	genService *TwoGenerationService
 }
 
-func NewMathService() *MathService {
+func NewMathService(genService *TwoGenerationService) *MathService {
 	return &MathService{
-		TwoPlusService:  di.InitializeTwoPlusService(),
-		TwoMinusService: di.InitializeTwoMinusService(),
+		genService: genService,
 	}
 }
 
-func (service *MathService) GenerateProblems(criteria *Criteria) []entity.Problem {
-	if criteria.Quantity == 0 {
-		criteria.Quantity = 10
+func (service *MathService) GenerateProblems(criterias ...Criteria) []QuestionModel {
+	var results []QuestionModel
+	for _, criteria := range criterias {
+		cr := criteria
+		problems := GetResponse(service.genService.GenerateProblems(&cr), &cr)
+		results = append(results, problems...)
 	}
 
-	var problems []entity.Problem = []entity.Problem{}
-
-	var problemService services.ProblemService
-	switch criteria.Category {
-	case CategoryMinus:
-		problemService = service.TwoMinusService
-	case CategoryPlus:
-		problemService = service.TwoPlusService
-	default:
-		log.Println("Invalid Category:", criteria.Category)
-	}
-
-	GenerateProblems(criteria, problemService, &problems)
-	return problems
+	return results
 }
 
-func GenerateProblems(criteria *Criteria, problemService services.ProblemService, problems *[]entity.Problem) {
-	round := 0
-	problemTexts := map[string]bool{}
-	for i := 0; i < criteria.Quantity; i++ {
-		round++
-		if round > MaxGenerateTimes {
-			log.Println("Too many attampts: ", MaxGenerateTimes)
-			break
-		}
-
-		problem := problemService.GenerateProblem(criteria.Min, criteria.Max)
-
-		minResult, maxResult := criteria.GetRange()
-		if problem.C > maxResult ||
-			problem.C < minResult ||
-			problemTexts[problem.IndenticalString()] {
-			i--
-			continue
-		}
-
-		problemTexts[problem.IndenticalString()] = true
-		*problems = append(*problems, *problem)
+func (service *MathService) GenerateFeeds(criterias ...Criteria) *QuestionFeedModel {
+	ch := make(chan []string)
+	wg := &sync.WaitGroup{}
+	wg.Add(len(criterias))
+	for _, criteria := range criterias {
+		cr := criteria
+		go GetResponseFeed(service.genService.GenerateProblems(&cr), &cr, wg, ch)
 	}
+
+	result, wg2 := processingResults(ch)
+
+	//wait for generating
+	wg.Wait()
+	close(ch)
+
+	//wait for result processing
+	wg2.Wait()
+
+	return result
+}
+
+func GetResponse(results []entity.Problem, criteria *Criteria) []QuestionModel {
+	questions := []QuestionModel{}
+
+	for _, pb := range results {
+		expression := getFormatInterface(&pb, criteria)
+		question, answer := getDisplayQandA(criteria, expression, pb)
+
+		model := QuestionModel{
+			FullText: expression.String(),
+			Kind:     criteria.Kind,
+			Question: question,
+			Answer:   answer,
+		}
+
+		questions = append(questions, model)
+	}
+
+	return questions
+}
+
+func GetResponseFeed(results []entity.Problem, criteria *Criteria, wg *sync.WaitGroup, ch chan<- []string) {
+	defer wg.Done()
+
+	for _, pb := range results {
+		expression := getFormatInterface(&pb, criteria)
+		question, answer := getDisplayQandA(criteria, expression, pb)
+		ch <- []string{question, fmt.Sprintf("%v", answer), expression.String()}
+	}
+}
+
+func getDisplayQandA(criteria *Criteria, expression format.FormatInterface, pb entity.Problem) (string, int) {
+	var question string
+	var answer int
+	switch criteria.Kind {
+	case KindQuestFirst:
+		question = expression.QuestFirst()
+		answer = pb.A
+	case KindQuestSecond:
+		question = expression.QuestSecond()
+		answer = pb.B
+	case KindQeustLast:
+		question = expression.QuestResult()
+		answer = pb.C
+	}
+	return question, answer
+}
+
+func formart(input interface{}, idx int) string {
+	return fmt.Sprintf("%v. %v", idx, input)
+}
+
+func processingResults(ch chan []string) (*QuestionFeedModel, *sync.WaitGroup) {
+	var result = &QuestionFeedModel{}
+	wg2 := &sync.WaitGroup{}
+	wg2.Add(1)
+	go func(wg *sync.WaitGroup) {
+		defer wg2.Done()
+		idx := 0
+		for vals := range ch {
+			idx++
+			result.Questions = append(result.Questions, formart(vals[0], idx))
+			result.Answers = append(result.Answers, formart(vals[1], idx))
+			result.FullText = append(result.FullText, formart(vals[2], idx))
+		}
+	}(wg2)
+	return result, wg2
+}
+
+func getFormatInterface(pb *entity.Problem, criteria *Criteria) format.FormatInterface {
+	var expression format.FormatInterface
+	switch criteria.Type {
+	case TypePlainExpression:
+		expression = &format.PlainExpression{
+			Problem: pb,
+		}
+	case TypePlainApplication:
+		expression = &format.PlainApplication{
+			Problem: pb,
+		}
+	}
+
+	return expression
 }

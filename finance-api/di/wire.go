@@ -23,7 +23,7 @@ func InitializeZdjApi() (*zdj.ZdjApi, error) {
 }
 
 func InitializeMathApi() *mathematicals.MathApi {
-	wire.Build(mathematicals.ProvideMathApi, problem.NewMathService) //sql
+	wire.Build(mathematicals.ProvideMathApi, problem.NewMathService, problem.NewTwoGenerationService) //sql
 	//wire.Build(zdj.ProvideZdjApi, repository.MemoryRepoSet) //InMemory
 	return &mathematicals.MathApi{}
 }

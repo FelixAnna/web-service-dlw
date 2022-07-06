@@ -9,16 +9,16 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var mathService *MathService
+var twoGenService *TwoGenerationService
 
 func init() {
-	mathService = NewMathService()
+	twoGenService = NewTwoGenerationService()
 }
 
-func TestNewMathService(t *testing.T) {
-	assert.NotNil(t, mathService)
-	assert.NotNil(t, mathService.TwoPlusService)
-	assert.NotNil(t, mathService.TwoMinusService)
+func TestTwoGenerationService(t *testing.T) {
+	assert.NotNil(t, twoGenService)
+	assert.NotNil(t, twoGenService.TwoPlusService)
+	assert.NotNil(t, twoGenService.TwoMinusService)
 }
 
 func TestGetQuestions(t *testing.T) {
@@ -31,7 +31,7 @@ func TestGetQuestions(t *testing.T) {
 		Category: CategoryPlus,
 	}
 
-	problems := mathService.GenerateProblems(criteria)
+	problems := twoGenService.GenerateProblems(criteria)
 
 	assert.NotNil(t, problems)
 	assert.Equal(t, len(problems), criteria.Quantity)
@@ -57,7 +57,7 @@ func TestGetQuestionsWithinRange(t *testing.T) {
 		Category: CategoryPlus,
 	}
 
-	problems := mathService.GenerateProblems(criteria)
+	problems := twoGenService.GenerateProblems(criteria)
 
 	fmt.Println(problems)
 	assert.NotNil(t, problems)
@@ -86,7 +86,7 @@ func TestGenerateProblemsMinus(t *testing.T) {
 		Category: CategoryMinus,
 	}
 
-	problems := mathService.GenerateProblems(criteria)
+	problems := twoGenService.GenerateProblems(criteria)
 
 	assert.NotNil(t, problems)
 	assert.Equal(t, len(problems), criteria.Quantity)
@@ -111,7 +111,7 @@ func TestGenerateProblemsMinusPos(t *testing.T) {
 		Category: CategoryMinus,
 	}
 
-	problems := mathService.GenerateProblems(criteria)
+	problems := twoGenService.GenerateProblems(criteria)
 
 	assert.NotNil(t, problems)
 	assert.Equal(t, len(problems), 10)
@@ -136,7 +136,7 @@ func TestGenerateProblemsMinusImpossible(t *testing.T) {
 		Category: CategoryMinus,
 	}
 
-	problems := mathService.GenerateProblems(criteria)
+	problems := twoGenService.GenerateProblems(criteria)
 
 	assert.NotNil(t, problems)
 	assert.Equal(t, len(problems), 0)

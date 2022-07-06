@@ -34,7 +34,8 @@ func InitializeZdjApi() (*zdj.ZdjApi, error) {
 }
 
 func InitializeMathApi() *mathematicals.MathApi {
-	mathService := problem.NewMathService()
+	twoGenerationService := problem.NewTwoGenerationService()
+	mathService := problem.NewMathService(twoGenerationService)
 	mathApi := mathematicals.ProvideMathApi(mathService)
 	return mathApi
 }

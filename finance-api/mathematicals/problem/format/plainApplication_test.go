@@ -71,3 +71,8 @@ func TestAppPrintLast(t *testing.T) {
 	result := plusApp.QuestResult()
 	assert.EqualValues(t, "比1多2的数是(  )", result)
 }
+
+func TestAppPrintMinusLast(t *testing.T) {
+	result := minusApp.QuestResult()
+	assert.EqualValues(t, "比3少2的数是(  )", result)
+}

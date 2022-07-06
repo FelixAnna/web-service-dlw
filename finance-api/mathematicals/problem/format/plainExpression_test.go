@@ -71,3 +71,8 @@ func TestPrintLast(t *testing.T) {
 	result := plusProblem.QuestResult()
 	assert.EqualValues(t, "1 + 2 = (  )", result)
 }
+
+func TestPrintMinusLast(t *testing.T) {
+	result := minusProblem.QuestResult()
+	assert.EqualValues(t, "3 - 2 = (  )", result)
+}

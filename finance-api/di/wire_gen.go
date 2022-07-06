@@ -14,6 +14,7 @@ import (
 	"github.com/FelixAnna/web-service-dlw/common/middleware"
 	"github.com/FelixAnna/web-service-dlw/common/mocks"
 	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals"
+	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem"
 	"github.com/FelixAnna/web-service-dlw/finance-api/zdj"
 	"github.com/FelixAnna/web-service-dlw/finance-api/zdj/repository"
 )
@@ -33,7 +34,7 @@ func InitializeZdjApi() (*zdj.ZdjApi, error) {
 }
 
 func InitializeMathApi() *mathematicals.MathApi {
-	mathService := mathematicals.NewMathService()
+	mathService := problem.NewMathService()
 	mathApi := mathematicals.ProvideMathApi(mathService)
 	return mathApi
 }

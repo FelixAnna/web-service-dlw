@@ -9,7 +9,7 @@ import (
 const placeHolder = "(  )"
 
 type PlainExpression struct {
-	entity.Problem
+	*entity.Problem
 }
 
 func (p *PlainExpression) String() string {

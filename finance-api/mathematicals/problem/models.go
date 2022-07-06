@@ -1,4 +1,4 @@
-package mathematicals
+package problem
 
 import (
 	"math"
@@ -13,6 +13,11 @@ const (
 const (
 	CategoryPlus int = iota
 	CategoryMinus
+)
+
+const (
+	TypePlainExpression int = iota
+	TypePlainApplication
 )
 
 type Range struct {
@@ -30,6 +35,9 @@ type Criteria struct {
 
 	//first, second, last
 	Kind int `binding:"min=1,max=3"`
+
+	//Expression, plainApplication, ...
+	Type int `binding:"min=0,max=255"`
 }
 
 func (s *Criteria) GetRange() (min, max int) {

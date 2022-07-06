@@ -13,7 +13,7 @@ var minusApp PlainApplication
 
 func init() {
 	plusApp = PlainApplication{
-		entity.Problem{
+		&entity.Problem{
 			A:  1,
 			B:  2,
 			C:  3,
@@ -22,7 +22,7 @@ func init() {
 	}
 
 	plusApp2 = PlainApplication{
-		entity.Problem{
+		&entity.Problem{
 			A:  2,
 			B:  1,
 			C:  3,
@@ -31,7 +31,7 @@ func init() {
 	}
 
 	minusApp = PlainApplication{
-		entity.Problem{
+		&entity.Problem{
 			A:  3,
 			B:  2,
 			C:  1,

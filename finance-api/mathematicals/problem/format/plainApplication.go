@@ -7,7 +7,7 @@ import (
 )
 
 type PlainApplication struct {
-	entity.Problem
+	*entity.Problem
 }
 
 func (p *PlainApplication) String() string {

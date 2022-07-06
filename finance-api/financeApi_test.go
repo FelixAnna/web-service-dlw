@@ -13,7 +13,7 @@ import (
 	"testing"
 
 	"github.com/FelixAnna/web-service-dlw/finance-api/di"
-	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals"
+	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem"
 	mathEntity "github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem/entity"
 	"github.com/FelixAnna/web-service-dlw/finance-api/zdj/entity"
 	"github.com/gin-gonic/gin"
@@ -92,7 +92,7 @@ func TestSearchAuthorized(t *testing.T) {
 
 func TestGetQuestionsInvalid(t *testing.T) {
 	//Act
-	w := performRequest(router, "POST", "/homework/math/", mathematicals.Criteria{Min: 10, Max: 20, Category: 1000})
+	w := performRequest(router, "POST", "/homework/math/", problem.Criteria{Min: 10, Max: 20, Category: 1000})
 
 	var response []mathEntity.Problem
 	err := json.Unmarshal(w.Body.Bytes(), &response)
@@ -104,12 +104,12 @@ func TestGetQuestionsInvalid(t *testing.T) {
 
 func TestGetQuestions(t *testing.T) {
 	//Act
-	w := performRequest(router, "POST", "/homework/math/", mathematicals.Criteria{
+	w := performRequest(router, "POST", "/homework/math/", problem.Criteria{
 		Min:      10,
 		Max:      20,
 		Quantity: 100,
-		Category: mathematicals.CategoryPlus,
-		Kind:     mathematicals.KindQeustLast})
+		Category: problem.CategoryPlus,
+		Kind:     problem.KindQeustLast})
 
 	var response []mathEntity.Problem
 	err := json.Unmarshal(w.Body.Bytes(), &response)
@@ -122,17 +122,17 @@ func TestGetQuestions(t *testing.T) {
 
 func TestGetQuestionsMultiple(t *testing.T) {
 	//Act
-	w := performRequest(router, "POST", "/homework/math/multiple", []mathematicals.Criteria{
+	w := performRequest(router, "POST", "/homework/math/multiple", []problem.Criteria{
 		{
 			Min:      10,
 			Max:      20,
 			Quantity: 100,
-			Category: mathematicals.CategoryPlus,
-			Kind:     mathematicals.KindQeustLast,
+			Category: problem.CategoryPlus,
+			Kind:     problem.KindQeustLast,
 		},
 	})
 
-	var response []mathematicals.QuestionModel
+	var response []problem.QuestionModel
 	err := json.Unmarshal(w.Body.Bytes(), &response)
 
 	//Assert
@@ -146,17 +146,17 @@ func TestGetQuestionsMultiple(t *testing.T) {
 
 func TestGetQuestionFeedsMultiple(t *testing.T) {
 	//Act
-	w := performRequest(router, "POST", "/homework/math/multiple/feeds", []mathematicals.Criteria{
+	w := performRequest(router, "POST", "/homework/math/multiple/feeds", []problem.Criteria{
 		{
 			Min:      10,
 			Max:      20,
 			Quantity: 100,
-			Category: mathematicals.CategoryPlus,
-			Kind:     mathematicals.KindQeustLast,
+			Category: problem.CategoryPlus,
+			Kind:     problem.KindQeustLast,
 		},
 	})
 
-	var response mathematicals.QuestionFeedModel
+	var response problem.QuestionFeedModel
 	err := json.Unmarshal(w.Body.Bytes(), &response)
 
 	//Assert

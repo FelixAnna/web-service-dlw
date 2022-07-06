@@ -5,46 +5,51 @@ import (
 	"testing"
 
 	commonmock "github.com/FelixAnna/web-service-dlw/common/mocks"
+	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem"
+
 	"github.com/stretchr/testify/assert"
 )
 
 var service *MathApi
-var criteria Criteria
-var criteria2 Criteria
-var criteria3 Criteria
+var criteria problem.Criteria
+var criteria2 problem.Criteria
+var criteria3 problem.Criteria
 
 func init() {
-	criteria = Criteria{
+	criteria = problem.Criteria{
 		Min:      100,
 		Max:      200,
 		Quantity: 10,
 
-		Kind: KindQuestFirst,
+		Kind: problem.KindQuestFirst,
 
-		Category: CategoryPlus,
+		Category: problem.CategoryPlus,
 	}
 
-	criteria2 = Criteria{
+	criteria2 = problem.Criteria{
 		Min:      100,
 		Max:      200,
 		Quantity: 10,
 
-		Kind: KindQuestSecond,
+		Kind: problem.KindQuestSecond,
 
-		Category: CategoryPlus,
+		Category: problem.CategoryPlus,
+
+		Type: problem.TypePlainExpression,
 	}
 
-	criteria3 = Criteria{
+	criteria3 = problem.Criteria{
 		Min:      100,
 		Max:      200,
 		Quantity: 10,
 
-		Kind: KindQeustLast,
+		Kind: problem.KindQeustLast,
 
-		Category: CategoryMinus,
+		Category: problem.CategoryMinus,
+		Type:     problem.TypePlainApplication,
 	}
 
-	mathService := NewMathService()
+	mathService := problem.NewMathService()
 	service = ProvideMathApi(mathService)
 }
 
@@ -64,7 +69,7 @@ func TestGetQuestionsFailed(t *testing.T) {
 }
 
 func TestGetQuestionsInvalid(t *testing.T) {
-	criteriaInvalid := Criteria{
+	criteriaInvalid := problem.Criteria{
 		Kind: 255,
 	}
 	ctx, writer := commonmock.GetGinContext(&commonmock.Parameter{Body: criteriaInvalid})
@@ -94,7 +99,7 @@ func TestGetAllQuestionsFailed(t *testing.T) {
 }
 
 func TestGetAllQuestionsOk(t *testing.T) {
-	ctx, writer := commonmock.GetGinContext(&commonmock.Parameter{Body: []Criteria{criteria, criteria2, criteria3}})
+	ctx, writer := commonmock.GetGinContext(&commonmock.Parameter{Body: []problem.Criteria{criteria, criteria2, criteria3}})
 	service.GetAllQuestions(ctx)
 
 	assert.NotNil(t, ctx)
@@ -112,7 +117,7 @@ func TestGetAllQuestionFeedsFailed(t *testing.T) {
 }
 
 func TestGetAllQuestionFeedsOk(t *testing.T) {
-	ctx, writer := commonmock.GetGinContext(&commonmock.Parameter{Body: []Criteria{criteria, criteria2, criteria3}})
+	ctx, writer := commonmock.GetGinContext(&commonmock.Parameter{Body: []problem.Criteria{criteria, criteria2, criteria3}})
 	service.GetAllQuestionFeeds(ctx)
 
 	assert.NotNil(t, ctx)

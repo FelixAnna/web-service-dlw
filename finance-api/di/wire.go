@@ -10,6 +10,7 @@ import (
 	"github.com/FelixAnna/web-service-dlw/common/mesh"
 	"github.com/FelixAnna/web-service-dlw/common/middleware"
 	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals"
+	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem"
 	"github.com/FelixAnna/web-service-dlw/finance-api/zdj"
 	"github.com/FelixAnna/web-service-dlw/finance-api/zdj/repository"
 	"github.com/google/wire"
@@ -22,7 +23,7 @@ func InitializeZdjApi() (*zdj.ZdjApi, error) {
 }
 
 func InitializeMathApi() *mathematicals.MathApi {
-	wire.Build(mathematicals.ProvideMathApi, mathematicals.NewMathService) //sql
+	wire.Build(mathematicals.ProvideMathApi, problem.NewMathService) //sql
 	//wire.Build(zdj.ProvideZdjApi, repository.MemoryRepoSet) //InMemory
 	return &mathematicals.MathApi{}
 }

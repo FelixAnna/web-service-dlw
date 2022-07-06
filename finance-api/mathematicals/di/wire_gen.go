@@ -7,23 +7,23 @@
 package di
 
 import (
-	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem"
+	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem/services"
 	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem/services/data"
 	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem/services/stratergy"
 )
 
 // Injectors from wire.go:
 
-func InitializeTwoPlusService() problem.ProblemService {
+func InitializeTwoPlusService() services.ProblemService {
 	randomService := data.CreateRandomService()
 	twoPlusStratergy := stratergy.NewTwoPlusStratergy(randomService)
-	twoProblem := problem.NewTwoProblem(twoPlusStratergy)
+	twoProblem := services.NewTwoProblem(twoPlusStratergy)
 	return twoProblem
 }
 
-func InitializeTwoMinusService() problem.ProblemService {
+func InitializeTwoMinusService() services.ProblemService {
 	randomService := data.CreateRandomService()
 	twoMinusStratergy := stratergy.NewTwoMinusStratergy(randomService)
-	twoProblem := problem.NewTwoProblem(twoMinusStratergy)
+	twoProblem := services.NewTwoProblem(twoMinusStratergy)
 	return twoProblem
 }

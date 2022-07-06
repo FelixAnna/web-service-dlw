@@ -1,18 +1,18 @@
-package mathematicals
+package problem
 
 import (
 	"log"
 
 	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/di"
-	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem"
 	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem/entity"
+	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem/services"
 )
 
 const MaxGenerateTimes = 10000
 
 type MathService struct {
-	TwoPlusService  problem.ProblemService
-	TwoMinusService problem.ProblemService
+	TwoPlusService  services.ProblemService
+	TwoMinusService services.ProblemService
 }
 
 func NewMathService() *MathService {
@@ -29,7 +29,7 @@ func (service *MathService) GenerateProblems(criteria *Criteria) []entity.Proble
 
 	var problems []entity.Problem = []entity.Problem{}
 
-	var problemService problem.ProblemService
+	var problemService services.ProblemService
 	switch criteria.Category {
 	case CategoryMinus:
 		problemService = service.TwoMinusService
@@ -43,13 +43,13 @@ func (service *MathService) GenerateProblems(criteria *Criteria) []entity.Proble
 	return problems
 }
 
-func GenerateProblems(criteria *Criteria, problemService problem.ProblemService, problems *[]entity.Problem) {
+func GenerateProblems(criteria *Criteria, problemService services.ProblemService, problems *[]entity.Problem) {
 	round := 0
 	problemTexts := map[string]bool{}
 	for i := 0; i < criteria.Quantity; i++ {
 		round++
 		if round > MaxGenerateTimes {
-			log.Println("Too many attampts")
+			log.Println("Too many attampts: ", MaxGenerateTimes)
 			break
 		}
 

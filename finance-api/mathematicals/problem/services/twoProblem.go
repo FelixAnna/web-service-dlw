@@ -1,4 +1,4 @@
-package problem
+package services
 
 import (
 	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem/entity"

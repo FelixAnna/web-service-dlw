@@ -4,18 +4,18 @@
 package di
 
 import (
-	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem"
+	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem/services"
 	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem/services/data"
 	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem/services/stratergy"
 	"github.com/google/wire"
 )
 
-func InitializeTwoPlusService() problem.ProblemService {
-	wire.Build(problem.ProblemServiceSet, stratergy.TwoPlusStratergySet, data.RandomServiceSet)
+func InitializeTwoPlusService() services.ProblemService {
+	wire.Build(services.ProblemServiceSet, stratergy.TwoPlusStratergySet, data.RandomServiceSet)
 	return nil
 }
 
-func InitializeTwoMinusService() problem.ProblemService {
-	wire.Build(problem.ProblemServiceSet, stratergy.TwoMinusStratergySet, data.RandomServiceSet)
+func InitializeTwoMinusService() services.ProblemService {
+	wire.Build(services.ProblemServiceSet, stratergy.TwoMinusStratergySet, data.RandomServiceSet)
 	return nil
 }

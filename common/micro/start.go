@@ -7,6 +7,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/gin-contrib/cors"
 	"go-micro.dev/v4"
 
 	httpServer "github.com/asim/go-micro/plugins/server/http/v4"
@@ -39,6 +40,7 @@ func RegisterMiddlewares(router *gin.Engine, errorHandler gin.HandlerFunc) {
 	initialLogger()
 	router.Use(gin.Logger())
 	router.Use(errorHandler)
+	router.Use(cors.Default())
 	router.Use(gin.Recovery())
 }
 

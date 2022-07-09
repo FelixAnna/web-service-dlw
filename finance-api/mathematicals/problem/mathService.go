@@ -127,7 +127,8 @@ func getFormatInterface(pb *entity.Problem, criteria *Criteria) format.FormatInt
 		}
 	case TypePlainApplication:
 		expression = &format.PlainApplication{
-			Problem: pb,
+			Problem:  pb,
+			Template: "比%v%s%v的数是%v",
 		}
 	}
 

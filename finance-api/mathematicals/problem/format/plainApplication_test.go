@@ -12,6 +12,7 @@ var plusApp2 PlainApplication
 var minusApp PlainApplication
 
 func init() {
+	const template = "比%v%v%v的数是%v"
 	plusApp = PlainApplication{
 		&entity.Problem{
 			A:  1,
@@ -19,6 +20,7 @@ func init() {
 			C:  3,
 			Op: '+',
 		},
+		template,
 	}
 
 	plusApp2 = PlainApplication{
@@ -28,6 +30,7 @@ func init() {
 			C:  3,
 			Op: '+',
 		},
+		template,
 	}
 
 	minusApp = PlainApplication{
@@ -37,6 +40,7 @@ func init() {
 			C:  1,
 			Op: '-',
 		},
+		template,
 	}
 }
 

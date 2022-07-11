@@ -57,12 +57,31 @@ type QuestionModel struct {
 	Question string
 	Answer   int
 
+	Category int
 	Kind     int
-	FullText string
+	Type     int
 }
 
 type QuestionFeedModel struct {
 	Questions []string
 	Answers   []string
 	FullText  []string
+}
+
+type MathResultItem struct {
+	Index    int
+	Question string
+	Answer   string
+
+	Category int
+	Kind     int
+	Type     int
+
+	UserAnswer int
+}
+
+type MathResultRequest struct {
+	Result  []MathResultItem
+	GroupId string
+	Score   float32
 }

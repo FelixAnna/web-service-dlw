@@ -29,6 +29,28 @@ func (service *MathService) GenerateProblems(criterias ...Criteria) []QuestionMo
 	return results
 }
 
+func (service *MathService) SaveResults(request *MathResultRequest, userId string) error {
+	questions := []entity.QuestionResult{}
+	for _, val := range request.Result {
+		question := entity.QuestionResult{
+			Index:    val.Index,
+			Question: val.Question,
+			Answer:   val.Answer,
+
+			Category: val.Category,
+			Kind:     val.Kind,
+			Type:     val.Type,
+
+			UserAnswer: val.UserAnswer,
+		}
+
+		questions = append(questions, question)
+	}
+
+	//save to db
+	return nil
+}
+
 func (service *MathService) GenerateFeeds(criterias ...Criteria) *QuestionFeedModel {
 	ch := make(chan []string)
 	wg := &sync.WaitGroup{}
@@ -58,8 +80,11 @@ func GetResponse(results []entity.Problem, criteria *Criteria) []QuestionModel {
 		question, answer := getDisplayQandA(criteria, expression, pb)
 
 		model := QuestionModel{
-			FullText: expression.String(),
+			//FullText: expression.String(),
 			Kind:     criteria.Kind,
+			Category: criteria.Category,
+			Type:     criteria.Category,
+
 			Question: question,
 			Answer:   answer,
 		}

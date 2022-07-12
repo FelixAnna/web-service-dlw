@@ -6,8 +6,6 @@ import (
 	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem/entity"
 )
 
-const placeHolder = "(  )"
-
 type PlainExpression struct {
 	*entity.Problem
 }

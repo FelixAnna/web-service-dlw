@@ -1,6 +1,7 @@
 package format
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem/entity"
@@ -59,20 +60,20 @@ func TestNotIdenticalString(t *testing.T) {
 
 func TestPrintFirst(t *testing.T) {
 	result := plusProblem.QuestFirst()
-	assert.EqualValues(t, "(  ) + 2 = 3", result)
+	assert.EqualValues(t, fmt.Sprintf("%v + 2 = 3", placeHolder), result)
 }
 
 func TestPrintSecond(t *testing.T) {
 	result := plusProblem.QuestSecond()
-	assert.EqualValues(t, "1 + (  ) = 3", result)
+	assert.EqualValues(t, fmt.Sprintf("1 + %v = 3", placeHolder), result)
 }
 
 func TestPrintLast(t *testing.T) {
 	result := plusProblem.QuestResult()
-	assert.EqualValues(t, "1 + 2 = (  )", result)
+	assert.EqualValues(t, fmt.Sprintf("1 + 2 = %v", placeHolder), result)
 }
 
 func TestPrintMinusLast(t *testing.T) {
 	result := minusProblem.QuestResult()
-	assert.EqualValues(t, "3 - 2 = (  )", result)
+	assert.EqualValues(t, fmt.Sprintf("3 - 2 = %v", placeHolder), result)
 }

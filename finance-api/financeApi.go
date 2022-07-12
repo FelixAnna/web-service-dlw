@@ -7,6 +7,7 @@ import (
 	"github.com/FelixAnna/web-service-dlw/common/mesh"
 	"github.com/FelixAnna/web-service-dlw/common/micro"
 	"github.com/FelixAnna/web-service-dlw/common/middleware"
+	"github.com/FelixAnna/web-service-dlw/common/snowflake"
 	"github.com/FelixAnna/web-service-dlw/finance-api/di"
 	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals"
 	"github.com/FelixAnna/web-service-dlw/finance-api/zdj"
@@ -20,6 +21,7 @@ func main() {
 	initialDependency()
 	router := GetGinRouter()
 
+	//os.Setenv("DLW_NODE_NO", "1023")
 	router.Run(":8484")
 	//micro.StartApp(SERVER_NAME, ":8484", router, apiBoot.Registry.GetRegistry())
 }
@@ -48,6 +50,8 @@ func initialDependency() {
 		ErrorHandler:         di.InitialErrorMiddleware(),
 		Registry:             di.InitialRegistry(),
 	}
+
+	snowflake.InitSnowflake()
 }
 
 func GetGinRouter() *gin.Engine {
@@ -81,6 +85,7 @@ func defineRoutes(router *gin.Engine) {
 	{
 		mathGroupRouter.POST("/", apiBoot.MathApi.GetQuestions)
 		mathGroupRouter.POST("/multiple", apiBoot.MathApi.GetAllQuestions)
+		mathGroupRouter.POST("/save", apiBoot.MathApi.SaveResults)
 		mathGroupRouter.POST("/multiple/feeds", apiBoot.MathApi.GetAllQuestionFeeds)
 	}
 }

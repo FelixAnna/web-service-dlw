@@ -15,6 +15,7 @@ import (
 	"github.com/FelixAnna/web-service-dlw/common/mocks"
 	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals"
 	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem"
+	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem/repositories"
 	"github.com/FelixAnna/web-service-dlw/finance-api/zdj"
 	"github.com/FelixAnna/web-service-dlw/finance-api/zdj/repository"
 )
@@ -35,7 +36,10 @@ func InitializeZdjApi() (*zdj.ZdjApi, error) {
 
 func InitializeMathApi() *mathematicals.MathApi {
 	twoGenerationService := problem.NewTwoGenerationService()
-	mathService := problem.NewMathService(twoGenerationService)
+	awsHelper := aws.ProvideAwsHelper()
+	awsService := aws.ProvideAWSService(awsHelper)
+	mongoQuestionRepo := repositories.ProvideMongoQuestionRepo(awsService)
+	mathService := problem.NewMathService(twoGenerationService, mongoQuestionRepo)
 	mathApi := mathematicals.ProvideMathApi(mathService)
 	return mathApi
 }

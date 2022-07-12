@@ -8,7 +8,7 @@ import (
 	"github.com/bwmarrin/snowflake"
 )
 
-var node *snowflake.Node
+var SFNode *snowflake.Node
 
 // InitSnowflake initiate Snowflake node singleton.
 func InitSnowflake() error {
@@ -31,11 +31,11 @@ func InitSnowflake() error {
 	}
 
 	// Set node
-	node = n
+	SFNode = n
 	return nil
 }
 
 // GenerateSnowflake generate Twitter Snowflake ID
 func GenerateSnowflake() string {
-	return node.Generate().String()
+	return SFNode.Generate().String()
 }

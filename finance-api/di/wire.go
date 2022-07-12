@@ -11,6 +11,8 @@ import (
 	"github.com/FelixAnna/web-service-dlw/common/middleware"
 	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals"
 	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem"
+
+	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem/repositories"
 	"github.com/FelixAnna/web-service-dlw/finance-api/zdj"
 	"github.com/FelixAnna/web-service-dlw/finance-api/zdj/repository"
 	"github.com/google/wire"
@@ -23,7 +25,7 @@ func InitializeZdjApi() (*zdj.ZdjApi, error) {
 }
 
 func InitializeMathApi() *mathematicals.MathApi {
-	wire.Build(mathematicals.ProvideMathApi, problem.NewMathService, problem.NewTwoGenerationService) //sql
+	wire.Build(mathematicals.ProvideMathApi, problem.NewMathService, problem.NewTwoGenerationService, repositories.MongoRepoSet, aws.ProvideAWSService, aws.AwsSet) //sql
 	//wire.Build(zdj.ProvideZdjApi, repository.MemoryRepoSet) //InMemory
 	return &mathematicals.MathApi{}
 }

@@ -32,10 +32,10 @@ func TestInitSnowflakeOk(t *testing.T) {
 	os.Setenv("DLW_NODE_NO", "1023")
 	err := InitSnowflake()
 	assert.Nil(t, err)
-	assert.NotNil(t, node)
+	assert.NotNil(t, SFNode)
 }
 
-func TestGenerateSnowflake(t *testing.T) {
+func TestGenerate(t *testing.T) {
 	os.Setenv("DLW_NODE_NO", "1023")
 	InitSnowflake()
 

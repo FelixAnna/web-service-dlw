@@ -7,6 +7,8 @@ require (
 	github.com/asim/go-micro/plugins/registry/kubernetes/v4 v4.0.0-20220530075002-cf51ddeb26c8
 	github.com/asim/go-micro/plugins/server/http/v4 v4.0.0-20220530075002-cf51ddeb26c8
 	github.com/aws/aws-sdk-go v1.44.34
+	github.com/bwmarrin/snowflake v0.3.0
+	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-gonic/gin v1.8.1
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/google/wire v0.5.0
@@ -20,13 +22,11 @@ require (
 	github.com/acomagu/bufpipe v1.0.3 // indirect
 	github.com/armon/go-metrics v0.4.0 // indirect
 	github.com/bitly/go-simplejson v0.5.0 // indirect
-	github.com/bwmarrin/snowflake v0.3.0 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/emirpasic/gods v1.18.1 // indirect
 	github.com/fatih/color v1.13.0 // indirect
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
-	github.com/gin-contrib/cors v1.4.0 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-git/gcfg v1.5.0 // indirect
 	github.com/go-git/go-billy/v5 v5.3.1 // indirect

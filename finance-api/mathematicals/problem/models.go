@@ -53,6 +53,11 @@ func (s *Criteria) GetRange() (min, max int) {
 	return s.Range.Min, s.Range.Max
 }
 
+type QuestionResponse struct {
+	Questions  []QuestionModel
+	QuestionId string
+}
+
 type QuestionModel struct {
 	Question string
 	Answer   int
@@ -68,20 +73,20 @@ type QuestionFeedModel struct {
 	FullText  []string
 }
 
-type MathResultItem struct {
-	Index    int
-	Question string
-	Answer   string
+type QuestionAnswerItem struct {
+	Index    int    `json:"Index" binding:"required"`
+	Question string `json:"Question" binding:"required"`
+	Answer   string `json:"Answer" binding:"required"`
 
-	Category int
-	Kind     int
-	Type     int
+	Category int `json:"Category" binding:"required"`
+	Kind     int `json:"Kind" binding:"required"`
+	Type     int `json:"Type" binding:"required"`
 
-	UserAnswer int
+	UserAnswer string `json:"UserAnswer" binding:"-"`
 }
 
-type MathResultRequest struct {
-	Result  []MathResultItem
-	GroupId string
-	Score   float32
+type SaveAnswersRequest struct {
+	Results    []QuestionAnswerItem `json:"Results,omitempty" binding:"required,dive,required"`
+	QuestionId string               `json:"QuestionId" binding:"required"`
+	Score      float32              `json:"Score" binding:"required"`
 }

@@ -74,13 +74,13 @@ type QuestionFeedModel struct {
 }
 
 type QuestionAnswerItem struct {
-	Index    int    `json:"Index" binding:"required"`
+	Index    int    `json:"Index" binding:"-"`
 	Question string `json:"Question" binding:"required"`
 	Answer   string `json:"Answer" binding:"required"`
 
-	Category int `json:"Category" binding:"required"`
+	Category int `json:"Category" binding:"-"`
 	Kind     int `json:"Kind" binding:"required"`
-	Type     int `json:"Type" binding:"required"`
+	Type     int `json:"Type" binding:"-"`
 
 	UserAnswer string `json:"UserAnswer" binding:"-"`
 }
@@ -88,5 +88,5 @@ type QuestionAnswerItem struct {
 type SaveAnswersRequest struct {
 	Results    []QuestionAnswerItem `json:"Results,omitempty" binding:"required,dive,required"`
 	QuestionId string               `json:"QuestionId" binding:"required"`
-	Score      float32              `json:"Score" binding:"required"`
+	Score      float32              `json:"Score" binding:"-"`
 }

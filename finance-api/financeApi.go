@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/FelixAnna/web-service-dlw/common/mesh"
 	"github.com/FelixAnna/web-service-dlw/common/micro"
@@ -18,11 +19,12 @@ import (
 const SERVER_NAME = "finance-api"
 
 func main() {
+	os.Setenv("DLW_NODE_NO", "1023") //Debug Only
+
 	initialDependency()
 	router := GetGinRouter()
 
-	//os.Setenv("DLW_NODE_NO", "1023")
-	router.Run(":8484")
+	router.Run(":8484") //Debug Only
 	//micro.StartApp(SERVER_NAME, ":8484", router, apiBoot.Registry.GetRegistry())
 }
 
@@ -72,7 +74,8 @@ func defineRoutes(router *gin.Engine) {
 		c.String(http.StatusOK, "running")
 	})
 
-	zdjGroupRouter := router.Group("/zdj", apiBoot.AuthorizationHandler.AuthorizationHandler())
+	authorizationHandler := apiBoot.AuthorizationHandler.AuthorizationHandler()
+	zdjGroupRouter := router.Group("/zdj", authorizationHandler)
 	{
 		zdjGroupRouter.GET("/", apiBoot.ZdjApi.GetAll)
 		zdjGroupRouter.POST("/search", apiBoot.ZdjApi.Search)
@@ -85,7 +88,7 @@ func defineRoutes(router *gin.Engine) {
 	{
 		mathGroupRouter.POST("/", apiBoot.MathApi.GetQuestions)
 		mathGroupRouter.POST("/multiple", apiBoot.MathApi.GetAllQuestions)
-		mathGroupRouter.POST("/save", apiBoot.MathApi.SaveResults)
+		mathGroupRouter.POST("/save", apiBoot.MathApi.SaveResults, authorizationHandler)
 		mathGroupRouter.POST("/multiple/feeds", apiBoot.MathApi.GetAllQuestionFeeds)
 	}
 }

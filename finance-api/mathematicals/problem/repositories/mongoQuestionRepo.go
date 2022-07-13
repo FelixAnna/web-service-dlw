@@ -11,6 +11,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
 var MongoRepoSet = wire.NewSet(ProvideMongoQuestionRepo, wire.Bind(new(QuestionRepo), new(*MongoQuestionRepo)))
@@ -23,7 +24,7 @@ func ProvideMongoQuestionRepo(awsService *aws.AWSService) *MongoQuestionRepo {
 	serverAPIOptions := options.ServerAPI(options.ServerAPIVersion1)
 
 	clientOptions := options.Client().
-		ApplyURI(awsService.GetParameterByKey("mongo/connectionstring")).
+		ApplyURI(awsService.GetParameterByKey("mongo/connectionstring")). //local: "mongodb://localhost:27017"
 		SetServerAPIOptions(serverAPIOptions)
 
 	return &MongoQuestionRepo{
@@ -73,8 +74,14 @@ func (repo *MongoQuestionRepo) SaveAnswers(answers *entity.Answers) error {
 
 func getCollection(repo *MongoQuestionRepo, dbName, collectionName string) (context.Context, context.CancelFunc, *mongo.Collection) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
+	//defer cancel()
+
 	client, err := mongo.Connect(ctx, repo.ClientOptions)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = client.Ping(ctx, readpref.Primary())
 	if err != nil {
 		log.Fatal(err)
 	}

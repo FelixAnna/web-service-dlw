@@ -1,35 +1,35 @@
 package entity
 
 type QuestionItem struct {
-	Index    int    `json:"index" binding:"required"`
-	Question string `json:"question" binding:"required"`
-	Answer   string `json:"answer" binding:"required"`
+	Index    int
+	Question string
+	Answer   string
 
-	Category int `json:"category" binding:"required"`
-	Kind     int `json:"kind" binding:"required"`
-	Type     int `json:"type" binding:"required"`
+	Category int
+	Kind     int
+	Type     int
 }
 
 type Questions struct {
-	Id string `json:"_id" binding:""`
+	Id string `bson:"_id"`
 
-	Questions []QuestionItem `json:"questions" binding:""`
+	Questions []QuestionItem
 
-	CreatedTime int64 `json:"created_time" binding:""`
+	CreatedTime int64 `bson:"created_time"`
 }
 
 type AnswerItem struct {
-	Index  int    `json:"index" binding:"required"`
-	Answer string `json:"answer" binding:"required"`
+	Index  int
+	Answer string
 }
 
 type Answers struct {
-	Id string `json:"_id" binding:""`
+	Id string `bson:"_id"`
 
-	UserId     string       `json:"user_id" binding:"required"`
-	QuestionId string       `json:"question_id" binding:"required"`
-	Score      float32      `json:"score" binding:""`
-	Answers    []AnswerItem `json:"answers" binding:"required"`
+	UserId     string `bson:"user_id"`
+	QuestionId string `bson:"question_id"`
+	Score      float32
+	Answers    []AnswerItem
 
-	CreatedTime int64 `json:"created_time" binding:"required"`
+	CreatedTime int64 `bson:"created_time"`
 }

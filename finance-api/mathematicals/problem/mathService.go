@@ -59,6 +59,10 @@ func saveAnswers(userId string, request *SaveAnswersRequest, service *MathServic
 	}
 
 	for _, val := range request.Results {
+		if val.UserAnswer == "" {
+			continue
+		}
+
 		answers.Answers = append(answers.Answers, entity.AnswerItem{
 			Answer: val.UserAnswer,
 			Index:  val.Index,

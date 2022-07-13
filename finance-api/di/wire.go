@@ -36,6 +36,12 @@ func InitializeMockApi() (*zdj.ZdjApi, error) {
 	return &zdj.ZdjApi{}, nil
 }
 
+func InitializeMockMathApi() *mathematicals.MathApi {
+	wire.Build(mathematicals.ProvideMathApi, problem.NewMathService, problem.NewTwoGenerationService, repositories.MongoRepoSet, aws.ProvideAWSService, aws.AwsMockSet) //sql
+	//wire.Build(zdj.ProvideZdjApi, repository.MemoryRepoSet) //InMemory
+	return &mathematicals.MathApi{}
+}
+
 func InitialRegistry() *mesh.Registry {
 	wire.Build(mesh.ProvideRegistry,
 		aws.ProvideAWSService,

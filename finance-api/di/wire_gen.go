@@ -51,6 +51,16 @@ func InitializeMockApi() (*zdj.ZdjApi, error) {
 	return zdjApi, nil
 }
 
+func InitializeMockMathApi() *mathematicals.MathApi {
+	twoGenerationService := problem.NewTwoGenerationService()
+	mockAwsHelper := mocks.ProvideMockAwsHelper()
+	awsService := aws.ProvideAWSService(mockAwsHelper)
+	mongoQuestionRepo := repositories.ProvideMongoQuestionRepo(awsService)
+	mathService := problem.NewMathService(twoGenerationService, mongoQuestionRepo)
+	mathApi := mathematicals.ProvideMathApi(mathService)
+	return mathApi
+}
+
 func InitialRegistry() *mesh.Registry {
 	awsHelper := aws.ProvideAwsHelper()
 	awsService := aws.ProvideAWSService(awsHelper)

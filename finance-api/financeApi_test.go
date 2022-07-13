@@ -226,7 +226,7 @@ func initialMockDependency() {
 
 	apiBoot = &ApiBoot{
 		ZdjApi:               zdjApi,
-		MathApi:              di.InitializeMathApi(),
+		MathApi:              di.InitializeMockMathApi(),
 		AuthorizationHandler: di.InitialMockAuthorizationMiddleware(),
 		ErrorHandler:         di.InitialErrorMiddleware(),
 		Registry:             di.InitialMockRegistry(),

@@ -88,7 +88,7 @@ func defineRoutes(router *gin.Engine) {
 	{
 		mathGroupRouter.POST("/", apiBoot.MathApi.GetQuestions)
 		mathGroupRouter.POST("/multiple", apiBoot.MathApi.GetAllQuestions)
-		mathGroupRouter.POST("/save", apiBoot.MathApi.SaveResults, authorizationHandler)
+		mathGroupRouter.POST("/save", authorizationHandler, apiBoot.MathApi.SaveResults)
 		mathGroupRouter.POST("/multiple/feeds", apiBoot.MathApi.GetAllQuestionFeeds)
 	}
 }

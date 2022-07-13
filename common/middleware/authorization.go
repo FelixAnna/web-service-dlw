@@ -28,6 +28,7 @@ func (service *AuthorizationMiddleware) AuthorizationHandler() gin.HandlerFunc {
 			return
 		}
 
+		log.Println("token:", token)
 		if token == "test" {
 			c.Set("userId", "test")
 			c.Next()

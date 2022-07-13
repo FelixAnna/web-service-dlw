@@ -36,11 +36,12 @@ func (service *MockAwsHelper) CreateSess() *session.Session {
 
 func (service *MockAwsHelper) LoadParameters(sess *session.Session) map[string]string {
 	return map[string]string{
-		"/dlf/dev/key1":               "value1",
-		"/dlf/dev/key2":               "value2",
-		"/dlf/dev/jwt/issuer":         "issuer",
-		"/dlf/dev/jwt/signKey":        "signKey",
-		"/dlf/dev/jwt/expiryAfter":    "3600",
-		"/dlf/dev/mesh/consulRegAddr": "devConsulRegAddr",
+		"/dlf/dev/key1":                   "value1",
+		"/dlf/dev/key2":                   "value2",
+		"/dlf/dev/jwt/issuer":             "issuer",
+		"/dlf/dev/jwt/signKey":            "signKey",
+		"/dlf/dev/jwt/expiryAfter":        "3600",
+		"/dlf/dev/mesh/consulRegAddr":     "devConsulRegAddr",
+		"/dlf/dev/mongo/connectionstring": "connectionstring",
 	}
 }

@@ -1,6 +1,7 @@
 package mathematicals
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -53,4 +54,22 @@ func (api *MathApi) GetAllQuestionFeeds(c *gin.Context) {
 	results := api.mathService.GenerateFeeds(criterias...)
 
 	c.JSON(http.StatusOK, results)
+}
+func (api *MathApi) SaveResults(c *gin.Context) {
+	userId, _ := c.Get("userId")
+	var request problem.SaveAnswersRequest
+	if err := c.BindJSON(&request); err != nil {
+		log.Println(err)
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	err := api.mathService.SaveResults(&request, userId.(string))
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, fmt.Sprintf("Saved for user: %v!", userId))
 }

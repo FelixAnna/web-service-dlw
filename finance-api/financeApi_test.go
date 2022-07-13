@@ -3,15 +3,16 @@ package main
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"strconv"
 	"strings"
 	"testing"
 
+	"github.com/FelixAnna/web-service-dlw/common/snowflake"
 	"github.com/FelixAnna/web-service-dlw/finance-api/di"
 	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem"
 	mathEntity "github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem/entity"
@@ -109,9 +110,11 @@ func TestGetQuestions(t *testing.T) {
 		Max:      20,
 		Quantity: 100,
 		Category: problem.CategoryPlus,
-		Kind:     problem.KindQeustLast})
+		Kind:     problem.KindQeustLast,
+		Type:     problem.TypePlainExpression,
+	})
 
-	var response []mathEntity.Problem
+	var response problem.QuestionResponse
 	err := json.Unmarshal(w.Body.Bytes(), &response)
 
 	//Assert
@@ -129,17 +132,18 @@ func TestGetQuestionsMultiple(t *testing.T) {
 			Quantity: 100,
 			Category: problem.CategoryPlus,
 			Kind:     problem.KindQeustLast,
+			Type:     problem.TypePlainExpression,
 		},
 	})
 
-	var response []problem.QuestionModel
+	var response problem.QuestionResponse
 	err := json.Unmarshal(w.Body.Bytes(), &response)
 
 	//Assert
 	assert.Equal(t, http.StatusOK, w.Code)
 	assert.Nil(t, err)
 	assert.NotNil(t, response)
-	for _, val := range response {
+	for _, val := range response.Questions {
 		assert.True(t, val.Answer > 0)
 	}
 }
@@ -165,7 +169,7 @@ func TestGetQuestionFeedsMultiple(t *testing.T) {
 	assert.NotNil(t, response)
 	for _, val := range response.Answers {
 		vals := strings.Split(val, ". ")
-		fmt.Println(val, vals)
+		//fmt.Println(val, vals)
 		assert.True(t, len(vals) == 2)
 		answer, err := strconv.ParseInt(vals[1], 10, 32)
 		assert.Nil(t, err)
@@ -222,9 +226,12 @@ func initialMockDependency() {
 
 	apiBoot = &ApiBoot{
 		ZdjApi:               zdjApi,
-		MathApi:              di.InitializeMathApi(),
+		MathApi:              di.InitializeMockMathApi(),
 		AuthorizationHandler: di.InitialMockAuthorizationMiddleware(),
 		ErrorHandler:         di.InitialErrorMiddleware(),
 		Registry:             di.InitialMockRegistry(),
 	}
+
+	os.Setenv("DLW_NODE_NO", "1023")
+	snowflake.InitSnowflake()
 }

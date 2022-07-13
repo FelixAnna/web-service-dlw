@@ -7,6 +7,7 @@ import (
 	"github.com/FelixAnna/web-service-dlw/common/mesh"
 	"github.com/FelixAnna/web-service-dlw/common/micro"
 	"github.com/FelixAnna/web-service-dlw/common/middleware"
+	"github.com/FelixAnna/web-service-dlw/common/snowflake"
 	"github.com/FelixAnna/web-service-dlw/finance-api/di"
 	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals"
 	"github.com/FelixAnna/web-service-dlw/finance-api/zdj"
@@ -17,11 +18,13 @@ import (
 const SERVER_NAME = "finance-api"
 
 func main() {
+	//os.Setenv("DLW_NODE_NO", "1023") //Debug Only
+
 	initialDependency()
 	router := GetGinRouter()
 
-	router.Run(":8484")
-	//micro.StartApp(SERVER_NAME, ":8484", router, apiBoot.Registry.GetRegistry())
+	//router.Run(":8484") //Debug Only
+	micro.StartApp(SERVER_NAME, ":8484", router, apiBoot.Registry.GetRegistry())
 }
 
 type ApiBoot struct {
@@ -48,6 +51,8 @@ func initialDependency() {
 		ErrorHandler:         di.InitialErrorMiddleware(),
 		Registry:             di.InitialRegistry(),
 	}
+
+	snowflake.InitSnowflake()
 }
 
 func GetGinRouter() *gin.Engine {
@@ -68,7 +73,8 @@ func defineRoutes(router *gin.Engine) {
 		c.String(http.StatusOK, "running")
 	})
 
-	zdjGroupRouter := router.Group("/zdj", apiBoot.AuthorizationHandler.AuthorizationHandler())
+	authorizationHandler := apiBoot.AuthorizationHandler.AuthorizationHandler()
+	zdjGroupRouter := router.Group("/zdj", authorizationHandler)
 	{
 		zdjGroupRouter.GET("/", apiBoot.ZdjApi.GetAll)
 		zdjGroupRouter.POST("/search", apiBoot.ZdjApi.Search)
@@ -81,6 +87,7 @@ func defineRoutes(router *gin.Engine) {
 	{
 		mathGroupRouter.POST("/", apiBoot.MathApi.GetQuestions)
 		mathGroupRouter.POST("/multiple", apiBoot.MathApi.GetAllQuestions)
+		mathGroupRouter.POST("/save", authorizationHandler, apiBoot.MathApi.SaveResults)
 		mathGroupRouter.POST("/multiple/feeds", apiBoot.MathApi.GetAllQuestionFeeds)
 	}
 }

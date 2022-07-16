@@ -18,7 +18,9 @@ const SERVER_NAME = "user-api"
 func main() {
 	initialDependency()
 	router := GetGinRouter()
-	micro.StartApp(SERVER_NAME, ":8181", router, apiBoot.Registry.GetRegistry())
+
+	router.Run(":8181")
+	//micro.StartApp(SERVER_NAME, ":8181", router, apiBoot.Registry.GetRegistry())
 }
 
 type ApiBoot struct {
@@ -47,7 +49,6 @@ func GetGinRouter() *gin.Engine {
 	micro.RegisterMiddlewares(router, apiBoot.ErrorHandler.ErrorHandler())
 	defineRoutes(router)
 
-	//router.Run(":8181")
 	return router
 }
 
@@ -61,6 +62,7 @@ func defineRoutes(router *gin.Engine) {
 		authGitHubRouter.GET("/authorize", apiBoot.AuthApi.AuthorizeGithub)
 		authGitHubRouter.GET("/authorize/url", apiBoot.AuthApi.AuthorizeGithubUrl)
 		authGitHubRouter.GET("/redirect", apiBoot.AuthApi.GetGithubToken)
+		authGitHubRouter.GET("/login", apiBoot.AuthApi.Login)
 		authGitHubRouter.GET("/user", apiBoot.AuthApi.GetNativeToken)
 		authGitHubRouter.GET("/checktoken", apiBoot.AuthApi.CheckNativeToken)
 	}

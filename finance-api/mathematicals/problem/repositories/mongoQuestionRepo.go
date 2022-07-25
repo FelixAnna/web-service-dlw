@@ -78,12 +78,12 @@ func getCollection(repo *MongoQuestionRepo, dbName, collectionName string) (cont
 
 	client, err := mongo.Connect(ctx, repo.ClientOptions)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 
 	err = client.Ping(ctx, readpref.Primary())
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 
 	collection := client.Database(dbName).Collection(collectionName)

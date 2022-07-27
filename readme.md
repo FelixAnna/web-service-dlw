@@ -44,6 +44,10 @@
    dlf.Memos, dlf.Users
    
 4. Prepare an SQL Server instance to store data for finance api, table will be automatic migrated
+5. Prepare database in MongoDB atlas (free forever for first 500MB)
+	
+	* database: dlw_mathematicals
+	* collections： answers， questions
 
 ## Switch kubectl context
 

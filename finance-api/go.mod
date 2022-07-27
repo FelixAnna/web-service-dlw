@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	//github.com/FelixAnna/web-service-dlw/common v0.0.0-00010101000000-000000000000
-	github.com/FelixAnna/web-service-dlw/common v0.0.0-20220624134446-d2ee160eb924
+	github.com/FelixAnna/web-service-dlw/common v0.0.0-20220727034624-b0677d582c43
 	github.com/gin-gonic/gin v1.8.1
 	go-micro.dev/v4 v4.7.0 // indirect
 )
@@ -12,12 +12,14 @@ require (
 require (
 	github.com/ahmetb/go-linq/v3 v3.2.0
 	github.com/google/wire v0.5.0
-	github.com/stretchr/testify v1.7.5
+	github.com/stretchr/testify v1.8.0
 	gorm.io/driver/sqlserver v1.3.2
 	gorm.io/gorm v1.23.6
 )
 
 require (
+	github.com/bwmarrin/snowflake v0.3.0 // indirect
+	github.com/gin-contrib/cors v1.4.0 // indirect
 	github.com/go-stack/stack v1.8.0 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/klauspost/compress v1.13.6 // indirect

@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/FelixAnna/web-service-dlw/common/mesh"
 	"github.com/FelixAnna/web-service-dlw/common/micro"
@@ -18,13 +19,13 @@ import (
 const SERVER_NAME = "finance-api"
 
 func main() {
-	//os.Setenv("DLW_NODE_NO", "1023") //Debug Only
+	os.Setenv("DLW_NODE_NO", "1023") //Debug Only
 
 	initialDependency()
 	router := GetGinRouter()
 
-	//router.Run(":8484") //Debug Only
-	micro.StartApp(SERVER_NAME, ":8484", router, apiBoot.Registry.GetRegistry())
+	router.Run(":8484") //Debug Only
+	//micro.StartApp(SERVER_NAME, ":8484", router, apiBoot.Registry.GetRegistry())
 }
 
 type ApiBoot struct {

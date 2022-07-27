@@ -78,10 +78,12 @@ func (api *GithubAuthApi) GetGithubToken(c *gin.Context) {
 
 	if code == "" {
 		c.JSON(http.StatusUnauthorized, "Token not found.")
+		return
 	}
 
 	if state != "state123" {
 		c.JSON(http.StatusBadGateway, "Invalid state.")
+		return
 	}
 
 	//TODO: how to verify dynamic csrf token
@@ -89,9 +91,74 @@ func (api *GithubAuthApi) GetGithubToken(c *gin.Context) {
 	if err != nil {
 		log.Println(err.Error())
 		c.String(http.StatusBadRequest, err.Error())
+		return
 	}
 
 	c.JSON(http.StatusOK, token)
+}
+
+//a combined API to get native token by auth code from github:
+/*
+	1. use github auth code  + state to get github token;
+	2. use github token to get github user info;
+	3. ensure github user email registered in our system;
+	4. register new user if not already exists;
+	5. generate token with our own signature.
+*/
+func (api *GithubAuthApi) Login(c *gin.Context) {
+	code := c.Query("code")
+	state := c.Query("state")
+
+	if code == "" {
+		c.JSON(http.StatusUnauthorized, "Token not found.")
+		return
+	}
+
+	if state != "state123" {
+		c.JSON(http.StatusBadGateway, "Invalid state.")
+		return
+	}
+
+	//TODO: how to verify dynamic csrf token
+	token, err := api.ConfGitHub.Exchange(c.Request.Context(), code)
+	if err != nil {
+		log.Println(err.Error())
+		c.String(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	user, err := api.getGithubUser(githubUserUrl, token.AccessToken)
+	if err != nil {
+		log.Println(err.Error())
+		c.String(http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	nativeUser, err := api.Repo.GetByEmail(user.Email)
+	if err != nil {
+		api.Repo.Add(&entity.User{
+			AvatarUrl: user.AvatarUrl,
+			Email:     user.Email,
+			Name:      user.Login,
+			Birthday:  "2000-01-01",
+			Address:   make([]entity.Address, 0),
+		})
+
+		nativeUser, err = api.Repo.GetByEmail(user.Email)
+
+		if err != nil {
+			c.String(http.StatusInternalServerError, err.Error())
+			return
+		}
+	}
+
+	nativeToken, err := api.jwtService.NewToken(nativeUser.Id, nativeUser.Email)
+	if err != nil {
+		c.String(http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, nativeToken)
 }
 
 /*
@@ -110,6 +177,7 @@ func (api *GithubAuthApi) GetNativeToken(c *gin.Context) {
 	if err != nil {
 		log.Println(err.Error())
 		c.String(http.StatusInternalServerError, err.Error())
+		return
 	}
 
 	nativeUser, err := api.Repo.GetByEmail(user.Email)
@@ -126,12 +194,14 @@ func (api *GithubAuthApi) GetNativeToken(c *gin.Context) {
 
 		if err != nil {
 			c.String(http.StatusInternalServerError, err.Error())
+			return
 		}
 	}
 
 	nativeToken, err := api.jwtService.NewToken(nativeUser.Id, nativeUser.Email)
 	if err != nil {
 		c.String(http.StatusInternalServerError, err.Error())
+		return
 	}
 
 	c.JSON(http.StatusOK, nativeToken)
@@ -146,6 +216,7 @@ func (api *GithubAuthApi) CheckNativeToken(c *gin.Context) {
 	claims, err := api.jwtService.ParseToken(token)
 	if err != nil {
 		c.String(http.StatusInternalServerError, err.Error())
+		return
 	}
 
 	c.JSON(http.StatusOK, claims)

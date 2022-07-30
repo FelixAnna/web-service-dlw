@@ -2,6 +2,7 @@ package repository
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	"strings"
 
@@ -55,8 +56,9 @@ func (s *ZdjSqlServerRepo) Search(criteria *entity.Criteria) ([]entity.Zhidaojia
 		query = query.Where(&entity.Zhidaojia{Street: criteria.Street})
 	}
 
-	if len(criteria.Community) > 0 {
-		query = query.Where(&entity.Zhidaojia{Community: criteria.Community})
+	if len(criteria.KeyWords) > 0 {
+		keywords := fmt.Sprintf("%%%s%%", criteria.KeyWords)
+		query = query.Where("(Community LIKE ? OR Street LIKE ?)", keywords, keywords)
 	}
 
 	if criteria.MinPrice > 0 {

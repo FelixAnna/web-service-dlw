@@ -12,9 +12,10 @@ type Zhidaojia struct {
 }
 
 type Criteria struct {
-	Distrct   string
-	Street    string
-	Community string
+	Distrct string
+	Street  string
+
+	KeyWords string
 
 	MinPrice int
 	MaxPrice int

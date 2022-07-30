@@ -57,9 +57,9 @@ func (repo *ZdjInMemoryRepo) Search(criteria *entity.Criteria) ([]entity.Zhidaoj
 		})
 	}
 
-	if len(criteria.Community) > 0 {
+	if len(criteria.KeyWords) > 0 {
 		query = query.Where(func(i interface{}) bool {
-			return i.(entity.Zhidaojia).Community == criteria.Community
+			return strings.Contains(i.(entity.Zhidaojia).Community, criteria.KeyWords)
 		})
 	}
 

@@ -75,11 +75,11 @@ func defineRoutes(router *gin.Engine) {
 	})
 
 	authorizationHandler := apiBoot.AuthorizationHandler.AuthorizationHandler()
-	zdjGroupRouter := router.Group("/zdj", authorizationHandler)
+	zdjGroupRouter := router.Group("/zdj")
 	{
 		zdjGroupRouter.GET("/", apiBoot.ZdjApi.GetAll)
 		zdjGroupRouter.POST("/search", apiBoot.ZdjApi.Search)
-		zdjGroupRouter.POST("/upload", apiBoot.ZdjApi.Upload)
+		zdjGroupRouter.POST("/upload", authorizationHandler, apiBoot.ZdjApi.Upload)
 		zdjGroupRouter.DELETE("/:id", apiBoot.ZdjApi.Delete)
 		zdjGroupRouter.GET("/slow", apiBoot.ZdjApi.MemoryCosty)
 	}

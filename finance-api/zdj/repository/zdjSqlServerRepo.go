@@ -48,12 +48,12 @@ func (s *ZdjSqlServerRepo) Append(zdj *[]entity.Zhidaojia) error {
 
 func (s *ZdjSqlServerRepo) Search(criteria *entity.Criteria) ([]entity.Zhidaojia, error) {
 	query := s.Db.Model(&entity.Zhidaojia{})
-	if len(criteria.Distrct) > 0 {
-		query = query.Where(&entity.Zhidaojia{Distrct: criteria.Distrct})
+	if len(criteria.Districts) > 0 {
+		query = query.Where("Distrct IN ?", criteria.Districts)
 	}
 
-	if len(criteria.Street) > 0 {
-		query = query.Where(&entity.Zhidaojia{Street: criteria.Street})
+	if len(criteria.Streets) > 0 {
+		query = query.Where("Street IN ?", criteria.Streets)
 	}
 
 	if len(criteria.KeyWords) > 0 {

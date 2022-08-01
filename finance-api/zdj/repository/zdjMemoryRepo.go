@@ -45,15 +45,33 @@ func (repo *ZdjInMemoryRepo) Append(zdj *[]entity.Zhidaojia) error {
 func (repo *ZdjInMemoryRepo) Search(criteria *entity.Criteria) ([]entity.Zhidaojia, error) {
 
 	var query linq.Query = linq.From(zdjList)
-	if len(criteria.Distrct) > 0 {
+	if len(criteria.Districts) > 0 {
 		query = query.Where(func(i interface{}) bool {
-			return i.(entity.Zhidaojia).Distrct == criteria.Distrct
+			var contains bool
+			distict := i.(entity.Zhidaojia).Distrct
+			for _, dist := range criteria.Districts {
+				if dist == distict {
+					contains = true
+					break
+				}
+			}
+
+			return contains
 		})
 	}
 
-	if len(criteria.Street) > 0 {
+	if len(criteria.Streets) > 0 {
 		query = query.Where(func(i interface{}) bool {
-			return i.(entity.Zhidaojia).Street == criteria.Street
+			var contains bool
+			street := i.(entity.Zhidaojia).Street
+			for _, stre := range criteria.Streets {
+				if stre == street {
+					contains = true
+					break
+				}
+			}
+
+			return contains
 		})
 	}
 

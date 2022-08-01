@@ -12,8 +12,8 @@ type Zhidaojia struct {
 }
 
 type Criteria struct {
-	Distrct string
-	Street  string
+	Districts []string
+	Streets   []string
 
 	KeyWords string
 

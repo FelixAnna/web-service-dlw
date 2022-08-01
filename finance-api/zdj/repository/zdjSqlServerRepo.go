@@ -75,16 +75,24 @@ func (s *ZdjSqlServerRepo) Search(criteria *entity.Criteria) ([]entity.Zhidaojia
 
 	if len(criteria.SortKey) > 0 {
 		switch strings.ToLower(criteria.SortKey) {
-		case "id":
-			query.Order("Id DESC")
-		case "district":
-			query.Order("District DESC")
-		case "street":
+		case "price_asc":
+			query.Order("Price ASC")
+		case "price_desc":
+			query.Order("Price DESC")
+		case "district_asc":
+			query.Order("Distrct ASC")
+		case "district_desc":
+			query.Order("Distrct DESC")
+		case "street_asc":
+			query.Order("Street ASC")
+		case "street_desc":
 			query.Order("Street DESC")
-		case "community":
+		case "community_asc":
+			query.Order("Community ASC")
+		case "community_desc":
 			query.Order("Community DESC")
 		default: //price
-			query.Order("Price DESC")
+			query.Order("Id ASC")
 		}
 	}
 

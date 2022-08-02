@@ -30,6 +30,9 @@ quota:
     cpu: "3"
     memory: 3Gi
 
+ingress:
+  ingressClassName: nginx
+
 applications:
   - name: user
     port: 8181

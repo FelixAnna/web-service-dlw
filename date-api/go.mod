@@ -3,7 +3,7 @@ module github.com/FelixAnna/web-service-dlw/date-api
 go 1.18
 
 require (
-	github.com/FelixAnna/web-service-dlw/common v0.0.0-20220624134446-d2ee160eb924
+	github.com/FelixAnna/web-service-dlw/common v0.0.0-20220727034624-b0677d582c43
 	github.com/gin-gonic/gin v1.8.1
 	github.com/golang-module/carbon/v2 v2.1.8
 	go-micro.dev/v4 v4.7.0 // indirect
@@ -11,7 +11,7 @@ require (
 
 require (
 	github.com/google/wire v0.5.0
-	github.com/stretchr/testify v1.7.5
+	github.com/stretchr/testify v1.8.0
 )
 
 require (
@@ -29,6 +29,7 @@ require (
 	github.com/emirpasic/gods v1.18.1 // indirect
 	github.com/fatih/color v1.13.0 // indirect
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
+	github.com/gin-contrib/cors v1.4.0 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-git/gcfg v1.5.0 // indirect
 	github.com/go-git/go-billy/v5 v5.3.1 // indirect

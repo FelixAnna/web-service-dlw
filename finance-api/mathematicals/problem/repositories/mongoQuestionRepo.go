@@ -74,7 +74,6 @@ func (repo *MongoQuestionRepo) SaveAnswers(answers *entity.Answers) error {
 
 func getCollection(repo *MongoQuestionRepo, dbName, collectionName string) (context.Context, context.CancelFunc, *mongo.Collection) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	//defer cancel()
 
 	client, err := mongo.Connect(ctx, repo.ClientOptions)
 	if err != nil {

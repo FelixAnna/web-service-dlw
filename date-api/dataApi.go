@@ -55,7 +55,7 @@ func defineRoutes(router *gin.Engine) {
 	userGroupRouter := router.Group("/date")
 	{
 		userGroupRouter.GET("/current/month", apiBoot.DateApi.GetMonthDate)
-		userGroupRouter.GET("/distance", apiBoot.DateApi.GetDateDistance)
-		userGroupRouter.GET("/distance/lunar", apiBoot.DateApi.GetLunarDateDistance)
+		userGroupRouter.POST("/distance", apiBoot.DateApi.GetDateDistance)
+		userGroupRouter.POST("/distance/lunar", apiBoot.DateApi.GetLunarDateDistance)
 	}
 }

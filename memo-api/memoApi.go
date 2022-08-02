@@ -16,6 +16,8 @@ const SERVER_NAME = "memo-api"
 func main() {
 	initialDependency()
 	router := GetGinRouter()
+
+	//router.Run(":8282")
 	micro.StartApp(SERVER_NAME, ":8282", router, apiBoot.Registry.GetRegistry())
 }
 

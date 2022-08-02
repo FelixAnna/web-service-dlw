@@ -101,16 +101,24 @@ func (repo *ZdjInMemoryRepo) Search(criteria *entity.Criteria) ([]entity.Zhidaoj
 
 	if len(criteria.SortKey) > 0 {
 		switch strings.ToLower(criteria.SortKey) {
-		case "id":
-			query = query.Sort(func(i, j interface{}) bool { return i.(entity.Zhidaojia).Id < j.(entity.Zhidaojia).Id })
-		case "district":
-			query = query.Sort(func(i, j interface{}) bool { return i.(entity.Zhidaojia).Distrct < j.(entity.Zhidaojia).Distrct })
-		case "street":
-			query = query.Sort(func(i, j interface{}) bool { return i.(entity.Zhidaojia).Street < j.(entity.Zhidaojia).Street })
-		case "community":
-			query = query.Sort(func(i, j interface{}) bool { return i.(entity.Zhidaojia).Community < j.(entity.Zhidaojia).Community })
-		default: //price
+		case "price_asc":
 			query = query.Sort(func(i, j interface{}) bool { return i.(entity.Zhidaojia).Price < j.(entity.Zhidaojia).Price })
+		case "price_desc":
+			query = query.Sort(func(i, j interface{}) bool { return i.(entity.Zhidaojia).Price > j.(entity.Zhidaojia).Price })
+		case "district_asc":
+			query = query.Sort(func(i, j interface{}) bool { return i.(entity.Zhidaojia).Distrct < j.(entity.Zhidaojia).Distrct })
+		case "district_desc":
+			query = query.Sort(func(i, j interface{}) bool { return i.(entity.Zhidaojia).Distrct > j.(entity.Zhidaojia).Distrct })
+		case "street_asc":
+			query = query.Sort(func(i, j interface{}) bool { return i.(entity.Zhidaojia).Street < j.(entity.Zhidaojia).Street })
+		case "street_desc":
+			query = query.Sort(func(i, j interface{}) bool { return i.(entity.Zhidaojia).Street > j.(entity.Zhidaojia).Street })
+		case "community_asc":
+			query = query.Sort(func(i, j interface{}) bool { return i.(entity.Zhidaojia).Community < j.(entity.Zhidaojia).Community })
+		case "community_desc":
+			query = query.Sort(func(i, j interface{}) bool { return i.(entity.Zhidaojia).Community > j.(entity.Zhidaojia).Community })
+		default:
+			query = query.Sort(func(i, j interface{}) bool { return i.(entity.Zhidaojia).Id < j.(entity.Zhidaojia).Id })
 		}
 	}
 

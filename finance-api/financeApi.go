@@ -80,7 +80,7 @@ func defineRoutes(router *gin.Engine) {
 		zdjGroupRouter.GET("/", apiBoot.ZdjApi.GetAll)
 		zdjGroupRouter.POST("/search", apiBoot.ZdjApi.Search)
 		zdjGroupRouter.POST("/upload", authorizationHandler, apiBoot.ZdjApi.Upload)
-		zdjGroupRouter.DELETE("/:id", apiBoot.ZdjApi.Delete)
+		zdjGroupRouter.DELETE("/:id", authorizationHandler, apiBoot.ZdjApi.Delete)
 		zdjGroupRouter.GET("/slow", apiBoot.ZdjApi.MemoryCosty)
 	}
 

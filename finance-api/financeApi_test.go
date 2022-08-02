@@ -41,30 +41,6 @@ func TestRunning(t *testing.T) {
 	assert.Equal(t, "running", w.Body.String())
 }
 
-func TestGetZdjUnAuthorized(t *testing.T) {
-	//Act
-	w := performRequest(router, "GET", "/zdj/", nil)
-
-	var response []entity.Zhidaojia
-	err := json.Unmarshal(w.Body.Bytes(), &response)
-
-	//Assert
-	assert.Equal(t, http.StatusUnauthorized, w.Code)
-	assert.NotNil(t, err)
-}
-
-func TestGetZdjForbidden(t *testing.T) {
-	//Act
-	w := performRequest(router, "GET", "/zdj/?access_code=123", nil)
-
-	var response []entity.Zhidaojia
-	err := json.Unmarshal(w.Body.Bytes(), &response)
-
-	//Assert
-	assert.Equal(t, http.StatusForbidden, w.Code)
-	assert.NotNil(t, err)
-}
-
 func TestGetZdjAuthorized(t *testing.T) {
 	//Act
 	w := performRequest(router, "GET", "/zdj/?access_code="+validToken, nil)
@@ -175,6 +151,22 @@ func TestGetQuestionFeedsMultiple(t *testing.T) {
 		assert.Nil(t, err)
 		assert.Greater(t, answer, int64(0))
 	}
+}
+
+func TestDeleteUnAuthorized(t *testing.T) {
+	//Act
+	w := performRequest(router, "DELETE", "/zdj/123", nil)
+
+	//Assert
+	assert.Equal(t, http.StatusUnauthorized, w.Code)
+}
+
+func TestDeleteForbidden(t *testing.T) {
+	//Act
+	w := performRequest(router, "DELETE", "/zdj/123?access_code=123", nil)
+
+	//Assert
+	assert.Equal(t, http.StatusForbidden, w.Code)
 }
 
 func TestDeleteAuthorized(t *testing.T) {

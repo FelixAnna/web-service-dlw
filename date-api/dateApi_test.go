@@ -58,7 +58,7 @@ func TestGetMonthDate(t *testing.T) {
 
 func TestGetDateDistance(t *testing.T) {
 	//Act
-	w := performRequest(router, "GET", "/date/distance?start=20200101&end=20200505")
+	w := performRequest(router, "POST", "/date/distance?start=20200101&end=20200505")
 
 	var response entity.Distance
 	err := json.Unmarshal(w.Body.Bytes(), &response)
@@ -72,7 +72,7 @@ func TestGetDateDistance(t *testing.T) {
 
 func TestGetLunarDateDistance(t *testing.T) {
 	//Act
-	w := performRequest(router, "GET", "/date/distance/lunar?start=20200101&end=20200505")
+	w := performRequest(router, "POST", "/date/distance/lunar?start=20200101&end=20200505")
 
 	var response entity.Distance
 	err := json.Unmarshal(w.Body.Bytes(), &response)
@@ -86,7 +86,7 @@ func TestGetLunarDateDistance(t *testing.T) {
 
 func TestGetDateDistanceInvalid(t *testing.T) {
 	//Act
-	w := performRequest(router, "GET", "/date/distance?start=&end=20200505")
+	w := performRequest(router, "POST", "/date/distance?start=&end=20200505")
 
 	//Assert
 	assert.Equal(t, http.StatusBadRequest, w.Code)
@@ -95,7 +95,7 @@ func TestGetDateDistanceInvalid(t *testing.T) {
 
 func TestGetLunarDateDistanceInvalid(t *testing.T) {
 	//Act
-	w := performRequest(router, "GET", "/date/distance/lunar?start=&end=20200505")
+	w := performRequest(router, "POST", "/date/distance/lunar?start=&end=20200505")
 
 	//Assert
 	assert.Equal(t, http.StatusBadRequest, w.Code)

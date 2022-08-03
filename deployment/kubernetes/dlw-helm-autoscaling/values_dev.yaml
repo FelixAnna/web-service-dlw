@@ -24,11 +24,11 @@ config:
 
 quota:
   requests:
+    cpu: "1"
+    memory: 1Gi
+  limits:
     cpu: "2"
     memory: 2Gi
-  limits:
-    cpu: "4"
-    memory: 4Gi
 
 ingress:
   ingressClassName: nginx
@@ -36,7 +36,7 @@ ingress:
 applications:
   - name: user
     port: 8181
-    image: yufelix/dlw-user-api:1.5.0
+    image: yufelix/dlw-user-api:1.6.0
     resources:
       requests:
         memory: 64Mi
@@ -46,7 +46,7 @@ applications:
         cpu: "128m"
   - name: memo
     port: 8282
-    image: yufelix/dlw-memo-api:1.5.0
+    image: yufelix/dlw-memo-api:1.6.0
     resources:
       requests:
         memory: 64Mi
@@ -56,7 +56,7 @@ applications:
         cpu: "128m"
   - name: date
     port: 8383
-    image: yufelix/dlw-date-api:1.5.0
+    image: yufelix/dlw-date-api:1.6.0
     resources:
       requests:
         memory: 64Mi
@@ -66,7 +66,7 @@ applications:
         cpu: "128m"
   - name: finance
     port: 8484
-    image: yufelix/dlw-finance-api:1.5.0
+    image: yufelix/dlw-finance-api:1.6.0
     resources:
       requests:
         memory: 64Mi

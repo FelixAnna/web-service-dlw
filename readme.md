@@ -122,7 +122,7 @@ cloud based kubernetes should already include metric server by default.
 3. after all resources installed (include ingress controller), access test api from local browser: http://localhost/date/status
 4. update by running:
 	```bash
-	helm upgrade dlw ./dlw-helm-autoscaling/ --namespace dlw-dev --values ./dlw-helm-autoscaling/values_dev.yaml
+	helm upgrade --install dlw ./dlw-helm-autoscaling/ --namespace dlw-dev --values ./dlw-helm-autoscaling/values_dev.yaml
 	```
 5. remove all by running:
 	```bash

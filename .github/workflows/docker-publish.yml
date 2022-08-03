@@ -51,7 +51,7 @@ jobs:
           file: ./date-api/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          labels: yufelix/dlw-date-api
       -
         name: Build and push memo-api
         uses: docker/build-push-action@v2

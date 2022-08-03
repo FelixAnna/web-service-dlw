@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	//github.com/FelixAnna/web-service-dlw/common v0.0.0-00010101000000-000000000000
-	github.com/FelixAnna/web-service-dlw/common v0.0.0-20220727034624-b0677d582c43
+	github.com/FelixAnna/web-service-dlw/common v0.0.0-20220803124428-ae102b02e258
 	github.com/asim/go-micro/plugins/client/http/v4 v4.0.0-20220622010113-107bd74187e7
 	github.com/aws/aws-sdk-go v1.44.41
 	github.com/gin-gonic/gin v1.8.1

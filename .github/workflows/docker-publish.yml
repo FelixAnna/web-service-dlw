@@ -18,7 +18,7 @@ jobs:
         name: Checkout 
         uses: actions/checkout@v3
       -
-        name: Docker meta
+        name: Docker meta-date
         id: meta-date
         uses: docker/metadata-action@v4
         with:
@@ -32,7 +32,7 @@ jobs:
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
       -
-        name: Docker meta
+        name: Docker meta-memo
         id: meta-memo
         uses: docker/metadata-action@v4
         with:
@@ -46,7 +46,7 @@ jobs:
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
       -
-        name: Docker meta
+        name: Docker meta-finance
         id: meta-finance
         uses: docker/metadata-action@v4
         with:
@@ -60,7 +60,7 @@ jobs:
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
       -
-        name: Docker meta
+        name: Docker meta-user
         id: meta-user
         uses: docker/metadata-action@v4
         with:

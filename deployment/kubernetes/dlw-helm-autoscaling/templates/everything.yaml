@@ -214,14 +214,25 @@ kind: Ingress
 metadata:
   name: {{ $.Release.Name }}-ingress
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
+  {{ if eq $.Values.ingress.ingressClassName "nginx" }}
+    nginx.ingress.kubernetes.io/rewrite-target: /$1 # for nginx only
+  {{ end }}
+  {{ if eq $.Values.ingress.ingressClassName "kong" }}
+    konghq.com/strip-path: "true"  # for kong only
+  {{ end }}
+    
 spec:
   ingressClassName: {{.Values.ingress.ingressClassName}}
   rules:
   - http:
       paths:
       {{- range .Values.applications }}
-      - path: /{{.name}}/(.*)
+    {{ if eq $.Values.ingress.ingressClassName "nginx" }}
+      - path: /{{.name}}/(.*)   # for nginx only
+    {{ end }}
+    {{ if eq $.Values.ingress.ingressClassName "kong" }}
+      - path: /{{.name}}/   # for kong only
+    {{ end }}
         pathType: Prefix
         backend:
           service:

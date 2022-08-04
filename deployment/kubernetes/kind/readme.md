@@ -13,7 +13,11 @@ create a cluster with work node(s) and control-plane(s), and with port 80 mappin
 kind don't support Loadbalance type service, so please use below nginx for kind:
 
     `kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml`
-
+## enable ingress kong (with 2 kind special changes)
+    `kubectl apply -f https://raw.githubusercontent.com/Kong/kubernetes-ingress-controller/master/deploy/single/all-in-one-dbless.yaml`
+    
+    `kubectl patch deployment -n kong ingress-kong -p '{"spec":{"template":{"spec":{"containers":[{"name":"proxy","ports":[{"containerPort":8000,"hostPort":80,"name":"proxy","protocol":"TCP"},{"containerPort":8443,"hostPort":43,"name":"proxy-ssl","protocol":"TCP"}]}],"nodeSelector":{"ingress-ready":"true"},"tolerations":[{"key":"node-role.kubernetes.io/control-plane","operator":"Equal","effect":"NoSchedule"},{"key":"node-role.kubernetes.io/master","operator":"Equal","effect":"NoSchedule"}]}}}}'`
+    `kubectl patch service -n kong kong-proxy -p '{"spec":{"type":"NodePort"}}'`
 ## pull image issue
 
 in case pull image is very slow in kind cluster's node, you can pull it to local first and then load to kind's nodes by:

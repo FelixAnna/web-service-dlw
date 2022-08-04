@@ -292,8 +292,8 @@ see details in: [kind/readme.md](deployment/kubernetes/kind/readme.md)
 
 	`az aks get-credentials --resource-group dlw-cluste_group --name dlw-cluster`
 
-    az ml computetarget detach -n dlw-cluster -g dlw-cluste_group -w myworkspace
-    az aks get-credentials --resource-group dlw-cluste_group --name dlw-cluster
+    `az ml computetarget detach -n dlw-cluster -g dlw-cluste_group -w myworkspace`
+    `az aks get-credentials --resource-group dlw-cluste_group --name dlw-cluster`
 
 5. install nginx-controller: [install nginx for aks](https://docs.microsoft.com/en-us/azure/aks/ingress-basic?tabs=azure-cli)
 

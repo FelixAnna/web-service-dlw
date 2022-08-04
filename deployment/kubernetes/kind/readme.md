@@ -9,11 +9,11 @@ create a cluster with work node(s) and control-plane(s), and with port 80 mappin
 
     `kind create cluster --config dlw-cluster.yml`
 
-## enable ingress nginx
+## enable ingress nginx (skip kong)
 kind don't support Loadbalance type service, so please use below nginx for kind:
 
     `kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml`
-## enable ingress kong (with 2 kind special changes)
+## enable ingress kong (skip nginx) (with 2 kind special changes)
     `kubectl apply -f https://raw.githubusercontent.com/Kong/kubernetes-ingress-controller/master/deploy/single/all-in-one-dbless.yaml`
     
     `kubectl patch deployment -n kong ingress-kong -p '{"spec":{"template":{"spec":{"containers":[{"name":"proxy","ports":[{"containerPort":8000,"hostPort":80,"name":"proxy","protocol":"TCP"},{"containerPort":8443,"hostPort":43,"name":"proxy-ssl","protocol":"TCP"}]}],"nodeSelector":{"ingress-ready":"true"},"tolerations":[{"key":"node-role.kubernetes.io/control-plane","operator":"Equal","effect":"NoSchedule"},{"key":"node-role.kubernetes.io/master","operator":"Equal","effect":"NoSchedule"}]}}}}'`

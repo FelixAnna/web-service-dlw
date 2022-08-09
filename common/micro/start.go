@@ -37,10 +37,18 @@ func StartApp(serverName, port string, router *gin.Engine, reg registry.Registry
 
 func RegisterMiddlewares(router *gin.Engine, errorHandler gin.HandlerFunc) {
 	//define middleware before apis
+	corsSettings := cors.Config{
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "HEAD"},
+		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+		AllowOrigins:     []string{"https://dlw-mi.azureedge.net", "http://localhost:3000"},
+	}
+
 	initialLogger()
 	router.Use(gin.Logger())
 	router.Use(errorHandler)
-	router.Use(cors.Default())
+	router.Use(cors.New(corsSettings))
 	router.Use(gin.Recovery())
 }
 

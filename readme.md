@@ -314,7 +314,7 @@ see details in: [kind/readme.md](deployment/kubernetes/kind/readme.md)
 6. deploy/upgrade/uninstall by：
 	
 	```bash
-	helm install dlw ./dlw-helm-autoscaling/ --namespace dlw-dev --create-namespace  --values ./dlw-helm-autoscaling/values_aks.yaml
+	helm upgrade --install dlw ./dlw-helm-autoscaling/ --namespace dlw-dev --create-namespace --values ./dlw-helm-autoscaling/values_aks.yaml
 
 	helm upgrade dlw ./dlw-helm-autoscaling/ --namespace dlw-dev --values ./dlw-helm-autoscaling/values_aks.yaml --set controller.service.externalTrafficPolicy=Local
 

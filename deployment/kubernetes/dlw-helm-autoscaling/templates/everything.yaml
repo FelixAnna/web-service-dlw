@@ -27,6 +27,7 @@ metadata:
   {{- template "mytemplate.defaultLabel" }}
 data:
   aws-region: {{.Values.config.region}}
+  profile: {{.Values.config.profile}}
     
 ---
 # 2. create ResourceQuota for the namespace
@@ -168,6 +169,11 @@ spec:
             configMapKeyRef:
               name: {{ $.Release.Name }}-config
               key: aws-region
+        - name: profile
+          valueFrom:
+            configMapKeyRef:
+              name: {{ $.Release.Name }}-config
+              key: profile
         resources:
           requests:
             memory: {{.resources.requests.memory}}

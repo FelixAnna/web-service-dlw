@@ -21,6 +21,7 @@ config:
   awsKeyId: ==
   awsSecretKey: ==
   region: ap-southeast-1
+  profile: dev
 
 quota:
   requests:

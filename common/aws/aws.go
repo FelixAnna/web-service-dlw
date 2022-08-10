@@ -2,6 +2,7 @@ package aws
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
@@ -21,7 +22,11 @@ func ProvideAWSService(helper AwsInterface) *AWSService {
 }
 
 func (service *AWSService) GetParameterByKey(key string) string {
-	env := "dev"
+	env := os.Getenv("profile")
+	if env != "prod" {
+		env = "dev"
+	}
+
 	fullKey := fmt.Sprintf("%v/%v/%v", basePath, env, key)
 	return service.parameters[fullKey]
 }

@@ -3,7 +3,7 @@ module github.com/FelixAnna/web-service-dlw/user-api
 go 1.18
 
 require (
-	github.com/FelixAnna/web-service-dlw/common v0.0.0-20220809061524-551e47c92b45
+	github.com/FelixAnna/web-service-dlw/common v0.0.0-20220810131904-6ca7c32f0520
 	github.com/aws/aws-sdk-go v1.44.55
 	github.com/gin-gonic/gin v1.8.1
 	github.com/go-oauth2/oauth2/v4 v4.5.1

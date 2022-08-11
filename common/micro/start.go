@@ -39,8 +39,8 @@ func RegisterMiddlewares(router *gin.Engine, errorHandler gin.HandlerFunc) {
 	//define middleware before apis
 	corsSettings := cors.Config{
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "HEAD"},
-		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type"},
-		AllowCredentials: true,
+		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization"},
+		AllowCredentials: false,
 		MaxAge:           12 * time.Hour,
 		AllowOrigins:     []string{"https://dlw-mi.azureedge.net", "http://localhost:3000"},
 	}

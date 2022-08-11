@@ -8,7 +8,16 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 )
 
-const basePath = "/dlf"
+var basePath string = "/dlf"
+
+func init() {
+	env := os.Getenv("profile")
+	if env != "prod" {
+		env = "dev"
+	}
+
+	basePath = fmt.Sprintf("%v/%v", basePath, env)
+}
 
 type AWSService struct {
 	sess       *session.Session
@@ -22,12 +31,7 @@ func ProvideAWSService(helper AwsInterface) *AWSService {
 }
 
 func (service *AWSService) GetParameterByKey(key string) string {
-	env := os.Getenv("profile")
-	if env != "prod" {
-		env = "dev"
-	}
-
-	fullKey := fmt.Sprintf("%v/%v/%v", basePath, env, key)
+	fullKey := fmt.Sprintf("%v/%v", basePath, key)
 	return service.parameters[fullKey]
 }
 

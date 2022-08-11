@@ -52,6 +52,7 @@ func (helper *AwsHelper) CreateSess() *session.Session {
 func (helper *AwsHelper) LoadParameters(sess *session.Session) map[string]string {
 	ssmClient := ssm.New(sess)
 
+	// TODO, this is a paged option
 	out, err := ssmClient.GetParametersByPath(&ssm.GetParametersByPathInput{
 		Path:           aws.String(basePath),
 		WithDecryption: aws.Bool(true),

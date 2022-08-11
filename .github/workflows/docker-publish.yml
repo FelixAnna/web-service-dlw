@@ -1,4 +1,4 @@
-name: ci
+name: continuous integration - build and push images
 
 on:
   push:

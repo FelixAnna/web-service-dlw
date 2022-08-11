@@ -5,12 +5,13 @@
     "version": "0.2.0",
     "configurations": [
 
+
         {
             "name": "Launch file",
             "type": "go",
             "request": "launch",
             "mode": "debug",
-            "program": "user-api\\userApi.go"
+            "program": "finance-api\\financeApi.go"
         }
     ]
 }

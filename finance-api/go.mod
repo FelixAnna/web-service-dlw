@@ -3,7 +3,7 @@ module github.com/FelixAnna/web-service-dlw/finance-api
 go 1.18
 
 require (
-	github.com/FelixAnna/web-service-dlw/common v0.0.0-20220810131904-6ca7c32f0520
+	github.com/FelixAnna/web-service-dlw/common v0.0.0-20220811091330-c0d9bae04ab3
 	github.com/gin-gonic/gin v1.8.1
 	go-micro.dev/v4 v4.7.0 // indirect
 )

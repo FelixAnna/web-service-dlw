@@ -29,7 +29,7 @@
 ## Prepare 
 1. Register OAuth Apps in https://github.com/settings/developers
    
-   the Authorization callback URL should be： http://localhost/user/oauth2/github/redirect
+   the Authorization callback URL should be： {baseApiUrl}/user/oauth2/github/redirect
    
    keep the ClientID and ClientSecret
 
@@ -71,7 +71,7 @@ kubectl config use-context kind-dlw-cluster
 
 #### helm deployment templetes (autoscaling)
 
-`deployment/kubernetes/dlw-helm-autoscaling`: include autoscaling configurations which only supported by kubectl 1.23.* or above, requires latest docker desktop or minikube.
+`deployment/kubernetes/dlw-helm-autoscaling`: include autoscaling configurations which only supported by kubectl 1.23+ or above.
 
 #### helm deployment templetes(no autoscaling)
 `deployment/kubernetes/dlw-helm`: no autoscaling configurations in the deployments templements
@@ -98,7 +98,7 @@ helm upgrade --install ingress-nginx ingress-nginx \
 ### Metric Server
 `deployment/kubernetes/metrics/*.yaml`: enable metrics server which is necessary for horizontalautoscaler or veticalautoscaler if metric server not deployed by default, --kubelet-insecure-tls args is used for local, --metric-resolution can be set to longer if use docker-desktop
 
-cloud based kubernetes should already include metric server by default.
+cloud based kubernetes already include metric server by default.
 
 ### Dashboard
 `deployment/kubernetes/dashboard`: follow the instructions to enable dashboard.

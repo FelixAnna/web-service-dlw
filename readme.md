@@ -25,6 +25,8 @@
     - 5.2 [AKS](#aks)
     - 5.3 [MiniKube](#minikube)
     - 5.4 [Docker-Desktop](#docker-desktop)
+    
+- 6. [Front-end](#front-end)
 
 ## Prepare 
 1. Register OAuth Apps in https://github.com/settings/developers
@@ -344,3 +346,6 @@ d. after deployed, ssh to minikube container to test the api after installed.
  deploy ingress, metric server, microservices use either helm or kubectl.
 
  known issue is the metric server need longer `--metric-resolution`, refer [metric server](#metric-server)
+ 
+## Front-end
+implemented by [ReactJs + Redux](https://github.com/FelixAnna/keep-hands-on/tree/master/important/dlw-app)

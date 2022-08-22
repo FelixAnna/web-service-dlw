@@ -16,6 +16,8 @@ const SERVER_NAME = "date-api"
 func main() {
 	initialDependency()
 	router := GetGinRouter()
+
+	//router.Run(":8383")
 	micro.StartApp(SERVER_NAME, ":8383", router, apiBoot.Registry.GetRegistry())
 }
 
@@ -43,7 +45,6 @@ func GetGinRouter() *gin.Engine {
 	micro.RegisterMiddlewares(router, apiBoot.ErrorHandler.ErrorHandler())
 	defineRoutes(router)
 
-	//router.Run(":8383")
 	return router
 }
 

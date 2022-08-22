@@ -17,8 +17,8 @@ func main() {
 	initialDependency()
 	router := GetGinRouter()
 
-	//router.Run(":8282")
-	micro.StartApp(SERVER_NAME, ":8282", router, apiBoot.Registry.GetRegistry())
+	router.Run(":8282")
+	//micro.StartApp(SERVER_NAME, ":8282", router, apiBoot.Registry.GetRegistry())
 }
 
 type ApiBoot struct {
@@ -46,7 +46,6 @@ func GetGinRouter() *gin.Engine {
 	micro.RegisterMiddlewares(router, apiBoot.ErrorHandler.ErrorHandler())
 	defineRoutes(router)
 
-	//router.Run(":8282")
 	return router
 }
 

@@ -50,24 +50,24 @@ func (helper *AwsHelper) CreateSess() *session.Session {
 }
 
 func (helper *AwsHelper) LoadParameters(sess *session.Session) map[string]string {
-	ssmClient := ssm.New(sess)
+	parameters := make(map[string]string)
 
-	// this is a paged option
-	out, err := ssmClient.GetParametersByPath(&ssm.GetParametersByPathInput{
-		MaxResults:     aws.Int64(100),
+	ssmClient := ssm.New(sess)
+	input := ssm.GetParametersByPathInput{
+		MaxResults:     aws.Int64(10),
 		Path:           aws.String(basePath),
 		WithDecryption: aws.Bool(true),
 		Recursive:      aws.Bool(true),
-	})
-
-	if err != nil {
-		log.Printf("Error when geting ssm parameters: %v", err)
-		panic(err)
 	}
 
-	parameters := make(map[string]string, len(out.Parameters))
-	for _, parameter := range out.Parameters {
-		parameters[*parameter.Name] = *parameter.Value
+	if err := ssmClient.GetParametersByPathPages(&input, func(gpbpo *ssm.GetParametersByPathOutput, b bool) bool {
+		for _, parameter := range gpbpo.Parameters {
+			parameters[*parameter.Name] = *parameter.Value
+		}
+		return true
+	}); err != nil {
+		log.Printf("Error when geting ssm parameters: %v", err)
+		panic(err)
 	}
 
 	return parameters

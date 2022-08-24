@@ -150,7 +150,7 @@ cloud based kubernetes already include metric server by default.
 	helm uninstall dlw -n dlw-dev
 	```
 
-7. user external ip of ingress to access the api services
+7. user external ip of loadbalancer(created by AKS by default) to access the api services
 
 
 ## Front-end

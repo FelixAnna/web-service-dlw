@@ -1,0 +1,77 @@
+# Default values for dlw-helm.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replica:
+  min: 1
+  #desired: 2
+  max: 3
+
+# namespace: dlw-dev
+serviceAccount: 
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: "dlw-sericeaccount"
+
+config:
+  awsKeyId: ==
+  awsSecretKey: ==
+  region: ap-southeast-1
+  profile: prod
+
+quota:
+  requests:
+    cpu: "1"
+    memory: 1Gi
+  limits:
+    cpu: "2"
+    memory: 4Gi
+
+ingress:
+  ingressClassName: azure/application-gateway
+
+applications:
+  - name: user
+    port: 8181
+    image: yufelix/dlw-user-api:1.7.5
+    resources:
+      requests:
+        memory: 64Mi
+        cpu: "64m"
+      limits:
+        memory: 128Mi
+        cpu: "128m"
+  - name: memo
+    port: 8282
+    image: yufelix/dlw-memo-api:1.7.5
+    resources:
+      requests:
+        memory: 64Mi
+        cpu: "64m"
+      limits:
+        memory: 128Mi
+        cpu: "128m"
+  - name: date
+    port: 8383
+    image: yufelix/dlw-date-api:1.7.5
+    resources:
+      requests:
+        memory: 64Mi
+        cpu: "64m"
+      limits:
+        memory: 128Mi
+        cpu: "128m"
+  - name: finance
+    port: 8484
+    image: yufelix/dlw-finance-api:1.7.5
+    resources:
+      requests:
+        memory: 64Mi
+        cpu: "64m"
+      limits:
+        memory: 128Mi
+        cpu: "128m"

@@ -220,15 +220,17 @@ kind: Ingress
 metadata:
   name: {{ $.Release.Name }}-ingress
   annotations:
+    kubernetes.io/ingress.class: {{$.Values.ingress.ingressClassName}}
   {{ if eq $.Values.ingress.ingressClassName "nginx" }}
     nginx.ingress.kubernetes.io/rewrite-target: /$1 # for nginx only
   {{ end }}
   {{ if eq $.Values.ingress.ingressClassName "kong" }}
     konghq.com/strip-path: "true"  # for kong only
   {{ end }}
-    
+  {{ if eq $.Values.ingress.ingressClassName "azure/application-gateway" }}
+    appgw.ingress.kubernetes.io/rewrite-rule-set: rewrite-path-perfix # for appgw only
+  {{ end }}
 spec:
-  ingressClassName: {{.Values.ingress.ingressClassName}}
   rules:
   - http:
       paths:
@@ -238,6 +240,9 @@ spec:
     {{ end }}
     {{ if eq $.Values.ingress.ingressClassName "kong" }}
       - path: /{{.name}}/   # for kong only
+    {{ end }}
+    {{ if eq $.Values.ingress.ingressClassName "azure/application-gateway" }}
+      - path: /{{.name}}/(.*)   # for appgw only
     {{ end }}
         pathType: Prefix
         backend:

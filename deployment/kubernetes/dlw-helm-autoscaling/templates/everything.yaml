@@ -229,6 +229,7 @@ metadata:
   {{ end }}
   {{ if eq $.Values.ingress.ingressClassName "azure/application-gateway" }}
     appgw.ingress.kubernetes.io/rewrite-rule-set: rewrite-path-perfix # for appgw only
+    appgw.ingress.kubernetes.io/backend-path-prefix: "/"
   {{ end }}
 spec:
   rules:
@@ -242,7 +243,7 @@ spec:
       - path: /{{.name}}/   # for kong only
     {{ end }}
     {{ if eq $.Values.ingress.ingressClassName "azure/application-gateway" }}
-      - path: /{{.name}}/(.*)   # for appgw only
+      - path: /{{.name}}/*   # for appgw only
     {{ end }}
         pathType: Prefix
         backend:

@@ -29,11 +29,11 @@ func (service *AuthorizationMiddleware) AuthorizationHandler() gin.HandlerFunc {
 		}
 
 		log.Println("token:", token)
-		if token == "test" {
+		/*if token == "test" {
 			c.Set("userId", "test")
 			c.Next()
 			return
-		}
+		}*/
 
 		claims, err := service.TokenService.ParseToken(token)
 		if err != nil {

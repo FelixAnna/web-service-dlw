@@ -7,11 +7,11 @@
 # Table of Contents
 
 - 1. [Prepare](#prepare)
-- 2. [Switch Context](#swith-kubectl-context)
+- 2. [Switch Context](#switch-kubectl-context)
 
 - 3. [Components](#components)
     - 3.1 [Microservices](#microservices)
-    - 3.2 [Ingress controller](#ingress-controller)
+    - 3.2 [Ingress controller](#ingress)
     - 3.3 [Metric Server](#metric-server)
     - 3.4 [Dashboard](#dashboard)
 
@@ -20,7 +20,8 @@
 
 - 5. [Target](#target)
     - 5.1 [Kind](#kind)
-    - 5.2 [AKS](#aks)
+    - 5.2 [AKS + nginx](#aksnginxkong)
+	- 5.3 [AKS + Application Gateway](#aksappgw)
     
 - 6. [Front-end](#front-end)
 
@@ -92,7 +93,7 @@ cloud based kubernetes already include metric server by default.
 	helm repo add bitnami https://charts.bitnami.com/bitnami
 	```
 #### deploy
-1. update the *awsKeyId* and *awsSecretKey* to correct value in: `deployment\kubernetes\dlw-helm-autoscalingvalues_*.yaml`
+1. update the *awsKeyId* and *awsSecretKey* to correct value in: `deployment\kubernetes\dlw-helm-autoscaling\values_*.yaml`
 2. cd to `deployment\kubernetes` folder, run:
 	```bash
 	helm install dlw ./dlw-helm-autoscaling/ --namespace dlw-dev --create-namespace  --values ./dlw-helm-autoscaling/values_dev.yaml
@@ -107,7 +108,18 @@ cloud based kubernetes already include metric server by default.
 	helm uninstall dlw -n dlw-dev
 	```
 
-### AKS
+## Target
+
+### Kind
+`deployment/kubernetes/kind/*.yml`: set up kubernetes cluster by using kind, which can run multiple control panel and work nodes by using docker containers in local.
+
+#### Set up kind: 
+[kind/readme.md](deployment/kubernetes/kind/readme.md)
+
+#### deployments
+install/update/uninstall by following [deploy by helm](#helm-deployments)
+
+### AKS(nginx/kong)
 1. create acr, like: dlwcr
 2. push local images to the acr like below:
 
@@ -152,6 +164,14 @@ cloud based kubernetes already include metric server by default.
 
 7. user external ip of loadbalancer(created by AKS by default) to access the api services
 
+### AKS(appgw)
+
+#### install
+following： [./deployment/kubernetes/aks_appgw_provisioning.sh](./deployment/kubernetes/aks_appgw_provisioning.sh)
+#### config ssl termination
+
+#### deployments
+install/update/uninstall by following [deploy by helm](#helm-deployments)
 
 ## Front-end
 implemented by [ReactJs + Redux](https://github.com/FelixAnna/keep-hands-on/tree/master/important/dlw-app)

@@ -1,4 +1,6 @@
 ## provisioning application gateway
+echo "provisioning application gateway"
+
 rgName=dlw-rg
 region=eastus
 ipName=dlwAppGWIp
@@ -18,8 +20,7 @@ az network application-gateway create -n $appgwName -l $region -g $rgName --sku 
   --min-capacity 1
 
 ## provisioning aks
-## refer: [aks](https://docs.microsoft.com/en-us/cli/azure/aks?view=azure-cli-latest#az-aks-create), [application gateway for aks](https://docs.microsoft.com/en-us/azure/application-gateway/tutorial-ingress-controller-add-on-existing#code-try-2)
-## * append --no-wait if needed
+echo "provisioning aks"
 
 clusterName=dlw-aks
 appgwId=$(az network application-gateway show -n $appgwName -g $rgName -o tsv --query "id") 
@@ -31,9 +32,11 @@ az aks create -n $clusterName -g $rgName \
   --dns-name-prefix dlw \
   --enable-addons ingress-appgw --appgw-id $appgwId \
   --network-plugin azure --enable-managed-identity --generate-ssh-keys
-
+  ## * append --no-wait if needed
 
 ## connect 2 VPC
+echo "peering 2 VPCs"
+
 nodeResourceGroup=$(az aks show -n $clusterName -g $rgName -o tsv --query "nodeResourceGroup")
 aksVnetName=$(az network vnet list -g $nodeResourceGroup -o tsv --query "[0].name")
 aksVnetId=$(az network vnet show -n $aksVnetName -g $nodeResourceGroup -o tsv --query "id")
@@ -48,6 +51,7 @@ az network vnet peering create -n AKStoAppGWVnetPeering -g $nodeResourceGroup \
 
 
 ## install services
+echo "installing services"
 
 az aks get-credentials --resource-group $rgName --name $clusterName
 
@@ -55,6 +59,8 @@ ns=dlw-dev
 helm upgrade --install dlw ./dlw-helm-autoscaling/ --namespace $ns --create-namespace --values ./dlw-helm-autoscaling/values_aks_apgw.yaml
 
 ## configure health probs (path=/status)
+echo "configure health probs (path=/status)"
+
 az network application-gateway probe update --gateway-name $appgwName -g $rgName \
 	--name pb-$ns-dlw-service-date-8383-dlw-ingress --path /status
 
@@ -66,3 +72,5 @@ az network application-gateway probe update --gateway-name $appgwName -g $rgName
 
 az network application-gateway probe update --gateway-name $appgwName -g $rgName \
 	--name pb-$ns-dlw-service-user-8181-dlw-ingress --path /status
+
+echo "done"

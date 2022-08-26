@@ -168,6 +168,8 @@ install/update/uninstall by following [deploy by helm](#helm-deployments)
 
 #### install
 following： [./deployment/kubernetes/aks_appgw_provisioning.sh](./deployment/kubernetes/aks_appgw_provisioning.sh)
+
+ refer: [aks](https://docs.microsoft.com/en-us/cli/azure/aks?view=azure-cli-latest#az-aks-create), [application gateway for aks](https://docs.microsoft.com/en-us/azure/application-gateway/tutorial-ingress-controller-add-on-existing#code-try-2)
 #### config ssl termination
 
 #### deployments

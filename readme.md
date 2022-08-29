@@ -96,12 +96,12 @@ cloud based kubernetes already include metric server by default.
 1. update the *awsKeyId* and *awsSecretKey* to correct value in: `deployment\kubernetes\dlw-helm-autoscaling\values_*.yaml`
 2. cd to `deployment\kubernetes` folder, run:
 	```bash
-	helm install dlw ./dlw-helm-autoscaling/ --namespace dlw-dev --create-namespace  --values ./dlw-helm-autoscaling/values_dev.yaml
+	helm install dlw ./dlw-helm-autoscaling/ --namespace dlw-dev --create-namespace  --values ./dlw-helm-autoscaling/values_*.yaml
 	```
 3. after all resources installed (include ingress controller), access test api from local browser: http://localhost/date/status
 4. update by running:
 	```bash
-	helm upgrade --install dlw ./dlw-helm-autoscaling/ --namespace dlw-dev --values ./dlw-helm-autoscaling/values_dev.yaml
+	helm upgrade --install dlw ./dlw-helm-autoscaling/ --namespace dlw-dev --values ./dlw-helm-autoscaling/values_*.yaml
 	```
 5. remove all by running:
 	```bash
@@ -119,7 +119,7 @@ cloud based kubernetes already include metric server by default.
 #### deployments
 install/update/uninstall by following [deploy by helm](#helm-deployments)
 
-### AKS(nginx/kong)
+### AKS(nginx)
 1. create acr, like: dlwcr
 2. push local images to the acr like below:
 

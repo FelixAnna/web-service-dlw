@@ -23,7 +23,7 @@ az network application-gateway create -n $appgwName -l $region -g $rgName --sku 
 echo "provisioning aks"
 
 clusterName=dlw-aks
-appgwId=$(az network application-gateway show -n $appgwName -g $rgName -o tsv --query "id") 
+appgwId=$(az network application-gateway show -n $appgwName -g $rgName -o tsv --query "id")
 
 az aks create -n $clusterName -g $rgName \
   --kubernetes-version 1.24.3 \
@@ -32,7 +32,6 @@ az aks create -n $clusterName -g $rgName \
   --dns-name-prefix dlw \
   --enable-addons ingress-appgw --appgw-id $appgwId \
   --network-plugin azure --enable-managed-identity --generate-ssh-keys
-  ## * append --no-wait if needed
 
 ## connect 2 VPC
 echo "peering 2 VPCs"

@@ -2,6 +2,8 @@
 # $pwd = ConvertTo-SecureString -String "myTest@Pwd123" -Force -AsPlainText
 # Export-PfxCertificate -cert Cert:\localMachine\my\A5CE8D378ED5B664D61E59FF57C5D874DDF1CF35  -FilePath C:\Users\Felix_Yu\Downloads\testCert.pfx -Password $pwd
 
+## --cert-file "C:\Users\Felix_Yu\Downloads\testCert.pfx" --cert-password "myTest@Pwd123" --frontend-port 443
+## create ssl listener for application gateway, and attach it to existing rule manually (how to do it by command?)
 
 ## provisioning application gateway
 echo "provisioning application gateway"
@@ -23,7 +25,6 @@ az network vnet create -n $vnetName -g $rgName --address-prefix 10.0.0.0/16 \
 az network application-gateway create -n $appgwName -l $region -g $rgName --sku Standard_v2 \
 	--public-ip-address $ipName --vnet-name $vnetName --subnet $subnetName --priority 100 \
 	--min-capacity 1 
-## --cert-file "C:\Users\Felix_Yu\Downloads\testCert.pfx" --cert-password "myTest@Pwd123" --frontend-port 443
 
 ## provisioning aks
 echo "provisioning aks"
@@ -40,7 +41,7 @@ az aks create -n $clusterName -g $rgName \
   --network-plugin azure --enable-managed-identity --generate-ssh-keys
 
 
-## connect 2 VPC
+## connect 2 VPC (chance that vnet created, but not found by vnet list command, so this step need manually now)
 echo "peering 2 VPCs"
 
 nodeResourceGroup=$(az aks show -n $clusterName -g $rgName -o tsv --query "nodeResourceGroup")

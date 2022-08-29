@@ -1,3 +1,8 @@
+# New-SelfSignedCertificate -certstorelocation Cert:\localMachine\my -dnsname "www.dlw.com"
+# $pwd = ConvertTo-SecureString -String "myTest@Pwd123" -Force -AsPlainText
+# Export-PfxCertificate -cert Cert:\localMachine\my\A5CE8D378ED5B664D61E59FF57C5D874DDF1CF35  -FilePath C:\Users\Felix_Yu\Downloads\testCert.pfx -Password $pwd
+
+
 ## provisioning application gateway
 echo "provisioning application gateway"
 
@@ -16,8 +21,9 @@ az network vnet create -n $vnetName -g $rgName --address-prefix 10.0.0.0/16 \
   --subnet-name $subnetName --subnet-prefix 10.0.0.0/24 
 
 az network application-gateway create -n $appgwName -l $region -g $rgName --sku Standard_v2 \
-  --public-ip-address $ipName --vnet-name $vnetName --subnet $subnetName --priority 100 \
-  --min-capacity 1
+	--public-ip-address $ipName --vnet-name $vnetName --subnet $subnetName --priority 100 \
+	--min-capacity 1 
+## --cert-file "C:\Users\Felix_Yu\Downloads\testCert.pfx" --cert-password "myTest@Pwd123" --frontend-port 443
 
 ## provisioning aks
 echo "provisioning aks"
@@ -32,6 +38,7 @@ az aks create -n $clusterName -g $rgName \
   --dns-name-prefix dlw \
   --enable-addons ingress-appgw --appgw-id $appgwId \
   --network-plugin azure --enable-managed-identity --generate-ssh-keys
+
 
 ## connect 2 VPC
 echo "peering 2 VPCs"
@@ -48,7 +55,6 @@ appGWVnetId=$(az network vnet show -n $vnetName -g $rgName -o tsv --query "id")
 az network vnet peering create -n AKStoAppGWVnetPeering -g $nodeResourceGroup \
   --vnet-name $aksVnetName --remote-vnet $appGWVnetId --allow-vnet-access
 
-
 ## install services
 echo "installing services"
 
@@ -56,6 +62,7 @@ az aks get-credentials --resource-group $rgName --name $clusterName
 
 ns=dlw-dev
 helm upgrade --install dlw ./dlw-helm-autoscaling/ --namespace $ns --create-namespace --values ./dlw-helm-autoscaling/values_aks_apgw.yaml
+
 
 ## configure health probs (path=/status)
 echo "configure health probs (path=/status)"

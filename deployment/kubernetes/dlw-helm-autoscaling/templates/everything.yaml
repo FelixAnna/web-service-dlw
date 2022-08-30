@@ -156,8 +156,8 @@ spec:
           httpGet:
             path: /status
             port: 80
-          periodSeconds: 2
-          timeoutSeconds: 5
+          periodSeconds: 6
+          timeoutSeconds: 2
           failureThreshold: 3
         imagePullPolicy: IfNotPresent
         env:

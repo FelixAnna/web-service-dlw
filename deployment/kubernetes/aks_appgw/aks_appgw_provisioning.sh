@@ -4,6 +4,8 @@
   # https://docs.microsoft.com/en-us/azure/application-gateway/tutorial-ssl-cli
 
 ## prepare
+echo "prepare"
+
 rgName=dlwRG
 region=eastus
 ipName=dlwAppGWIp
@@ -13,6 +15,7 @@ appgwName=dlwAppGateway
 clusterName=dlwCluster
 identityName=appgwIdentity
 vaultName=dlwVault
+ns=dlwns
 
 az group create --name $rgName --location $region
 
@@ -91,6 +94,7 @@ az aks create -n $clusterName -g $rgName \
   --network-plugin azure --enable-managed-identity --generate-ssh-keys
 
 
+
 ## connect 2 VPC (chance that vnet created, but not found by vnet list command, so this step need manually now)
 echo "peering 2 VPCs"
 
@@ -107,29 +111,14 @@ appGWVnetId=$(az network vnet show -n $vnetName -g $rgName -o tsv --query "id")
 az network vnet peering create -n AKStoAppGWVnetPeering -g $nodeResourceGroup \
   --vnet-name $aksVnetName --remote-vnet $appGWVnetId --allow-vnet-access
 
+
+
 ## install services
 echo "installing services"
 
 az aks get-credentials --resource-group $rgName --name $clusterName
 
-ns=dlw-dev
 helm upgrade --install dlw ./dlw-helm-autoscaling/ --namespace $ns --create-namespace --values ./dlw-helm-autoscaling/values_aks_appgw.yaml
-
-
-## configure health probs (path=/status)
-echo "configure health probs (path=/status)"
-
-az network application-gateway probe update --gateway-name $appgwName -g $rgName \
-	--name pb-$ns-dlw-service-date-8383-dlw-ingress --path /status
-
-az network application-gateway probe update --gateway-name $appgwName -g $rgName \
-	--name pb-$ns-dlw-service-finance-8484-dlw-ingress --path /status
-
-az network application-gateway probe update --gateway-name $appgwName -g $rgName \
-	--name pb-$ns-dlw-service-memo-8282-dlw-ingress --path /status
-
-az network application-gateway probe update --gateway-name $appgwName -g $rgName \
-	--name pb-$ns-dlw-service-user-8181-dlw-ingress --path /status
 
 echo "done"
 

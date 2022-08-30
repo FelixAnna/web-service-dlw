@@ -20,6 +20,9 @@ identityName=appgwIdentity
 vaultName=dlwVault
 ns=dlwns
 
+## purge: keyvault
+az keyvault purge -n $vaultName 
+
 az group create --name $rgName --location $region
 
 ## provide certificate
@@ -30,20 +33,17 @@ az identity create -n $identityName -g $rgName -l $region
 identityID=$(az identity list --query "[?resourceGroup=='dlwRG'].id" -o tsv)
 identityPrincipal=$(az identity list --query "[?resourceGroup=='dlwRG'].principalId" -o tsv)
 
-# One time operation, assign AGIC identity to have operator access over AppGw identity
-az role assignment create --role "Managed Identity Operator" --assignee $identityPrincipal --scope $identityID
-
-# One time operation, create Azure key vault and certificate (can done through portal as well)
+# create Azure key vault and certificate (can done through portal as well)
 az keyvault create -n $vaultName -g $rgName -l $region
 
-# One time operation, assign the identity GET secret access to Azure Key Vault
+# assign the identity GET secret access to Azure Key Vault
 az keyvault set-policy \
 	-n $vaultName \
 	-g $rgName \
 	--object-id $identityPrincipal \
 	--secret-permissions get
 
-# One time operation, assign the identity GET secret access to Azure Key Vault
+# assign the identity GET secret access to Azure Key Vault
 az keyvault set-policy \
 	-n $vaultName \
 	-g $rgName \
@@ -55,6 +55,9 @@ az keyvault certificate create \
 	--vault-name $vaultName \
 	-n mycert \
 	-p "$(az keyvault certificate get-default-policy)"
+
+# assign AGIC identity to have operator access over AppGw identity
+az role assignment create --role "Managed Identity Operator" --assignee $identityPrincipal --scope $identityID
 
 
 

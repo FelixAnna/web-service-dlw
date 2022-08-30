@@ -17,6 +17,7 @@ vaultName=dlwVault
 az group create --name $rgName --location $region
 
 ## provide certificate
+echo "provisioning keyvalt and ssl cert"
 
 # create user managed identity
 az identity create -n $identityName -g $rgName -l $region
@@ -50,6 +51,7 @@ az keyvault certificate create \
 	-p "$(az keyvault certificate get-default-policy)"
 
 
+
 ## provisioning application gateway
 echo "provisioning application gateway"
 versionedSecretId=$(az keyvault certificate show -n mycert --vault-name $vaultName --query "sid" -o tsv)
@@ -73,6 +75,8 @@ az network application-gateway create -n $appgwName -l $region -g $rgName --sku 
 	--ssl-certificate-name dlwkvsslcert \
 	--key-vault-secret-id $unversionedSecretId # ssl certificate with name "mykvsslcert" will be configured on AppGw
   #--cert-file "C:\Users\Felix_Yu\Downloads\testCert.pfx" --cert-password "myTest@Pwd123" 
+
+
 
 ## provisioning aks
 echo "provisioning aks"

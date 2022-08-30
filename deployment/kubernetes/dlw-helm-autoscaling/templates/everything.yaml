@@ -155,7 +155,6 @@ spec:
         livenessProbe:
           httpGet:
             path: /status
-            port: 80
           periodSeconds: 6
           timeoutSeconds: 2
           failureThreshold: 3

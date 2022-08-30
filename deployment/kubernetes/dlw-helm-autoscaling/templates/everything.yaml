@@ -155,6 +155,7 @@ spec:
         livenessProbe:
           httpGet:
             path: /status
+            port: {{.port}}
           periodSeconds: 6
           timeoutSeconds: 2
           failureThreshold: 3

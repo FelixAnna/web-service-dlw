@@ -167,9 +167,10 @@ install/update/uninstall by following [deploy by helm](#helm-deployments)
 ### AKS(appgw)
 
 #### install
-following： [./deployment/kubernetes/aks_appgw_provisioning.sh](./deployment/kubernetes/aks_appgw_provisioning.sh)
+following： [./deployment/kubernetes/aks_appgw/readme.md](./deployment/kubernetes/aks_appgw/readme.md)
 
  refer: [aks](https://docs.microsoft.com/en-us/cli/azure/aks?view=azure-cli-latest#az-aks-create), [application gateway for aks](https://docs.microsoft.com/en-us/azure/application-gateway/tutorial-ingress-controller-add-on-existing#code-try-2)
+ [application-gateway-kubernetes-ingress](https://azure.github.io/application-gateway-kubernetes-ingress)
 #### config ssl termination
 
 #### deployments

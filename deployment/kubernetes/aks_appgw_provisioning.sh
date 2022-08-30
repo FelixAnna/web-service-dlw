@@ -3,16 +3,18 @@
 # Export-PfxCertificate -cert Cert:\localMachine\my\A5CE8D378ED5B664D61E59FF57C5D874DDF1CF35  -FilePath C:\Users\Felix_Yu\Downloads\testCert.pfx -Password $pwd
   # https://docs.microsoft.com/en-us/azure/application-gateway/tutorial-ssl-cli
 
+## provide certificate
+
 ## provisioning application gateway
 echo "provisioning application gateway"
 
-rgName=dlw-rg
+rgName=dlwRG
 region=eastus
 ipName=dlwAppGWIp
 vnetName=appGWVnet
 subnetName=gwSubnet
 appgwName=dlwAppGateway
-clusterName=dlw-aks
+clusterName=dlwCluster
 
 az group create --name $rgName --location $region
 
@@ -65,7 +67,7 @@ echo "installing services"
 az aks get-credentials --resource-group $rgName --name $clusterName
 
 ns=dlw-dev
-helm upgrade --install dlw ./dlw-helm-autoscaling/ --namespace $ns --create-namespace --values ./dlw-helm-autoscaling/values_aks_apgw.yaml
+helm upgrade --install dlw ./dlw-helm-autoscaling/ --namespace $ns --create-namespace --values ./dlw-helm-autoscaling/values_aks_appgw.yaml
 
 
 ## configure health probs (path=/status)

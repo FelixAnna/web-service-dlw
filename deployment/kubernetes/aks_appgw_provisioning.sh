@@ -1,9 +1,7 @@
 # New-SelfSignedCertificate -certstorelocation Cert:\localMachine\my -dnsname "www.dlw.com"
 # $pwd = ConvertTo-SecureString -String "myTest@Pwd123" -Force -AsPlainText
 # Export-PfxCertificate -cert Cert:\localMachine\my\A5CE8D378ED5B664D61E59FF57C5D874DDF1CF35  -FilePath C:\Users\Felix_Yu\Downloads\testCert.pfx -Password $pwd
-
-## --cert-file "C:\Users\Felix_Yu\Downloads\testCert.pfx" --cert-password "myTest@Pwd123" --frontend-port 443
-## create ssl listener for application gateway, and attach it to existing rule manually (how to do it by command?)
+  # https://docs.microsoft.com/en-us/azure/application-gateway/tutorial-ssl-cli
 
 ## provisioning application gateway
 echo "provisioning application gateway"
@@ -14,6 +12,7 @@ ipName=dlwAppGWIp
 vnetName=appGWVnet
 subnetName=gwSubnet
 appgwName=dlwAppGateway
+clusterName=dlw-aks
 
 az group create --name $rgName --location $region
 
@@ -24,12 +23,15 @@ az network vnet create -n $vnetName -g $rgName --address-prefix 10.0.0.0/16 \
 
 az network application-gateway create -n $appgwName -l $region -g $rgName --sku Standard_v2 \
 	--public-ip-address $ipName --vnet-name $vnetName --subnet $subnetName --priority 100 \
-	--min-capacity 1 
+	--min-capacity 1 \
+  --http-settings-cookie-based-affinity Disabled \
+  --frontend-port 443 \
+  --http-settings-port 80 \
+  --http-settings-protocol Http \
+  --cert-file "C:\Users\Felix_Yu\Downloads\testCert.pfx" --cert-password "myTest@Pwd123" 
 
 ## provisioning aks
 echo "provisioning aks"
-
-clusterName=dlw-aks
 appgwId=$(az network application-gateway show -n $appgwName -g $rgName -o tsv --query "id")
 
 az aks create -n $clusterName -g $rgName \
@@ -45,7 +47,8 @@ az aks create -n $clusterName -g $rgName \
 echo "peering 2 VPCs"
 
 nodeResourceGroup=$(az aks show -n $clusterName -g $rgName -o tsv --query "nodeResourceGroup")
-aksVnetName=$(az network vnet list -g $nodeResourceGroup -o tsv --query "[0].name")
+## aksVnetName=$(az network vnet list -g $nodeResourceGroup -o tsv --query "[0].name") ## this command  have bug
+aksVnetName=$(az network vnet list --query "[?resourceGroup=='$nodeResourceGroup'].name" --output tsv)
 aksVnetId=$(az network vnet show -n $aksVnetName -g $nodeResourceGroup -o tsv --query "id")
 
 az network vnet peering create -n AppGWtoAKSVnetPeering -g $rgName --vnet-name $vnetName \
@@ -81,3 +84,5 @@ az network application-gateway probe update --gateway-name $appgwName -g $rgName
 	--name pb-$ns-dlw-service-user-8181-dlw-ingress --path /status
 
 echo "done"
+
+## create ssl listener, select existing cert for application gateway, and associated it to existing rule manually (how to do it by command?)

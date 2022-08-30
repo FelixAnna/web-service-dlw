@@ -3,6 +3,9 @@
 # Export-PfxCertificate -cert Cert:\localMachine\my\A5CE8D378ED5B664D61E59FF57C5D874DDF1CF35  -FilePath C:\Users\Felix_Yu\Downloads\testCert.pfx -Password $pwd
   # https://docs.microsoft.com/en-us/azure/application-gateway/tutorial-ssl-cli
 
+## 
+## purge: az keyvault purge -n $vaultName 
+
 ## prepare
 echo "preparing"
 
@@ -32,7 +35,6 @@ az role assignment create --role "Managed Identity Operator" --assignee $identit
 
 # One time operation, create Azure key vault and certificate (can done through portal as well)
 az keyvault create -n $vaultName -g $rgName -l $region
-## purge: az keyvault purge -n $vaultName 
 
 # One time operation, assign the identity GET secret access to Azure Key Vault
 az keyvault set-policy \
@@ -111,14 +113,3 @@ appGWVnetId=$(az network vnet show -n $vnetName -g $rgName -o tsv --query "id")
 
 az network vnet peering create -n AKStoAppGWVnetPeering -g $nodeResourceGroup \
   --vnet-name $aksVnetName --remote-vnet $appGWVnetId --allow-vnet-access
-
-
-
-## install services
-echo "installing services"
-
-az aks get-credentials --resource-group $rgName --name $clusterName
-
-helm upgrade --install dlw ./dlw-helm-autoscaling/ --namespace $ns --create-namespace --values ./dlw-helm-autoscaling/values_aks_appgw.yaml
-
-echo "done"

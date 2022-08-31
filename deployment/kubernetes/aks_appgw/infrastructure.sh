@@ -21,6 +21,7 @@ vaultName=dlwVault
 ns=dlwns
 
 ## purge: keyvault
+az group delete --name $rgName --location $region -y
 az keyvault purge -n $vaultName 
 
 az group create --name $rgName --location $region

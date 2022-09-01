@@ -37,14 +37,7 @@ identityPrincipal=$(az identity list --query "[?resourceGroup=='dlwRG'].principa
 # create Azure key vault and certificate (can done through portal as well)
 az keyvault create -n $vaultName -g $rgName -l $region
 
-# assign the identity GET secret access to Azure Key Vault
-az keyvault set-policy \
-	-n $vaultName \
-	-g $rgName \
-	--object-id $identityPrincipal \
-	--secret-permissions get
-
-# assign the identity GET secret access to Azure Key Vault
+# assign the identity GET certificate access to Azure Key Vault
 az keyvault set-policy \
 	-n $vaultName \
 	-g $rgName \
@@ -66,8 +59,6 @@ az role assignment create --role "Managed Identity Operator" --assignee $identit
 echo "provisioning application gateway"
 versionedSecretId=$(az keyvault certificate show -n mycert --vault-name $vaultName --query "sid" -o tsv)
 unversionedSecretId=$(echo $versionedSecretId | cut -d'/' -f-5) # remove the version from the url
-
-az group create --name $rgName --location $region
 
 az network public-ip create -n $ipName -g $rgName --allocation-method Static --sku Standard
 

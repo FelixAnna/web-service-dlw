@@ -1,6 +1,6 @@
-resource "azurerm_public_ip" "default" {
-  resource_group_name = azurerm_resource_group.default.name
-  location            = azurerm_resource_group.default.location
+resource "azurerm_public_ip" "gwIp" {
+  resource_group_name = azurerm_resource_group.dlwrg.name
+  location            = azurerm_resource_group.dlwrg.location
 
   name                = var.ipaddrName
   allocation_method   = "Static"
@@ -8,19 +8,19 @@ resource "azurerm_public_ip" "default" {
 }
 
 locals {
-  gateway_ip_configure_name      = "${azurerm_virtual_network.default.name}-gwipn"
-  backend_address_pool_name      = "${azurerm_virtual_network.default.name}-beap"
-  frontend_port_name             = "${azurerm_virtual_network.default.name}-feport"
-  frontend_ip_configuration_name = "${azurerm_virtual_network.default.name}-feip"
-  http_setting_name              = "${azurerm_virtual_network.default.name}-be-htst"
-  listener_name                  = "${azurerm_virtual_network.default.name}-httplstn"
-  request_routing_rule_name      = "${azurerm_virtual_network.default.name}-rqrt"
-  redirect_configuration_name    = "${azurerm_virtual_network.default.name}-rdrcfg"
+  gateway_ip_configure_name      = "${azurerm_virtual_network.gwVNet.name}-gwipn"
+  backend_address_pool_name      = "${azurerm_virtual_network.gwVNet.name}-beap"
+  frontend_port_name             = "${azurerm_virtual_network.gwVNet.name}-feport"
+  frontend_ip_configuration_name = "${azurerm_virtual_network.gwVNet.name}-feip"
+  http_setting_name              = "${azurerm_virtual_network.gwVNet.name}-be-htst"
+  listener_name                  = "${azurerm_virtual_network.gwVNet.name}-httplstn"
+  request_routing_rule_name      = "${azurerm_virtual_network.gwVNet.name}-rqrt"
+  redirect_configuration_name    = "${azurerm_virtual_network.gwVNet.name}-rdrcfg"
 }
 
-resource "azurerm_application_gateway" "default" {
-  resource_group_name = azurerm_resource_group.default.name
-  location            = azurerm_resource_group.default.location
+resource "azurerm_application_gateway" "appGW" {
+  resource_group_name = azurerm_resource_group.dlwrg.name
+  location            = azurerm_resource_group.dlwrg.location
 
   name                = var.appgwName
 
@@ -42,7 +42,7 @@ resource "azurerm_application_gateway" "default" {
 
   frontend_ip_configuration {
     name                 = local.frontend_ip_configuration_name
-    public_ip_address_id = azurerm_public_ip.default.id
+    public_ip_address_id = azurerm_public_ip.gwIp.id
   }
 
   backend_address_pool {
@@ -65,7 +65,7 @@ resource "azurerm_application_gateway" "default" {
 
   ssl_certificate {
     name = var.sslCertName
-    key_vault_secret_id = azurerm_key_vault_certificate.default.secret_id
+    key_vault_secret_id = azurerm_key_vault_certificate.sslcert.secret_id
   }
 
   http_listener {

@@ -1,8 +1,8 @@
 data "azurerm_client_config" "current" {}
 
-resource "azurerm_key_vault" "default" {
-    resource_group_name = azurerm_resource_group.default.name
-    location = azurerm_resource_group.default.location
+resource "azurerm_key_vault" "dlwkv" {
+    resource_group_name = azurerm_resource_group.dlwrg.name
+    location = azurerm_resource_group.dlwrg.location
     
     name = var.valutName
     enabled_for_disk_encryption = true
@@ -81,9 +81,9 @@ resource "azurerm_key_vault" "default" {
     }
 }
 
-resource "azurerm_key_vault_certificate" "default" {
+resource "azurerm_key_vault_certificate" "sslcert" {
     name = "mycert"
-    key_vault_id = azurerm_key_vault.default.id
+    key_vault_id = azurerm_key_vault.dlwkv.id
 
     certificate_policy {
       issuer_parameters {
@@ -141,20 +141,23 @@ resource "azurerm_role_assignment" "default" {
     role_definition_name = "Managed Identity Operator"
 }
 
-resource "azurerm_role_assignment" "ra3" {
-  scope                = azurerm_application_gateway.default.id
+resource "azurerm_role_assignment" "assignContributor" {
+  scope                = azurerm_application_gateway.appGW.id
   role_definition_name = "Contributor"
   principal_id         = azurerm_user_assigned_identity.gwIdentity.principal_id
 }
 
-resource "azurerm_role_assignment" "ra4" {
-  scope                = azurerm_resource_group.default.id
+resource "azurerm_role_assignment" "assignReader" {
+  scope                = azurerm_resource_group.dlwrg.id
   role_definition_name = "Reader"
   principal_id         = azurerm_user_assigned_identity.gwIdentity.principal_id
 }
 
-resource "azurerm_role_assignment" "ra1" {
-  scope                = azurerm_virtual_network.aks.id
+resource "azurerm_role_assignment" "assignNWContributor" {
+  scope                = azurerm_virtual_network.aksVNet.id
   role_definition_name = "Network Contributor"
   principal_id         = azurerm_user_assigned_identity.aksIdentity.principal_id
 }
+
+
+//TODO ensure this identity used by the AGIC (or the one used by it have permission: Reader + Contributor)

@@ -2,8 +2,8 @@ resource "random_pet" "prefix" {}
 
 resource "azurerm_kubernetes_cluster" "default" {
   name                = var.clusterName
-  location            = azurerm_resource_group.default.location
-  resource_group_name = azurerm_resource_group.default.name
+  location            = azurerm_resource_group.dlwrg.location
+  resource_group_name = azurerm_resource_group.dlwrg.name
   dns_prefix          = "dlw-${random_pet.prefix.id}"
   kubernetes_version  = "1.24"
 
@@ -19,7 +19,7 @@ resource "azurerm_kubernetes_cluster" "default" {
   }
 
   ingress_application_gateway{
-    gateway_id = azurerm_application_gateway.default.id
+    gateway_id = azurerm_application_gateway.appGW.id
   }
 
   network_profile{

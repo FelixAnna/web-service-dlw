@@ -31,8 +31,8 @@ echo "provisioning keyvalt and ssl cert"
 
 # create user managed identity
 az identity create -n $identityName -g $rgName -l $region
-identityID=$(az identity list --query "[?resourceGroup=='dlwRG'].id" -o tsv)
-identityPrincipal=$(az identity list --query "[?resourceGroup=='dlwRG'].principalId" -o tsv)
+identityID=$(az identity list --query "[?resourceGroup=='$rgName'].id" -o tsv)
+identityPrincipal=$(az identity list --query "[?resourceGroup=='$rgName'].principalId" -o tsv)
 
 # create Azure key vault and certificate (can done through portal as well)
 az keyvault create -n $vaultName -g $rgName -l $region
@@ -42,7 +42,7 @@ az keyvault set-policy \
 	-n $vaultName \
 	-g $rgName \
 	--object-id $identityPrincipal \
-	--certificate_permissions get
+	--secret-permissions get
 
 # For each new certificate, create a cert on keyvault and add unversioned secret id to Application Gateway
 az keyvault certificate create \
@@ -74,8 +74,9 @@ az network application-gateway create -n $appgwName -l $region -g $rgName --sku 
 	--http-settings-protocol Http \
 	--identity $identityID \
 	--ssl-certificate-name dlwkvsslcert \
-	--key-vault-secret-id $unversionedSecretId # ssl certificate with name "mykvsslcert" will be configured on AppGw
-  #--cert-file "C:\Users\Felix_Yu\Downloads\testCert.pfx" --cert-password "myTest@Pwd123" 
+	--key-vault-secret-id $unversionedSecretId 
+    # ssl certificate with name "mykvsslcert" will be configured on AppGw
+    #--cert-file "C:\Users\Felix_Yu\Downloads\testCert.pfx" --cert-password "myTest@Pwd123" 
 
 
 

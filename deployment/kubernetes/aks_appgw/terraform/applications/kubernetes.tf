@@ -5,7 +5,7 @@ resource "azurerm_kubernetes_cluster" "default" {
   location            = azurerm_resource_group.default.location
   resource_group_name = azurerm_resource_group.default.name
   dns_prefix          = "dlw-${random_pet.prefix.id}"
-  kubernetes_version  = "1.23"
+  kubernetes_version  = "1.24"
 
   default_node_pool {
     name            = "default"
@@ -30,6 +30,7 @@ resource "azurerm_kubernetes_cluster" "default" {
   identity {
     type = "SystemAssigned"
   }
+
   role_based_access_control_enabled = true
 
   tags = {

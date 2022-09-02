@@ -28,8 +28,7 @@ resource "azurerm_kubernetes_cluster" "default" {
   }
   
   identity {
-    type = "UserAssigned"
-    identity_ids = [azurerm_user_assigned_identity.aksIdentity.id]
+    type = "SystemAssigned"
   }
 
   role_based_access_control_enabled = true

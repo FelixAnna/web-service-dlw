@@ -10,10 +10,16 @@ variable "region" {
     default = "eastus"
 }
 
-variable "identityName" {
+variable "identityNameGw" {
     type = string
     description = "(optional) name of the user managed identity"
     default = "appgwIdentity"
+}
+
+variable "identityNameAks" {
+    type = string
+    description = "(optional) name of the user managed identity"
+    default = "aksIdentity"
 }
 
 variable "valutName" {

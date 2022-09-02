@@ -14,7 +14,7 @@ resource "azurerm_key_vault" "default" {
 
     access_policy {
         tenant_id = data.azurerm_client_config.current.tenant_id
-        object_id = azurerm_user_assigned_identity.default.principal_id
+        object_id = azurerm_user_assigned_identity.gwIdentity.principal_id
 
         storage_permissions = [
             "Get",
@@ -136,7 +136,25 @@ resource "azurerm_key_vault_certificate" "default" {
 }
 
 resource "azurerm_role_assignment" "default" {
-    scope = azurerm_user_assigned_identity.default.id
-    principal_id = azurerm_user_assigned_identity.default.principal_id
+    scope = azurerm_user_assigned_identity.gwIdentity.id
+    principal_id = azurerm_user_assigned_identity.gwIdentity.principal_id
     role_definition_name = "Managed Identity Operator"
+}
+
+resource "azurerm_role_assignment" "ra3" {
+  scope                = azurerm_application_gateway.default.id
+  role_definition_name = "Contributor"
+  principal_id         = azurerm_user_assigned_identity.gwIdentity.principal_id
+}
+
+resource "azurerm_role_assignment" "ra4" {
+  scope                = azurerm_resource_group.default.id
+  role_definition_name = "Reader"
+  principal_id         = azurerm_user_assigned_identity.gwIdentity.principal_id
+}
+
+resource "azurerm_role_assignment" "ra1" {
+  scope                = azurerm_virtual_network.aks.id
+  role_definition_name = "Network Contributor"
+  principal_id         = azurerm_user_assigned_identity.aksIdentity.principal_id
 }

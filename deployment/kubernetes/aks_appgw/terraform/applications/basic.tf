@@ -7,11 +7,18 @@ resource "azurerm_resource_group" "default" {
   }
 }
 
-resource "azurerm_user_assigned_identity" "default" {
+resource "azurerm_user_assigned_identity" "gwIdentity" {
   resource_group_name = azurerm_resource_group.default.name
   location = azurerm_resource_group.default.location
 
-  name = var.identityName
+  name = var.identityNameGw
+}
+
+resource "azurerm_user_assigned_identity" "aksIdentity" {
+  resource_group_name = azurerm_resource_group.default.name
+  location = azurerm_resource_group.default.location
+
+  name = var.identityNameAks
 }
 
 

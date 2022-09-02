@@ -51,7 +51,7 @@ resource "azurerm_application_gateway" "default" {
   
   identity {
     type = "UserAssigned"
-    identity_ids = [azurerm_user_assigned_identity.default.id]
+    identity_ids = [azurerm_user_assigned_identity.gwIdentity.id]
   }
 
   backend_http_settings {
@@ -60,7 +60,7 @@ resource "azurerm_application_gateway" "default" {
     ## path                  = "/api/"
     port                  = 80
     protocol              = "Http"
-    request_timeout       = 60
+    request_timeout       = 15
   }
 
   ssl_certificate {

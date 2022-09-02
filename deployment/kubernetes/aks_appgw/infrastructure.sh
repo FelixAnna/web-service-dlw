@@ -109,3 +109,7 @@ appGWVnetId=$(az network vnet show -n $vnetName -g $rgName -o tsv --query "id")
 
 az network vnet peering create -n AKStoAppGWVnetPeering -g $nodeResourceGroup \
   --vnet-name $aksVnetName --remote-vnet $appGWVnetId --allow-vnet-access
+
+
+# az role assignment create --role Reader --scope $groupId --assignee $identityPrincipal 
+# az role assignment create --role Contributor --scope $appgwId --assignee $identityPrincipal

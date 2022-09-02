@@ -5,3 +5,8 @@
 
 ## services
 [services](./services.sh): deploy/upgrade microservices to the cluster created by above scripts.
+
+
+## terraform
+
+helm upgrade --install dlw ./dlw-helm-autoscaling/ --namespace dlwns --create-namespace --values ./dlw-helm-autoscaling/values_aks_appgw.yaml

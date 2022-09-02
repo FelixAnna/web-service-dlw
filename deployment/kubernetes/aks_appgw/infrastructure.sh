@@ -9,16 +9,16 @@
 ## prepare
 echo "preparing"
 
-rgName=dlwRG
+rgName=dlwRG2
 region=eastus
-ipName=dlwAppGWIp
-vnetName=appGWVnet
-subnetName=gwSubnet
-appgwName=dlwAppGateway
-clusterName=dlwCluster
-identityName=appgwIdentity
-vaultName=dlwVault
-ns=dlwns
+ipName=dlwAppGWIp2
+vnetName=appGWVnet2
+subnetName=gwSubnet2
+appgwName=dlwAppGateway2
+clusterName=dlwCluster2
+identityName=appgwIdentity2
+vaultName=dlwVault2
+ns=dlwns2
 
 ## purge: keyvault
 az group delete --name $rgName --location $region -y
@@ -42,7 +42,7 @@ az keyvault set-policy \
 	-n $vaultName \
 	-g $rgName \
 	--object-id $identityPrincipal \
-	--secret-permissions get
+	--certificate_permissions get
 
 # For each new certificate, create a cert on keyvault and add unversioned secret id to Application Gateway
 az keyvault certificate create \

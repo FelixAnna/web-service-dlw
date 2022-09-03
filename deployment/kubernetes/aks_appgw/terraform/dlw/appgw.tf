@@ -5,8 +5,6 @@ resource "azurerm_public_ip" "gwIp" {
   name                = var.ipaddrName
   allocation_method   = "Static"
   sku = "Standard"
-  
-  tags = var.Tags
 }
 
 locals {
@@ -23,6 +21,7 @@ locals {
 resource "azurerm_application_gateway" "appGW" {
   resource_group_name = azurerm_resource_group.dlwrg.name
   location            = azurerm_resource_group.dlwrg.location
+  tags = var.tags
 
   name                = var.appgwName
 

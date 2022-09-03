@@ -5,6 +5,8 @@ resource "azurerm_public_ip" "gwIp" {
   name                = var.ipaddrName
   allocation_method   = "Static"
   sku = "Standard"
+  
+  tags = var.Tags
 }
 
 locals {
@@ -25,8 +27,8 @@ resource "azurerm_application_gateway" "appGW" {
   name                = var.appgwName
 
   sku {
-    name     = "Standard_v2"
-    tier     = "Standard_v2"
+    name     = "Standard_Small"
+    tier     = "Standard"
     capacity = 1
   }
 
@@ -57,7 +59,6 @@ resource "azurerm_application_gateway" "appGW" {
   backend_http_settings {
     name                  = local.http_setting_name
     cookie_based_affinity = "Disabled"
-    ## path                  = "/api/"
     port                  = 80
     protocol              = "Http"
     request_timeout       = 15

@@ -1,84 +1,85 @@
 data "azurerm_client_config" "current" {}
 
 resource "azurerm_key_vault" "dlwkv" {
-    resource_group_name = azurerm_resource_group.dlwrg.name
-    location = azurerm_resource_group.dlwrg.location
+  resource_group_name = azurerm_resource_group.dlwrg.name
+  location = azurerm_resource_group.dlwrg.location
+  tags = var.tags
     
-    name = var.valutName
-    enabled_for_disk_encryption = true
-    tenant_id                   = data.azurerm_client_config.current.tenant_id
-    soft_delete_retention_days  = 7
-    purge_protection_enabled    = false
+  name = var.valutName
+  enabled_for_disk_encryption = true
+  tenant_id                   = data.azurerm_client_config.current.tenant_id
+  soft_delete_retention_days  = 7
+  purge_protection_enabled    = false
 
-    sku_name = "standard"
+  sku_name = "standard"
 
-    access_policy {
-        tenant_id = data.azurerm_client_config.current.tenant_id
-        object_id = azurerm_user_assigned_identity.gwIdentity.principal_id
+  access_policy {
+      tenant_id = data.azurerm_client_config.current.tenant_id
+      object_id = azurerm_user_assigned_identity.gwIdentity.principal_id
 
-        storage_permissions = [
-            "Get",
-        ]
+      storage_permissions = [
+          "Get",
+      ]
 
-        certificate_permissions = [
-            "Get",
-        ]
+      certificate_permissions = [
+          "Get",
+      ]
 
-        secret_permissions = [
-            "Get"
-        ]
-    }
+      secret_permissions = [
+          "Get"
+      ]
+  }
 
-    access_policy {
-        tenant_id = data.azurerm_client_config.current.tenant_id
-        object_id = data.azurerm_client_config.current.object_id
+  access_policy {
+      tenant_id = data.azurerm_client_config.current.tenant_id
+      object_id = data.azurerm_client_config.current.object_id
 
-        certificate_permissions = [
-            "Create",
-            "Delete",
-            "DeleteIssuers",
-            "Get",
-            "GetIssuers",
-            "Import",
-            "List",
-            "ListIssuers",
-            "ManageContacts",
-            "ManageIssuers",
-            "Purge",
-            "SetIssuers",
-            "Update",
-        ]
+      certificate_permissions = [
+          "Create",
+          "Delete",
+          "DeleteIssuers",
+          "Get",
+          "GetIssuers",
+          "Import",
+          "List",
+          "ListIssuers",
+          "ManageContacts",
+          "ManageIssuers",
+          "Purge",
+          "SetIssuers",
+          "Update",
+      ]
 
-        key_permissions = [
-            "Backup",
-            "Create",
-            "Decrypt",
-            "Delete",
-            "Encrypt",
-            "Get",
-            "Import",
-            "List",
-            "Purge",
-            "Recover",
-            "Restore",
-            "Sign",
-            "UnwrapKey",
-            "Update",
-            "Verify",
-            "WrapKey",
-        ]
+      key_permissions = [
+          "Backup",
+          "Create",
+          "Decrypt",
+          "Delete",
+          "Encrypt",
+          "Get",
+          "Import",
+          "List",
+          "Purge",
+          "Recover",
+          "Restore",
+          "Sign",
+          "UnwrapKey",
+          "Update",
+          "Verify",
+          "WrapKey",
+      ]
 
-        secret_permissions = [
-            "Backup",
-            "Delete",
-            "Get",
-            "List",
-            "Purge",
-            "Recover",
-            "Restore",
-            "Set",
-        ]
-    }
+      secret_permissions = [
+          "Backup",
+          "Delete",
+          "Get",
+          "List",
+          "Purge",
+          "Recover",
+          "Restore",
+          "Set",
+      ]
+  }
 }
 
 resource "azurerm_key_vault_certificate" "sslcert" {

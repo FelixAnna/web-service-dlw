@@ -26,7 +26,7 @@ locals {
 }
 
 module "web_app" {
-  source = "../../applications"
+  source = "../../dlw"
 
   # Input Variables
   clusterName = "dlw-${local.environment_name}"

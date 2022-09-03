@@ -75,3 +75,12 @@ variable "sslCertName" {
     description = "(optional) ssl cert name in application gateway http listener"
     default = "dlwkvsslcert"
 }
+
+variable "tags" {
+    type = map
+    description = "(optional) tags for resources"
+    default = {
+        Application = "dlw"
+        Group = "dlwrg"
+    }
+}

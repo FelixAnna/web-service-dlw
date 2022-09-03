@@ -1,10 +1,7 @@
 resource "azurerm_resource_group" "dlwrg" {
   name     = var.rgName
   location = var.region
-
-  tags = {
-    environment = "Demo"
-  }
+  tags = var.tags
 }
 
 resource "azurerm_user_assigned_identity" "gwIdentity" {

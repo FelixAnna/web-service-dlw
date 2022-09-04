@@ -15,13 +15,6 @@ variable "identityNameGw" {
     description = "(optional) name of the user managed identity"
     default = "appgwIdentity"
 }
-
-variable "identityNameAks" {
-    type = string
-    description = "(optional) name of the user managed identity"
-    default = "aksIdentity"
-}
-
 variable "valutName" {
     type = string
     description = "(optional) name of key vault"

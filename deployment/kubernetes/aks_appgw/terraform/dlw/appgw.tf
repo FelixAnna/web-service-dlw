@@ -26,8 +26,8 @@ resource "azurerm_application_gateway" "appGW" {
   name                = var.appgwName
 
   sku {
-    name     = "Standard_Small"
-    tier     = "Standard"
+    name     = "Standard_v2"
+    tier     = "Standard_v2"
     capacity = 1
   }
 

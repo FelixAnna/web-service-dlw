@@ -154,11 +154,22 @@ resource "azurerm_role_assignment" "assignReader" {
   principal_id         = azurerm_user_assigned_identity.gwIdentity.principal_id
 }
 
-resource "azurerm_role_assignment" "assignNWContributor" {
-  scope                = azurerm_virtual_network.aksVNet.id
-  role_definition_name = "Network Contributor"
-  principal_id         = azurerm_user_assigned_identity.aksIdentity.principal_id
+resource "azurerm_role_assignment" "gateway-operator-role" {
+    scope = azurerm_user_assigned_identity.gwIdentity.id
+    principal_id                      = azurerm_kubernetes_cluster.dlwCluster.ingress_application_gateway[0].ingress_application_gateway_identity[0].object_id
+    role_definition_name = "Managed Identity Operator"
 }
 
+resource "azurerm_role_assignment" "gateway-reader-role" {
+  principal_id                      = azurerm_kubernetes_cluster.dlwCluster.ingress_application_gateway[0].ingress_application_gateway_identity[0].object_id
+  role_definition_name              = "Reader"
+  scope                = azurerm_resource_group.dlwrg.id
+  skip_service_principal_aad_check  = true
+}
 
+resource "azurerm_role_assignment" "gateway-contributor-role" {
+  principal_id                      = azurerm_kubernetes_cluster.dlwCluster.ingress_application_gateway[0].ingress_application_gateway_identity[0].object_id
+  role_definition_name              = "Contributor"
+  scope                = azurerm_application_gateway.appGW.id
+}
 //TODO ensure this identity used by the AGIC (or the one used by it have permission: Reader + Contributor)

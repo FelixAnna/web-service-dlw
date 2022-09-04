@@ -20,6 +20,6 @@ terraform destroy -auto-approve
 [services](./readme.md)
 
 ```
-az aks get-credentials --resource-group dlwRG --name dlw-dev
+az aks get-credentials --resource-group devRG --name devCluster
 helm upgrade --install dlw ./dlw-helm-autoscaling/ --namespace dlwns --create-namespace --values ./dlw-helm-autoscaling/values_aks_appgw.yaml
 ```

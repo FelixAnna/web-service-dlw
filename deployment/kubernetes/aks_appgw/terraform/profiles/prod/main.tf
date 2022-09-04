@@ -29,10 +29,9 @@ module "infrastructure" {
   source = "../../dlw"
 
   # Input Variables
-    # Input Variables
-  clusterName = "dlw${local.environment_name}Cluster"
-  rgName = "dlw${local.environment_name}rg"
-  default = {
+  clusterName = "${local.environment_name}Cluster"
+  rgName = "${local.environment_name}rg"
+  tags = {
       Application = "dlw"
       Group = "dlw"
       Environment="${local.environment_name}"

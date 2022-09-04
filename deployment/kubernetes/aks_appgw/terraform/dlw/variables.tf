@@ -4,7 +4,7 @@ variable "rgName" {
     default="dlwRG"
 }
 
-variable "region" {
+variable "location" {
     type = string
     description = "(optional) Location"
     default = "eastus"

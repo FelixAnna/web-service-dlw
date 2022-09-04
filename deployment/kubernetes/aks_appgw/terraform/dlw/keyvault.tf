@@ -83,7 +83,7 @@ resource "azurerm_key_vault" "dlwkv" {
 }
 
 resource "azurerm_key_vault_certificate" "sslcert" {
-    name = "mycert"
+    name = "dlwsslcert"
     key_vault_id = azurerm_key_vault.dlwkv.id
 
     certificate_policy {
@@ -127,10 +127,10 @@ resource "azurerm_key_vault_certificate" "sslcert" {
         ]
 
         subject_alternative_names {
-            dns_names = ["internal.contoso.com", "www.dlw.com"]
+            dns_names = ["internal.metadlw.com", "www.metadlw.com"]
         }
 
-        subject            = "CN=dlw.com"
+        subject            = "CN=metadlw.com"
         validity_in_months = 12
       }
     }

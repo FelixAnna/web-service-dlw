@@ -25,9 +25,16 @@ locals {
   environment_name = "dev"
 }
 
-module "web_app" {
+module "infrastructure" {
   source = "../../dlw"
 
   # Input Variables
-  clusterName = "dlw-${local.environment_name}"
+    # Input Variables
+  clusterName = "dlw${local.environment_name}Cluster"
+  rgName = "dlw${local.environment_name}rg"
+  default = {
+      Application = "dlw"
+      Group = "dlw"
+      Environment="${local.environment_name}"
+  }
 }

@@ -26,7 +26,7 @@ locals {
 }
 
 module "infrastructure" {
-  source = "../../dlw"
+  source = "../../infrastructure"
 
   # Input Variables
   clusterName = "${local.environment_name}Cluster"

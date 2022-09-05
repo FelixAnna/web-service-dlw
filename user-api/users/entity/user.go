@@ -16,7 +16,7 @@ type Address struct {
 }
 
 type User struct {
-	Id         string    `json:"Id" binding:""`
+	Id         string    `json:"Id" binding:"" bson:"_id"`
 	Name       string    `json:"Name" binding:"required"`
 	AvatarUrl  string    `json:"AvatarUrl" binding:""`
 	Email      string    `json:"Email" binding:"required,email"`

@@ -15,12 +15,12 @@ import (
 )
 
 func InitialUserApi() *users.UserApi {
-	wire.Build(users.UserSet, repository.RepoSet, aws.ProvideAWSService, aws.AwsSet)
+	wire.Build(users.UserSet, repository.MongoRepoSet, aws.ProvideAWSService, aws.AwsSet)
 	return &users.UserApi{}
 }
 
 func InitialGithubAuthApi() *auth.GithubAuthApi {
-	wire.Build(auth.ProvideGithubAuth, repository.RepoSet, jwt.JwtSet)
+	wire.Build(auth.ProvideGithubAuth, repository.MongoRepoSet, jwt.JwtSet)
 	return &auth.GithubAuthApi{}
 }
 

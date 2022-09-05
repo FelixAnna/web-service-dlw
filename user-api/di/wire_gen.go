@@ -22,9 +22,9 @@ import (
 func InitialUserApi() *users.UserApi {
 	awsHelper := aws.ProvideAwsHelper()
 	awsService := aws.ProvideAWSService(awsHelper)
-	userRepoDynamoDB := repository.ProvideUserRepoDynamoDB(awsService)
+	userRepoMongoDB := repository.ProvideUserRepoMongoDB(awsService)
 	userApi := &users.UserApi{
-		Repo: userRepoDynamoDB,
+		Repo: userRepoMongoDB,
 	}
 	return userApi
 }
@@ -32,9 +32,9 @@ func InitialUserApi() *users.UserApi {
 func InitialGithubAuthApi() *auth.GithubAuthApi {
 	awsHelper := aws.ProvideAwsHelper()
 	awsService := aws.ProvideAWSService(awsHelper)
-	userRepoDynamoDB := repository.ProvideUserRepoDynamoDB(awsService)
+	userRepoMongoDB := repository.ProvideUserRepoMongoDB(awsService)
 	tokenService := jwt.ProvideTokenService(awsService)
-	githubAuthApi := auth.ProvideGithubAuth(userRepoDynamoDB, awsService, tokenService)
+	githubAuthApi := auth.ProvideGithubAuth(userRepoMongoDB, awsService, tokenService)
 	return githubAuthApi
 }
 

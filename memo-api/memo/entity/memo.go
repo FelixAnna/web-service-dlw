@@ -5,7 +5,7 @@ import (
 )
 
 type Memo struct {
-	Id               string `json:"Id" binding:""`
+	Id               string `json:"Id" binding:"" bson:"_id"`
 	Subject          string `json:"Subject" binding:"required"`
 	Description      string `json:"Description" binding:""`
 	UserId           string `json:"UserId" binding:"required"`

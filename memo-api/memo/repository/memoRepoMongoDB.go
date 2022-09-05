@@ -75,7 +75,7 @@ func (repo *MemoRepoMongoDB) GetByUserId(userId string) ([]entity.Memo, error) {
 	defer cancel()
 
 	var results []entity.Memo
-	cursor, err := collection.Find(ctx, bson.D{{Key: "UserId", Value: userId}})
+	cursor, err := collection.Find(ctx, bson.D{{Key: "userId", Value: userId}})
 	if err != nil {
 		log.Println(err)
 		return nil, err
@@ -94,9 +94,9 @@ func (repo *MemoRepoMongoDB) GetByDateRange(start, end, userId string) ([]entity
 	defer cancel()
 
 	//"UserId = :userId and MonthDay BETWEEN :start and :end"
-	filter := bson.D{{Key: "UserId", Value: userId}, 
-		{Key: "MonthDay", Value: bson.D{{Key: "$gte", Value: start}}}, 
-		{Key: "MonthDay", Value: bson.D{{Key: "$lte", Value: end}}}
+	filter := bson.D{{Key: "userId", Value: userId},
+		{Key: "monthDay", Value: bson.D{{Key: "$gte", Value: start}}},
+		{Key: "monthDay", Value: bson.D{{Key: "$lte", Value: end}}},
 	}
 	var results []entity.Memo
 	cursor, err := collection.Find(ctx, filter)
@@ -117,13 +117,13 @@ func (repo *MemoRepoMongoDB) Update(memo entity.Memo) error {
 	ctx, cancel, collection := getCollection(repo, repo.dbMame, repo.collection)
 	defer cancel()
 
-	filter := bson.D{{Key: "UserId", Value: memo.UserId}, {Key: "id", Value: memo.Id}}
-	update := bson.D{{Key: "$set", Value: bson.D{{Key: "Subject", Value: memo.Subject}}},
-		{Key: "$set", Value: bson.D{{Key: "Description", Value: memo.Description}}},
-		{Key: "$set", Value: bson.D{{Key: "MonthDay", Value: strconv.Itoa(memo.MonthDay)}}},
-		{Key: "$set", Value: bson.D{{Key: "StartYear", Value: strconv.Itoa(memo.StartYear)}}},
-		{Key: "$set", Value: bson.D{{Key: "Lunar", Value: memo.Lunar}}},
-		{Key: "$set", Value: bson.D{{Key: "LastModifiedTime", Value: strconv.FormatInt(time.Now().UTC().Unix(), 10)}}},
+	filter := bson.D{{Key: "userId", Value: memo.UserId}, {Key: "_id", Value: memo.Id}}
+	update := bson.D{{Key: "$set", Value: bson.D{{Key: "subject", Value: memo.Subject}}},
+		{Key: "$set", Value: bson.D{{Key: "description", Value: memo.Description}}},
+		{Key: "$set", Value: bson.D{{Key: "monthDay", Value: strconv.Itoa(memo.MonthDay)}}},
+		{Key: "$set", Value: bson.D{{Key: "startYear", Value: strconv.Itoa(memo.StartYear)}}},
+		{Key: "$set", Value: bson.D{{Key: "lunar", Value: memo.Lunar}}},
+		{Key: "$set", Value: bson.D{{Key: "lastModifiedTime", Value: strconv.FormatInt(time.Now().UTC().Unix(), 10)}}},
 	}
 
 	err := collection.FindOneAndUpdate(ctx, filter, update).Err()
@@ -140,7 +140,7 @@ func (repo *MemoRepoMongoDB) Delete(id string) error {
 	ctx, cancel, collection := getCollection(repo, repo.dbMame, repo.collection)
 	defer cancel()
 
-	filter := bson.D{{Key: "id", Value: id}}
+	filter := bson.D{{Key: "_id", Value: id}}
 	err := collection.FindOneAndDelete(ctx, filter).Err()
 	if err != nil {
 		log.Printf("Got error calling UpdateItem: %s", err)

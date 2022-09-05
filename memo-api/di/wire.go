@@ -15,7 +15,7 @@ import (
 )
 
 func InitialMemoApi() *memo.MemoApi {
-	wire.Build(memo.MemoSet, repository.RepoSet, services.DateSet, aws.ProvideAWSService, aws.AwsSet, mesh.ProvideRegistry)
+	wire.Build(memo.MemoSet, repository.MongoRepoSet, services.DateSet, aws.ProvideAWSService, aws.AwsSet, mesh.ProvideRegistry)
 	return &memo.MemoApi{}
 }
 

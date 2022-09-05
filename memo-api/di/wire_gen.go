@@ -22,11 +22,11 @@ import (
 func InitialMemoApi() *memo.MemoApi {
 	awsHelper := aws.ProvideAwsHelper()
 	awsService := aws.ProvideAWSService(awsHelper)
-	memoRepoDynamoDB := repository.ProvideMemoRepoDynamoDB(awsService)
+	memoRepoMongoDB := repository.ProvideMemoRepoMongoDB(awsService)
 	registry := mesh.ProvideRegistry(awsService)
 	dateService := services.ProvideDateService(registry)
 	memoApi := &memo.MemoApi{
-		Repo:        memoRepoDynamoDB,
+		Repo:        memoRepoMongoDB,
 		DateService: dateService,
 	}
 	return memoApi

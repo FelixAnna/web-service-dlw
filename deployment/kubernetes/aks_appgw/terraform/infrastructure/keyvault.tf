@@ -136,6 +136,7 @@ resource "azurerm_key_vault_certificate" "sslcert" {
     }
 }
 
+/*
 resource "azurerm_role_assignment" "default" {
     scope = azurerm_user_assigned_identity.gwIdentity.id
     principal_id = azurerm_user_assigned_identity.gwIdentity.principal_id
@@ -152,7 +153,7 @@ resource "azurerm_role_assignment" "assignReader" {
   scope                = azurerm_resource_group.dlwrg.id
   role_definition_name = "Reader"
   principal_id         = azurerm_user_assigned_identity.gwIdentity.principal_id
-}
+}*/
 
 resource "azurerm_role_assignment" "gateway-operator-role" {
     scope = azurerm_user_assigned_identity.gwIdentity.id

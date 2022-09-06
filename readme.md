@@ -38,7 +38,7 @@
    
    use KMS customer managed keys if necessary.
 
-3. Create Tables in aws DynamoDB:
+3. [deprecated]Create Tables in aws DynamoDB:
 
    dlf.Memos, dlf.Users
    
@@ -48,6 +48,9 @@
 	
 	* database: dlw_mathematicals
 	* collections： answers， questions
+
+	* database: dlw_memo
+	* collections： users， memos (replace dynamodb)
 
 ## Switch kubectl context
 
@@ -68,7 +71,7 @@ kubectl config use-context kind-dlw-cluster
 
 #### helm deployment templetes (autoscaling)
 
-`deployment/kubernetes/dlw-helm-autoscaling`: include autoscaling configurations which only supported by kubectl 1.23+ or above.
+`deployment/kubernetes/dlw-helm-autoscaling`: include autoscaling components which only supported by kubectl 1.23+ .
 
 ### Ingress
 reference [ingress](./deployment/kubernetes/ingress/readme.md)
@@ -166,12 +169,13 @@ install/update/uninstall by following [deploy by helm](#helm-deployments)
 
 ### AKS(appgw)
 
+This version contains SSL/TLS termination and https redirection.
+
 #### install
 following： [./deployment/kubernetes/aks_appgw/readme.md](./deployment/kubernetes/aks_appgw/readme.md)
 
  refer: [aks](https://docs.microsoft.com/en-us/cli/azure/aks?view=azure-cli-latest#az-aks-create), [application gateway for aks](https://docs.microsoft.com/en-us/azure/application-gateway/tutorial-ingress-controller-add-on-existing#code-try-2)
  [application-gateway-kubernetes-ingress](https://azure.github.io/application-gateway-kubernetes-ingress)
-#### config ssl termination
 
 #### deployments
 install/update/uninstall by following [deploy by helm](#helm-deployments)

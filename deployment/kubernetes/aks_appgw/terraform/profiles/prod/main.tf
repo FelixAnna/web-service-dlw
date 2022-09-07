@@ -1,8 +1,10 @@
 terraform {
-  # Assumes s3 bucket and dynamo DB table already set up
-  # See /code/03-basics/aws-backend
-  backend "local" {
-    path = "backend/terraform.tfstate"
+  # need setup backend in azure storage account first
+  backend "azurerm" {
+    resource_group_name  = "configuration-rg"
+    storage_account_name = "configstoragefelix"
+    container_name       = "tfstate"
+    key                  = "prod.terraform.tfstate"
   }
 
   required_providers {
@@ -22,7 +24,7 @@ provider "azurerm" {
 }
 
 locals {
-  environment_name = "dev"
+  environment_name = "prod"
 }
 
 module "infrastructure" {

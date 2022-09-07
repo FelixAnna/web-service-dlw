@@ -1,3 +1,4 @@
+//TO DO : still not working
 data "terraform_remote_state" "eks" {
   backend = "local"
   config = {

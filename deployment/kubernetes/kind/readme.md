@@ -34,3 +34,5 @@ kubectl patch service -n kong kong-proxy -p '{"spec":{"type":"NodePort"}}'
 ```
 kind load docker-image xxx:versionxxx --name yourclustername
 ```
+
+helm upgrade --install dlw ./dlw-chart/ --namespace dlwns --create-namespace --values ./dlw-chart/values_dev.yaml

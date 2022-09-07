@@ -21,7 +21,7 @@ func ProvideRegistry(awsService *aws.AWSService) *Registry {
 
 func (service *Registry) GetRegistry() registry.Registry {
 	profile := os.Getenv("profile")
-	if profile == "dev" {
+	if profile == "local" {
 		return service.getConsulRegistry()
 	}
 

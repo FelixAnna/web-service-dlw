@@ -31,7 +31,7 @@ func SkipTestGetRegistryProd(t *testing.T) {
 }
 
 func TestGetRegistryDev(t *testing.T) {
-	os.Setenv("profile", "dev")
+	os.Setenv("profile", "local")
 
 	result := service.GetRegistry()
 

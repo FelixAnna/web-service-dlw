@@ -7,6 +7,6 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main
 kubectl apply -f ../metrics/metrics.yaml
 
 ## cd ..
-## helm upgrade --install dlw ./dlw-helm-autoscaling/ --namespace dlw-dev --create-namespace --values ./dlw-helm-autoscaling/values_dev.yaml
+## helm upgrade --install dlw ./dlw-chart/ --namespace dlw-dev --create-namespace --values ./dlw-chart/values_dev.yaml
 
 ## kubectl get all -n dlw-dev

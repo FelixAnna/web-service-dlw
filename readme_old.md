@@ -73,7 +73,7 @@ kubectl config use-context kind-dlw-cluster
 
 #### helm deployment templetes (autoscaling)
 
-`deployment/kubernetes/dlw-helm-autoscaling`: include autoscaling configurations which only supported by kubectl 1.23+ or above.
+`deployment/kubernetes/dlw-chart`: include autoscaling configurations which only supported by kubectl 1.23+ or above.
 
 #### helm deployment templetes(no autoscaling)
 `deployment/kubernetes/dlw-helm`: no autoscaling configurations in the deployments templements
@@ -116,15 +116,15 @@ cloud based kubernetes already include metric server by default.
 	helm repo add bitnami https://charts.bitnami.com/bitnami
 	```
 #### deploy
-1. update the *awsKeyId* and *awsSecretKey* to correct value in: `deployment\kubernetes\dlw-helm-autoscalingvalues_*.yaml`
+1. update the *awsKeyId* and *awsSecretKey* to correct value in: `deployment\kubernetes\dlw-chartvalues_*.yaml`
 2. cd to `deployment\kubernetes` folder, run:
 	```bash
-	helm install dlw ./dlw-helm-autoscaling/ --namespace dlw-dev --create-namespace  --values ./dlw-helm-autoscaling/values_dev.yaml
+	helm install dlw ./dlw-chart/ --namespace dlw-dev --create-namespace  --values ./dlw-chart/values_dev.yaml
 	```
 3. after all resources installed (include ingress controller), access test api from local browser: http://localhost/date/status
 4. update by running:
 	```bash
-	helm upgrade --install dlw ./dlw-helm-autoscaling/ --namespace dlw-dev --values ./dlw-helm-autoscaling/values_dev.yaml
+	helm upgrade --install dlw ./dlw-chart/ --namespace dlw-dev --values ./dlw-chart/values_dev.yaml
 	```
 5. remove all by running:
 	```bash
@@ -316,9 +316,9 @@ see details in: [kind/readme.md](deployment/kubernetes/kind/readme.md)
 6. deploy/upgrade/uninstall by：
 	
 	```bash
-	helm upgrade --install dlw ./dlw-helm-autoscaling/ --namespace dlw-dev --create-namespace --values ./dlw-helm-autoscaling/values_aks.yaml
+	helm upgrade --install dlw ./dlw-chart/ --namespace dlw-dev --create-namespace --values ./dlw-chart/values_aks.yaml
 
-	helm upgrade dlw ./dlw-helm-autoscaling/ --namespace dlw-dev --values ./dlw-helm-autoscaling/values_aks.yaml --set controller.service.externalTrafficPolicy=Local
+	helm upgrade dlw ./dlw-chart/ --namespace dlw-dev --values ./dlw-chart/values_aks.yaml --set controller.service.externalTrafficPolicy=Local
 
 	helm uninstall dlw -n dlw-dev
 	```

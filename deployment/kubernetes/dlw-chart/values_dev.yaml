@@ -33,6 +33,7 @@ quota:
 
 ingress:
   ingressClassName: nginx
+  dnsName: api-dev.metadlw.com
 
 applications:
   - name: user

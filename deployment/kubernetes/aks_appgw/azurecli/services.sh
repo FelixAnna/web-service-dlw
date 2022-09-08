@@ -1,5 +1,6 @@
 ## install services
 echo "installing services"
+
 rgName=dlwRG2
 clusterName=dlwCluster2
 ns=dlwns2

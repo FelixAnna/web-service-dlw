@@ -1,4 +1,4 @@
-# New-SelfSignedCertificate -certstorelocation Cert:\localMachine\my -dnsname "www.dlw.com"
+# New-SelfSignedCertificate -certstorelocation Cert:\localMachine\my -dnsname "api.metadlw.com"
 # $pwd = ConvertTo-SecureString -String "myTest@Pwd123" -Force -AsPlainText
 # Export-PfxCertificate -cert Cert:\localMachine\my\A5CE8D378ED5B664D61E59FF57C5D874DDF1CF35  -FilePath C:\Users\Felix_Yu\Downloads\testCert.pfx -Password $pwd
   # https://docs.microsoft.com/en-us/azure/application-gateway/tutorial-ssl-cli

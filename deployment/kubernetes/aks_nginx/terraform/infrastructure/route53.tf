@@ -1,4 +1,4 @@
-# Configure the AWS Provider
+# Configure DNS record in aws
 resource "aws_route53_zone" "main" {
   name = "metadlw.com"
 }

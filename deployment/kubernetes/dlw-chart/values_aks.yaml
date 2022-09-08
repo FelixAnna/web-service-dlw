@@ -33,6 +33,10 @@ quota:
 
 ingress:
   ingressClassName: nginx
+  dnsName: api.metadlw.com
+  issuer: letsencrypt-prod
+  server: https://acme-v02.api.letsencrypt.org/directory
+  email: user@example.com
 
 applications:
   - name: user

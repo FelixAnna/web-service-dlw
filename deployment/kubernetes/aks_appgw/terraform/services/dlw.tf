@@ -1,5 +1,5 @@
 //TO DO : still not working
-data "terraform_remote_state" "eks" {
+data "terraform_remote_state" "aks" {
   backend = "local"
   config = {
     path = "../learn-terraform-provision-eks-cluster/terraform.tfstate"

@@ -33,6 +33,8 @@ quota:
 
 ingress:
   ingressClassName: azure/application-gateway
+  dnsName: api.metadlw.com
+  
 
 applications:
   - name: user

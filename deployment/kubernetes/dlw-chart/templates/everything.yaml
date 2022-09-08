@@ -232,6 +232,7 @@ metadata:
     kubernetes.io/ingress.class: {{$.Values.ingress.ingressClassName}}
   {{ if eq $.Values.ingress.ingressClassName "nginx" }}
     nginx.ingress.kubernetes.io/rewrite-target: /$1 # for nginx only
+    cert-manager.io/issuer: {{ $.Values.ingress.issuer | quote }}
   {{ end }}
   {{ if eq $.Values.ingress.ingressClassName "kong" }}
     konghq.com/strip-path: "true"  # for kong only
@@ -242,8 +243,17 @@ metadata:
     appgw.ingress.kubernetes.io/ssl-redirect: "true"
   {{ end }}
 spec:
+  {{ if eq $.Values.ingress.ingressClassName "nginx" }}
+  tls:
+    - hosts:
+      - {{$.Values.ingress.ingressClassName.dnsName}}
+      # This assumes tls-secret exists and the SSL
+      # certificate contains a CN for foo.bar.com
+      secretName: tls-secret
+  {{ end }}
   rules:
-  - http:
+  - host: {{$.Values.ingress.ingressClassName.dnsName}}
+    http:
       paths:
       {{- range .Values.applications }}
     {{ if eq $.Values.ingress.ingressClassName "nginx" }}
@@ -262,3 +272,24 @@ spec:
             port:
               number: {{ .port }}
       {{- end}}
+{{ if eq $.Values.ingress.ingressClassName "nginx" }}
+---
+apiVersion: cert-manager.io/v1
+   kind: Issuer
+   metadata:
+     name: {{ $.Values.ingress.issuer }}
+   spec:
+     acme:
+       # The ACME server URL
+       server: {{ $.Values.ingress.server }}
+       # Email address used for ACME registration
+       email: {{ $.Values.ingress.email }}
+       # Name of a secret used to store the ACME account private key
+       privateKeySecretRef:
+         name: {{ $.Values.ingress.issuer }}
+       # Enable the HTTP-01 challenge provider
+       solvers:
+       - http01:
+           ingress:
+             class:  nginx
+{{ end }}

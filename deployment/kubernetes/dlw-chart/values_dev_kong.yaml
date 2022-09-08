@@ -33,6 +33,7 @@ quota:
 
 ingress:
   ingressClassName: kong
+  dnsName: api-dev.metadlw.com
   
 applications:
   - name: user

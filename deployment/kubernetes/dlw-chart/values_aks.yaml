@@ -36,7 +36,7 @@ ingress:
   dnsName: api.metadlw.com
   issuer: letsencrypt-prod
   server: https://acme-v02.api.letsencrypt.org/directory
-  email: user@example.com
+  email: yuecnu@hotmail.com  ## need real email address
 
 applications:
   - name: user

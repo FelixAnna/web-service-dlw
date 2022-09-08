@@ -11,6 +11,7 @@ echo "preparing"
 
 rgName=dlwRG2
 region=eastus
+ipName=nginxIp2
 clusterName=dlwCluster2
 ns=dlwns2
 
@@ -21,6 +22,7 @@ az group delete --name $rgName --location $region -y
 echo "provisioning resource group"
 az group create --name $rgName --location $region
 
+
 ## provisioning aks
 echo "provisioning aks"
 
@@ -30,3 +32,8 @@ az aks create -n $clusterName -g $rgName \
   --enable-cluster-autoscaler --min-count 1 --max-count 2 \
   --dns-name-prefix dlw \
   --network-plugin azure --enable-managed-identity --generate-ssh-keys
+
+
+## create ip for nginx
+nodeResourceGroup=$(az aks show -n $clusterName -g $rgName -o tsv --query "nodeResourceGroup")
+az network public-ip create -n $ipName -g $nodeResourceGroup --allocation-method Static --sku Standard

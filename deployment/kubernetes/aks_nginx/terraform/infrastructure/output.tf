@@ -1,3 +1,3 @@
 output "gateway_ip_address" {
-  value = "abc"
+  value = azurerm_public_ip.gwIp.ip_address
 }

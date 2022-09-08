@@ -58,6 +58,12 @@ variable "clusterName" {
     default = "dlwCluster"
 }
 
+variable "record" {
+    type = string
+    description = "(optional) dns record to binding to gateway ipaddress"
+    default = "api.metadlw.com"
+}
+
 variable "ns" {
     type = string
     description = "(optional) kubernetes namespace to deploy our microservices"

@@ -16,10 +16,22 @@ variable "clusterName" {
     default = "dlwCluster"
 }
 
+variable "ipaddrName" {
+    type = string
+    description = "(optional) public ip address name for application gateway"
+    default = "dlwAppGWIp"
+}
+
 variable "ns" {
     type = string
     description = "(optional) kubernetes namespace to deploy our microservices"
     default = "dlwns"
+}
+
+variable "record" {
+    type = string
+    description = "(optional) dns record to binding to gateway ipaddress"
+    default = "api.metadlw.com"
 }
 
 variable "tags" {

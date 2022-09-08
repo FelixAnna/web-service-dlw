@@ -246,13 +246,13 @@ spec:
   {{ if eq $.Values.ingress.ingressClassName "nginx" }}
   tls:
     - hosts:
-      - {{$.Values.ingress.ingressClassName.dnsName}}
+      - {{$.Values.ingress.dnsName}}
       # This assumes tls-secret exists and the SSL
       # certificate contains a CN for foo.bar.com
       secretName: tls-secret
   {{ end }}
   rules:
-  - host: {{$.Values.ingress.ingressClassName.dnsName}}
+  - host: {{$.Values.ingress.dnsName}}
     http:
       paths:
       {{- range .Values.applications }}
@@ -272,24 +272,25 @@ spec:
             port:
               number: {{ .port }}
       {{- end}}
-{{ if eq $.Values.ingress.ingressClassName "nginx" }}
+
 ---
+{{ if eq $.Values.ingress.ingressClassName "nginx" }}
 apiVersion: cert-manager.io/v1
-   kind: Issuer
-   metadata:
-     name: {{ $.Values.ingress.issuer }}
-   spec:
-     acme:
-       # The ACME server URL
-       server: {{ $.Values.ingress.server }}
-       # Email address used for ACME registration
-       email: {{ $.Values.ingress.email }}
-       # Name of a secret used to store the ACME account private key
-       privateKeySecretRef:
-         name: {{ $.Values.ingress.issuer }}
-       # Enable the HTTP-01 challenge provider
-       solvers:
-       - http01:
-           ingress:
-             class:  nginx
+kind: Issuer
+metadata:
+  name: {{ $.Values.ingress.issuer }}
+spec:
+  acme:
+    # The ACME server URL
+    server: {{ $.Values.ingress.server }}
+    # Email address used for ACME registration
+    email: {{ $.Values.ingress.email }}
+    # Name of a secret used to store the ACME account private key
+    privateKeySecretRef:
+      name: {{ $.Values.ingress.issuer }}
+    # Enable the HTTP-01 challenge provider
+    solvers:
+    - http01:
+        ingress:
+          class:  nginx
 {{ end }}

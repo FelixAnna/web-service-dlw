@@ -40,7 +40,7 @@ az network public-ip create -n $ipName -g $nodeResourceGroup --allocation-method
 
 
 ## installing basic services
-echo "installing services"
+echo "installing basic services"
 
 ## switch context
 az aks get-credentials --resource-group $rgName --name $clusterName

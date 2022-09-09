@@ -12,7 +12,6 @@ helm upgrade --install dlw ./dlw-chart/ --namespace $ns --create-namespace --val
 
 echo "done"
 
-
 ## create ssl cert
 #HOST=metadlw.com
 #KEY_FILE=key.txt

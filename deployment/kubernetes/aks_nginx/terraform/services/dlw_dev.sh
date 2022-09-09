@@ -1,6 +1,5 @@
 
 rgName=devrg
-region=eastus
 ipName=nginxIp
 clusterName=devCluster
 ns=dlwns
@@ -34,7 +33,7 @@ helm install cert-manager jetstack/cert-manager \
   --set installCRDs=true
 
 ## deploy services
-cd ../..
+cd ../../..
 helm upgrade --install dlw ./dlw-chart/ --namespace $ns --create-namespace --values ./dlw-chart/values_aks.yaml
 
 echo "done"

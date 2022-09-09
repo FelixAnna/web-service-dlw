@@ -20,7 +20,7 @@
 
 - 5. [Target](#target)
     - 5.1 [Kind](#kind)
-    - 5.2 [AKS + nginx](#aksnginxkong)
+    - 5.2 [AKS + nginx](#aksnginx)
 	- 5.3 [AKS + Application Gateway](#aksappgw)
     
 - 6. [Front-end](#front-end)
@@ -123,49 +123,10 @@ cloud based kubernetes already include metric server by default.
 install/update/uninstall by following [deploy by helm](#helm-deployments)
 
 ### AKS(nginx)
-1. create acr, like: dlwcr
-2. push local images to the acr like below:
+#### install /uninstall
+following： [./deployment/kubernetes/aks_nginx/readme.md](./deployment/kubernetes/aks_nginx/readme.md)
 
-    ```bash
-    docker tag memo-api:1.0.0 dlwcr.azurecr.io/memo-api:1.0.0
-    docker push  dlwcr.azurecr.io/date-api:1.0.0
-    ```
-
-3. create aks cluster, 1 node is ok, select kubeneters >=1.23
-4. connect your local kubectl to aks cluster
-
-	`az aks get-credentials --resource-group dlw-cluste_group --name dlw-cluster`
-
-    `az ml computetarget detach -n dlw-cluster -g dlw-cluste_group -w myworkspace`
-    `az aks get-credentials --resource-group dlw-cluste_group --name dlw-cluster`
-
-5. install nginx-controller: [install nginx for aks](https://docs.microsoft.com/en-us/azure/aks/ingress-basic?tabs=azure-cli)
-
-	add `--set controller.service.externalTrafficPolicy=Local` for enable access to the dynamic assigned public ip of nginx controller
-
-	```bash
-	NAMESPACE=ingress-basic
-
-	helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-	helm repo update
-
-	helm install ingress-nginx ingress-nginx/ingress-nginx \
-	  --create-namespace \
-	  --namespace $NAMESPACE \
-	  --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-health-probe-request-path"=/healthz \
-	  --set controller.service.externalTrafficPolicy=Local
-	  ```
-6. deploy/upgrade/uninstall by：
-	
-	```bash
-	helm upgrade --install dlw ./dlw-chart/ --namespace dlw-dev --create-namespace --values ./dlw-chart/values_aks.yaml
-
-	helm upgrade dlw ./dlw-chart/ --namespace dlw-dev --values ./dlw-chart/values_aks.yaml --set controller.service.externalTrafficPolicy=Local
-
-	helm uninstall dlw -n dlw-dev
-	```
-
-7. user external ip of loadbalancer(created by AKS by default) to access the api services
+refer: [Securing NGINX-ingress](https://cert-manager.io/v0.14-docs/tutorials/acme/ingress/), [Let's Encrypt](https://letsencrypt.org/)
 
 ### AKS(appgw)
 
@@ -174,7 +135,7 @@ This version contains SSL/TLS termination and https redirection.
 #### install
 following： [./deployment/kubernetes/aks_appgw/readme.md](./deployment/kubernetes/aks_appgw/readme.md)
 
- refer: [aks](https://docs.microsoft.com/en-us/cli/azure/aks?view=azure-cli-latest#az-aks-create), [application gateway for aks](https://docs.microsoft.com/en-us/azure/application-gateway/tutorial-ingress-controller-add-on-existing#code-try-2)
+ refer: [aks](https://docs.microsoft.com/en-us/cli/azure/aks?view=azure-cli-latest#az-aks-create), [application gateway for aks](https://docs.microsoft.com/en-us/azure/application-gateway/tutorial-ingress-controller-add-on-existing#code-try-2),
  [application-gateway-kubernetes-ingress](https://azure.github.io/application-gateway-kubernetes-ingress)
 
 #### deployments

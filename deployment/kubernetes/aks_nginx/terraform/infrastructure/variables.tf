@@ -19,7 +19,7 @@ variable "clusterName" {
 variable "ipaddrName" {
     type = string
     description = "(optional) public ip address name for application gateway"
-    default = "nginxIp2"
+    default = "nginxIp"
 }
 
 variable "ns" {

@@ -3,7 +3,6 @@
 ## infrastructure
 [infrastructure](./azurecli/infrastructure.sh): provide application gateway, azure Kubernetes services, and other needed services, so you have a complete environment with a health check, TLS termination, and TLS redirection enabled by default. This only needs to apply one time.
 
-## services
 [services](./azurecli/services.sh): deploy/upgrade microservices to the cluster created by above scripts.
 
 

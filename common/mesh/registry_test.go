@@ -21,19 +21,27 @@ func TestProvideRegistry(t *testing.T) {
 	assert.NotEmpty(t, service.consulRegAddr)
 }
 
-func SkipTestGetRegistryProd(t *testing.T) {
+func TestGetRegistryProd(t *testing.T) {
 	os.Setenv("profile", "prod")
 
 	result := service.GetRegistry()
 
-	//need mock kubernetes.NewRegistry
 	assert.NotNil(t, result)
 }
 
 func TestGetRegistryDev(t *testing.T) {
-	os.Setenv("profile", "local")
+	os.Setenv("profile", "dev")
 
 	result := service.GetRegistry()
 
+	assert.NotNil(t, result)
+}
+
+func SkipTestGetRegistryOther(t *testing.T) {
+	os.Setenv("profile", "Local")
+
+	result := service.GetRegistry()
+
+	//need mock kubernetes.NewRegistry
 	assert.NotNil(t, result)
 }

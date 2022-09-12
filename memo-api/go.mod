@@ -3,7 +3,7 @@ module github.com/FelixAnna/web-service-dlw/memo-api
 go 1.18
 
 require (
-	github.com/FelixAnna/web-service-dlw/common v0.0.0-20220907125920-f2aad0f7b051
+	github.com/FelixAnna/web-service-dlw/common v0.0.0-20220912020925-b2718a656574
 	github.com/asim/go-micro/plugins/client/http/v4 v4.0.0-20220622010113-107bd74187e7
 	github.com/aws/aws-sdk-go v1.44.41
 	github.com/gin-gonic/gin v1.8.1

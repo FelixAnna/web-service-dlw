@@ -18,6 +18,8 @@ const (
 const (
 	TypePlainExpression int = iota
 	TypePlainApplication
+	TypeAppleApplication
+	TypeTemplateApplication
 )
 
 type Range struct {

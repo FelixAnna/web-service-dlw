@@ -42,7 +42,8 @@ func RegisterMiddlewares(router *gin.Engine, errorHandler gin.HandlerFunc) {
 		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization"},
 		AllowCredentials: false,
 		MaxAge:           12 * time.Hour,
-		AllowOrigins:     []string{"https://dlw-mi.azureedge.net", "http://localhost:3000"},
+		AllowWildcard:    true,
+		AllowOrigins:     []string{"https://*.metadlw.com", "http://localhost:3000"},
 	}
 
 	initialLogger()

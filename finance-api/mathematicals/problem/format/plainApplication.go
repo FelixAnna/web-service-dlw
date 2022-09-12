@@ -9,6 +9,7 @@ import (
 type PlainApplication struct {
 	*entity.Problem
 	Template string
+	Ops      []string
 }
 
 func (p *PlainApplication) String() string {
@@ -32,8 +33,8 @@ func (p *PlainApplication) QuestResult() string {
 //"比%v%s%v的数是%s"
 func (p *PlainApplication) getOp() string {
 	if p.Op == '+' {
-		return "多"
+		return p.Ops[0]
 	} else {
-		return "少"
+		return p.Ops[1]
 	}
 }

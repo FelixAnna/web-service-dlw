@@ -22,6 +22,7 @@ func init() {
 			Op: '+',
 		},
 		template,
+		[]string{"多", "少"},
 	}
 
 	plusApp2 = PlainApplication{
@@ -32,6 +33,7 @@ func init() {
 			Op: '+',
 		},
 		template,
+		[]string{"多", "少"},
 	}
 
 	minusApp = PlainApplication{
@@ -42,6 +44,7 @@ func init() {
 			Op: '-',
 		},
 		template,
+		[]string{"多", "少"},
 	}
 }
 

@@ -17,6 +17,8 @@ var service *MathService
 var criteria Criteria
 var criteria2 Criteria
 var criteria3 Criteria
+var criteria4 Criteria
+var criteria5 Criteria
 var saveRquest SaveAnswersRequest
 var questions entity.Questions
 
@@ -52,6 +54,28 @@ func init() {
 
 		Category: CategoryMinus,
 		Type:     TypePlainApplication,
+	}
+
+	criteria4 = Criteria{
+		Min:      100,
+		Max:      200,
+		Quantity: 10,
+
+		Kind: KindQeustLast,
+
+		Category: CategoryMinus,
+		Type:     TypeAppleApplication,
+	}
+
+	criteria5 = Criteria{
+		Min:      100,
+		Max:      200,
+		Quantity: 10,
+
+		Kind: KindQeustLast,
+
+		Category: CategoryMinus,
+		Type:     TypeTemplateApplication,
 	}
 
 	saveRquest = SaveAnswersRequest{
@@ -150,21 +174,23 @@ func TestSaveResults(t *testing.T) {
 
 func TestGenerateProblemsMulti(t *testing.T) {
 	service = NewMathService(NewTwoGenerationService(), mocks.NewQuestionRepo(t))
+	totalQuantity := criteria.Quantity + criteria2.Quantity + criteria3.Quantity + criteria4.Quantity + criteria5.Quantity
 
-	results := service.GenerateProblems(criteria, criteria2, criteria3)
+	results := service.GenerateProblems(criteria, criteria2, criteria3, criteria4, criteria5)
 
 	assert.NotNil(t, results)
 	assert.NotEmpty(t, results.QuestionId)
-	assert.Equal(t, len(results.Questions), criteria.Quantity+criteria2.Quantity+criteria3.Quantity)
+	assert.Equal(t, len(results.Questions), totalQuantity)
 }
 
 func TestGenerateFeeds(t *testing.T) {
 	service = NewMathService(NewTwoGenerationService(), mocks.NewQuestionRepo(t))
+	totalQuantity := criteria.Quantity + criteria2.Quantity + criteria3.Quantity + criteria4.Quantity + criteria5.Quantity
 
-	results := service.GenerateFeeds(criteria, criteria2, criteria3)
+	results := service.GenerateFeeds(criteria, criteria2, criteria3, criteria4, criteria5)
 
 	assert.NotNil(t, results)
-	assert.Equal(t, len(results.Answers), criteria.Quantity+criteria2.Quantity+criteria3.Quantity)
-	assert.Equal(t, len(results.FullText), criteria.Quantity+criteria2.Quantity+criteria3.Quantity)
-	assert.Equal(t, len(results.Questions), criteria.Quantity+criteria2.Quantity+criteria3.Quantity)
+	assert.Equal(t, len(results.Answers), totalQuantity)
+	assert.Equal(t, len(results.FullText), totalQuantity)
+	assert.Equal(t, len(results.Questions), totalQuantity)
 }

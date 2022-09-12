@@ -203,6 +203,19 @@ func getFormatInterface(pb *entity.Problem, criteria *Criteria) format.FormatInt
 		expression = &format.PlainApplication{
 			Problem:  pb,
 			Template: "比%v%s%v的数是%v",
+			Ops:      []string{"多", "少"},
+		}
+	case TypeAppleApplication:
+		expression = &format.PlainApplication{
+			Problem:  pb,
+			Template: "小明有%v个苹果，小红比小明%s%v个，小红有%v个苹果？",
+			Ops:      []string{"多", "少"},
+		}
+	case TypeTemplateApplication:
+		expression = &format.PlainApplication{
+			Problem:  pb,
+			Template: "哥哥身高%v厘米，妹妹比哥哥%s%v厘米，妹妹身高%v厘米？",
+			Ops:      []string{"高", "矮"},
 		}
 	}
 

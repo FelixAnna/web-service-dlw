@@ -1,0 +1,15 @@
+global:
+  name: consul
+connectInject:
+  enabled: true
+  k8sAllowNamespaces: ['dlwns','dlwns2']
+  k8sDenyNamespaces: []
+  cni:
+    enabled: true
+    logLevel: info
+    cniBinDir: "/opt/cni/bin"
+    cniNetDir: "/etc/cni/net.d"
+ui:
+  enabled: true
+  service:
+    type: LoadBalancer

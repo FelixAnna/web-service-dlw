@@ -32,8 +32,14 @@ helm install cert-manager jetstack/cert-manager \
   --version v1.9.1 \
   --set installCRDs=true
 
+## deploy consul
+echo "deploy consul for service discovery and mesh"
+cd ../../../../components/consul
+sh install.sh
+
 ## deploy services
-cd ../../..
+echo "deploy dlw micro services"
+cd ../../
 helm upgrade --install dlw ./dlw-chart/ --namespace $ns --create-namespace --values ./dlw-chart/values_aks.yaml
 
 echo "done"

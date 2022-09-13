@@ -68,3 +68,6 @@ helm install cert-manager jetstack/cert-manager \
   --set installCRDs=true
 
 echo "done"
+
+
+echo "please create route53 'A' record for IP $STATIC_IP manually"

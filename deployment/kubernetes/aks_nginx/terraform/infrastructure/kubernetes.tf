@@ -11,7 +11,7 @@ resource "azurerm_kubernetes_cluster" "dlwCluster" {
 
   default_node_pool {
     name            = "default"
-    max_count = 3
+    max_count = 2
     min_count = 1
     node_count      = 1
     vm_size         = "Standard_B2s"

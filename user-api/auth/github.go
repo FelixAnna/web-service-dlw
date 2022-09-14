@@ -1,8 +1,11 @@
 package auth
 
 import (
+	"crypto/rand"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -51,7 +54,8 @@ generate github authorize url and redirect directly
 func (api *GithubAuthApi) AuthorizeGithub(c *gin.Context) {
 	//ctx := context.Background()
 	//generate state and return to client can stop CSRF
-	url := api.ConfGitHub.AuthCodeURL("state123", oauth2.AccessTypeOffline)
+	state, _ := newRandState(32)
+	url := api.ConfGitHub.AuthCodeURL(state, oauth2.AccessTypeOffline)
 
 	c.Redirect(http.StatusTemporaryRedirect, url)
 }
@@ -63,9 +67,19 @@ generate github authorize url and return url
 func (api *GithubAuthApi) AuthorizeGithubUrl(c *gin.Context) {
 	//ctx := context.Background()
 	//generate state and return to client can stop CSRF
-	url := api.ConfGitHub.AuthCodeURL("state123", oauth2.AccessTypeOffline)
+	state, _ := newRandState(32)
+	url := api.ConfGitHub.AuthCodeURL(state, oauth2.AccessTypeOffline)
 
 	c.String(http.StatusOK, url)
+}
+
+func newRandState(n int) (string, error) {
+	data := make([]byte, n)
+	if _, err := io.ReadFull(rand.Reader, data); err != nil {
+		return "default", err
+	}
+
+	return base64.StdEncoding.EncodeToString(data), nil
 }
 
 /*
@@ -74,17 +88,18 @@ GetGithubToken
 **/
 func (api *GithubAuthApi) GetGithubToken(c *gin.Context) {
 	code := c.Query("code")
-	state := c.Query("state")
+	//state := c.Query("state")
 
 	if code == "" {
 		c.JSON(http.StatusUnauthorized, "Token not found.")
 		return
 	}
 
+	/* this part done by frontend
 	if state != "state123" {
 		c.JSON(http.StatusBadGateway, "Invalid state.")
 		return
-	}
+	}*/
 
 	//TODO: how to verify dynamic csrf token
 	token, err := api.ConfGitHub.Exchange(c.Request.Context(), code)
@@ -107,17 +122,18 @@ func (api *GithubAuthApi) GetGithubToken(c *gin.Context) {
 */
 func (api *GithubAuthApi) Login(c *gin.Context) {
 	code := c.Query("code")
-	state := c.Query("state")
+	//state := c.Query("state")
 
 	if code == "" {
 		c.JSON(http.StatusUnauthorized, "Token not found.")
 		return
 	}
 
+	/* this part done by frontend
 	if state != "state123" {
 		c.JSON(http.StatusBadGateway, "Invalid state.")
 		return
-	}
+	}*/
 
 	//TODO: how to verify dynamic csrf token
 	token, err := api.ConfGitHub.Exchange(c.Request.Context(), code)

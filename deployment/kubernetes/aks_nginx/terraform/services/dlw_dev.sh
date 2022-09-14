@@ -34,7 +34,7 @@ helm install cert-manager jetstack/cert-manager \
 
 ## deploy consul
 echo "deploy consul for service discovery and mesh"
-cd ../../../../components/consul
+cd ../../../components/consul
 sh install.sh
 
 ## deploy services

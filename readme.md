@@ -63,13 +63,16 @@ kubectl config use-context kind-dlw-cluster
 
 ## Components
 ### Microservices
+![architecture overview](design.png)
 
-1. User api service: [user api service](/user-api/readme.md) [![Go Report Card](https://goreportcard.com/badge/github.com/FelixAnna/web-service-dlw/user-api)](https://goreportcard.com/report/github.com/FelixAnna/web-service-dlw/user-api)
-2. Memo api service: [memo api service](/memo-api/readme.md) [![Go Report Card](https://goreportcard.com/badge/github.com/FelixAnna/web-service-dlw/memo-api)](https://goreportcard.com/report/github.com/FelixAnna/web-service-dlw/memo-api)
-3. Date api service: [date api service](/date-api/readme.md) [![Go Report Card](https://goreportcard.com/badge/github.com/FelixAnna/web-service-dlw/date-api)](https://goreportcard.com/report/github.com/FelixAnna/web-service-dlw/date-api)
-4. Finance api service: [finance api service](/finance-api/readme.md) [![Go Report Card](https://goreportcard.com/badge/github.com/FelixAnna/web-service-dlw/finance-api)](https://goreportcard.com/report/github.com/FelixAnna/web-service-dlw/finance-api)
+Service | Path | Tags
+--- | --- | ---
+User api service | [user api service](/user-api/readme.md) | [![Go Report Card](https://goreportcard.com/badge/github.com/FelixAnna/web-service-dlw/user-api)](https://goreportcard.com/report/github.com/FelixAnna/web-service-dlw/user-api)
+Memo api service | [memo api service](/memo-api/readme.md) | [![Go Report Card](https://goreportcard.com/badge/github.com/FelixAnna/web-service-dlw/memo-api)](https://goreportcard.com/report/github.com/FelixAnna/web-service-dlw/memo-api)
+Date api service | [date api service](/date-api/readme.md) | [![Go Report Card](https://goreportcard.com/badge/github.com/FelixAnna/web-service-dlw/date-api)](https://goreportcard.com/report/github.com/FelixAnna/web-service-dlw/date-api)
+Finance api service | [finance api service](/finance-api/readme.md) | [![Go Report Card](https://goreportcard.com/badge/github.com/FelixAnna/web-service-dlw/finance-api)](https://goreportcard.com/report/github.com/FelixAnna/web-service-dlw/finance-api)
 
-#### helm deployment templetes (autoscaling)
+### Helm deployment templetes (autoscaling)
 
 `deployment/kubernetes/dlw-chart`: include autoscaling components which only supported by kubectl 1.23+ .
 

@@ -4,7 +4,7 @@ kind create cluster --config dlw-cluster.yml
 
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
 
-kubectl apply -f ../metrics/metrics.yaml
+kubectl apply -f ../components/metrics/metrics.yaml
 
 ## cd ..
 ## helm upgrade --install dlw ./dlw-chart/ --namespace dlw-dev --create-namespace --values ./dlw-chart/values_dev.yaml

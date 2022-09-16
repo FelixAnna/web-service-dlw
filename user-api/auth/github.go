@@ -101,7 +101,6 @@ func (api *GithubAuthApi) GetGithubToken(c *gin.Context) {
 		return
 	}*/
 
-	//TODO: how to verify dynamic csrf token
 	token, err := api.ConfGitHub.Exchange(c.Request.Context(), code)
 	if err != nil {
 		log.Println(err.Error())
@@ -135,7 +134,6 @@ func (api *GithubAuthApi) Login(c *gin.Context) {
 		return
 	}*/
 
-	//TODO: how to verify dynamic csrf token
 	token, err := api.ConfGitHub.Exchange(c.Request.Context(), code)
 	if err != nil {
 		log.Println(err.Error())

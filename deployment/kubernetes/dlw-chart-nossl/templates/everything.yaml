@@ -234,30 +234,19 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /$1 # for nginx only
     cert-manager.io/cluster-issuer: {{ $.Values.ingress.issuer | quote }}
   {{ end }}
-  {{ if eq $.Values.ingress.ingressClassName "azure/application-gateway" }}
-    appgw.ingress.kubernetes.io/backend-path-prefix: "/" # for appgw only
-    appgw.ingress.kubernetes.io/appgw-ssl-certificate: dlwkvsslcert
-    appgw.ingress.kubernetes.io/ssl-redirect: "true"
+  {{ if eq $.Values.ingress.ingressClassName "kong" }}
+    konghq.com/strip-path: "true"  # for kong only
   {{ end }}
 spec:
-  {{ if eq $.Values.ingress.ingressClassName "nginx" }}
-  tls:
-    - hosts:
-      - {{$.Values.ingress.dnsName}}
-      # This assumes tls-secret exists and the SSL
-      # certificate contains a CN for foo.bar.com
-      secretName: tls-secret
-  {{ end }}
   rules:
-  - host: {{$.Values.ingress.dnsName}}
-    http:
+  - http:
       paths:
       {{- range .Values.applications }}
     {{ if eq $.Values.ingress.ingressClassName "nginx" }}
       - path: /{{.name}}/(.*)   # for nginx only
     {{ end }}
-    {{ if eq $.Values.ingress.ingressClassName "azure/application-gateway" }}
-      - path: /{{.name}}/*   # for appgw only
+    {{ if eq $.Values.ingress.ingressClassName "kong" }}
+      - path: /{{.name}}/   # for kong only
     {{ end }}
         pathType: Prefix
         backend:
@@ -267,24 +256,3 @@ spec:
               number: {{ .port }}
       {{- end}}
 
----
-{{ if eq $.Values.ingress.ingressClassName "nginx" }}
-apiVersion: cert-manager.io/v1
-kind: ClusterIssuer
-metadata:
-  name: {{ $.Values.ingress.issuer }}
-spec:
-  acme:
-    # The ACME server URL
-    server: {{ $.Values.ingress.server }}
-    # Email address used for ACME registration
-    email: {{ $.Values.ingress.email }}
-    # Name of a secret used to store the ACME account private key
-    privateKeySecretRef:
-      name: {{ $.Values.ingress.issuer }}
-    # Enable the HTTP-01 challenge provider
-    solvers:
-    - http01:
-        ingress:
-          class:  nginx
-{{ end }}

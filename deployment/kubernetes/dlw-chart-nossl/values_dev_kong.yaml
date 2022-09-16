@@ -1,4 +1,4 @@
-# Default values for dlw-helm.
+# Default values for dlw-helm.  (for local test)
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
@@ -21,7 +21,7 @@ config:
   awsKeyId: ==
   awsSecretKey: ==
   region: ap-southeast-1
-  profile: dev
+  profile: local  ## get dev config, do not use consul
 
 quota:
   requests:
@@ -32,16 +32,13 @@ quota:
     memory: 2Gi
 
 ingress:
-  ingressClassName: nginx
+  ingressClassName: kong
   dnsName: api-dev.metadlw.com
-  issuer: letsencrypt-staging
-  server: https://acme-staging-v02.api.letsencrypt.org/directory
-  email: yuecnu@hotmail.com  ## need real email address
-
+  
 applications:
   - name: user
     port: 8181
-    image: yufelix/dlw-user-api:1.8
+    image: yufelix/dlw-user-api:1.8.1
     resources:
       requests:
         memory: 64Mi
@@ -51,7 +48,7 @@ applications:
         cpu: "128m"
   - name: memo
     port: 8282
-    image: yufelix/dlw-memo-api:1.8
+    image: yufelix/dlw-memo-api:1.8.1
     resources:
       requests:
         memory: 64Mi
@@ -61,7 +58,7 @@ applications:
         cpu: "128m"
   - name: date
     port: 8383
-    image: yufelix/dlw-date-api:1.8
+    image: yufelix/dlw-date-api:1.8.1
     resources:
       requests:
         memory: 64Mi
@@ -71,7 +68,7 @@ applications:
         cpu: "128m"
   - name: finance
     port: 8484
-    image: yufelix/dlw-finance-api:1.8
+    image: yufelix/dlw-finance-api:1.8.1
     resources:
       requests:
         memory: 64Mi

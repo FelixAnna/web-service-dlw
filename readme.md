@@ -76,6 +76,7 @@ Finance api service | [finance api service](/finance-api/readme.md) | [![Go Repo
 
 `deployment/kubernetes/dlw-chart`: include autoscaling components which only supported by kubectl 1.23+ .
 
+`deployment/kubernetes/dlw-chart-nossl`: same as above, except not include cert-manager, ingress with public ip, use this for local development.
 ### Ingress
 reference [ingress](./deployment/kubernetes/ingress/readme.md)
 

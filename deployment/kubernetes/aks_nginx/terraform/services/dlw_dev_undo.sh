@@ -1,5 +1,5 @@
 
-rgName=devrg
+rgName=dev-rg
 clusterName=devCluster
 ns=dlwns
 

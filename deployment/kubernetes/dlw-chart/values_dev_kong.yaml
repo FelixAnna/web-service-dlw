@@ -38,7 +38,7 @@ ingress:
 applications:
   - name: user
     port: 8181
-    image: yufelix/dlw-user-api:1.7.9
+    image: yufelix/dlw-user-api:1.8
     resources:
       requests:
         memory: 64Mi
@@ -48,7 +48,7 @@ applications:
         cpu: "128m"
   - name: memo
     port: 8282
-    image: yufelix/dlw-memo-api:1.7.9
+    image: yufelix/dlw-memo-api:1.8
     resources:
       requests:
         memory: 64Mi
@@ -58,7 +58,7 @@ applications:
         cpu: "128m"
   - name: date
     port: 8383
-    image: yufelix/dlw-date-api:1.7.9
+    image: yufelix/dlw-date-api:1.8
     resources:
       requests:
         memory: 64Mi
@@ -68,7 +68,7 @@ applications:
         cpu: "128m"
   - name: finance
     port: 8484
-    image: yufelix/dlw-finance-api:1.7.9
+    image: yufelix/dlw-finance-api:1.8
     resources:
       requests:
         memory: 64Mi

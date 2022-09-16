@@ -22,16 +22,40 @@ variable "ipaddrName" {
     default = "nginxIp"
 }
 
+variable "storageAccName" {
+    type = string
+    description = "(optional) storage account name for static webhosting"
+    default = "dlwstorage916"
+}
+
+variable "cdnProfileName" {
+    type = string
+    description = "(optional) cdn prodile name for static webhosting"
+    default = "dlwcdn"
+}
+
+variable "cdnEndpointName" {
+    type = string
+    description = "(optional) cdn endpoint name for static webhosting"
+    default = "dlwendpoint"
+}
+
 variable "ns" {
     type = string
     description = "(optional) kubernetes namespace to deploy our microservices"
     default = "dlwns"
 }
 
-variable "record" {
+variable "backendDNS" {
     type = string
     description = "(optional) dns record to binding to gateway ipaddress"
     default = "api.metadlw.com"
+}
+
+variable "frontendDNS" {
+    type = string
+    description = "(optional) dns record to binding to gateway ipaddress"
+    default = "www.metadlw.com"
 }
 
 variable "tags" {

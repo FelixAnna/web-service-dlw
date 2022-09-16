@@ -1,5 +1,5 @@
 
-rgName=devrg
+rgName=dev-rg
 ipName=nginxIp
 clusterName=devCluster
 ns=dlwns

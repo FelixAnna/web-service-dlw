@@ -5,8 +5,17 @@ data "aws_route53_zone" "selected" {
 
 resource "aws_route53_record" "api" {
   zone_id = data.aws_route53_zone.selected.zone_id
-  name    = var.record
+  name    = var.backendDNS
   type    = "A"
   ttl     = 300
   records = [azurerm_public_ip.gwIp.ip_address]
+}
+
+resource "aws_route53_record" "web" {
+  zone_id = data.aws_route53_zone.selected.zone_id
+  name    = var.frontendDNS
+  type    = "CNAME"
+  ttl     = 10
+
+  records = [ azurerm_cdn_endpoint.dlw_origin.fqdn ]
 }

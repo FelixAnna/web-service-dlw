@@ -63,7 +63,7 @@ kubectl config use-context kind-dlw-cluster
 
 ## Components
 ### Microservices
-![architecture overview](design.png)
+![architecture overview](architecture_dlw.png)
 
 Service | Path | Tags
 --- | --- | ---

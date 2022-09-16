@@ -38,7 +38,7 @@ module "infrastructure" {
 
   # Input Variables
   clusterName = "${local.environment_name}Cluster"
-  rgName = "${local.environment_name}rg"
+  rgName = "${local.environment_name}-rg"
   tags = {
       Application = "dlw"
       Group = "dlw"

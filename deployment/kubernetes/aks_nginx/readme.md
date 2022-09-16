@@ -15,6 +15,12 @@ terraform plan
 terraform apply -auto-approve
 terraform destroy -auto-approve   
 ```
-* uninstall infrastructure need uninstall nginx helm chart by using the ./terraform/services/***_undo.sh first
+* uninstall infrastructure need uninstall nginx helm chart by using the ./terraform/services/uninstall.sh first
 
 [configure & install](./terraform/services/) configure environment and install services.
+
+```
+cd services
+sh basic_services.sh
+sh dlw_services.sh
+```

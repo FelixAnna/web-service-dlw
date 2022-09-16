@@ -2,7 +2,6 @@
 rgName=dev-rg
 ipName=nginxIp
 clusterName=devCluster
-ns=dlwns
 
 ## installing basic services
 echo "installing basic services"
@@ -36,10 +35,3 @@ helm install cert-manager jetstack/cert-manager \
 echo "deploy consul for service discovery and mesh"
 cd ../../../components/consul
 sh install.sh
-
-## deploy services
-echo "deploy dlw micro services"
-cd ../../
-helm upgrade --install dlw ./dlw-chart/ --namespace $ns --create-namespace --values ./dlw-chart/values_aks.yaml
-
-echo "done"

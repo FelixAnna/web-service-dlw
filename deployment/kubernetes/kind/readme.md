@@ -1,6 +1,12 @@
 # kind
 To work with kind, you need docker installed first, kind create docker containers and use them as nodes to construct the cluster. You may have multiple control planes to make the cluster high availability.
 
+## All-in-one (provisioning + deploy microservice)
+```
+sh kind_provisioning.sh
+```
+
+if you want manually, please read blow content.
 ## install kind
 install kind with go: [install kind with go](https://kind.sigs.k8s.io/docs/user/quick-start/#installing-with-go-get--go-install)
 

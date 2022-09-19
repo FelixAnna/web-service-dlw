@@ -19,7 +19,7 @@ terraform destroy -auto-approve
 ```
 * uninstall infrastructure need uninstall nginx helm chart by using the ./terraform/services/uninstall.sh first
 
-[configure & install](./terraform/services/) configure environment and install services.
+[configure & install](./terraform/services/) configure environment and install services (microservice + frontend).
 
 ```
 cd services

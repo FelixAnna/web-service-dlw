@@ -49,7 +49,13 @@ func RegisterMiddlewares(router *gin.Engine, errorHandler gin.HandlerFunc) {
 
 	//allow all origin for local debug/deployment
 	if profile == "local" {
-		corsSettings.AllowAllOrigins = true
+		corsSettings = cors.Config{
+			AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "HEAD"},
+			AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization"},
+			AllowCredentials: false,
+			MaxAge:           12 * time.Hour,
+			AllowAllOrigins:  true,
+		}
 	}
 
 	initialLogger()

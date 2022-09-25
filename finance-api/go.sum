@@ -26,6 +26,8 @@ github.com/FelixAnna/web-service-dlw/common v0.0.0-20220912020925-b2718a656574 h
 github.com/FelixAnna/web-service-dlw/common v0.0.0-20220912020925-b2718a656574/go.mod h1:qpNAXeRR9j09XXygSlBH765POI+mfa52wPYJ7papr6o=
 github.com/FelixAnna/web-service-dlw/common v0.0.0-20220925085917-235072dd109c h1:gXVWqTaY8iPyyT2N7Ku4gkfmYo4IvWqKIook6DzNFrI=
 github.com/FelixAnna/web-service-dlw/common v0.0.0-20220925085917-235072dd109c/go.mod h1:qpNAXeRR9j09XXygSlBH765POI+mfa52wPYJ7papr6o=
+github.com/FelixAnna/web-service-dlw/common v0.0.0-20220925091758-0bca774d0439 h1:oLu1DVqmTE/Wqrp8cugZx34fK2VgjOHwYe+6LNIMpNE=
+github.com/FelixAnna/web-service-dlw/common v0.0.0-20220925091758-0bca774d0439/go.mod h1:qpNAXeRR9j09XXygSlBH765POI+mfa52wPYJ7papr6o=
 github.com/Microsoft/go-winio v0.4.14/go.mod h1:qXqCSQ3Xa7+6tgxaGTIe4Kpcdsi+P8jBhyzoq1bpyYA=
 github.com/Microsoft/go-winio v0.4.16/go.mod h1:XB6nPKklQyQ7GC9LdcBEcBl8PF76WugXOPRXwdLnMv0=
 github.com/Microsoft/go-winio v0.5.0/go.mod h1:JPGBdM1cNvN/6ISo+n8V5iA4v8pBzdOpzfwIujj1a84=

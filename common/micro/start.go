@@ -37,13 +37,17 @@ func StartApp(serverName, port string, router *gin.Engine, reg registry.Registry
 
 func RegisterMiddlewares(router *gin.Engine, errorHandler gin.HandlerFunc) {
 	//define middleware before apis
-	corsSettings := cors.Config{
-		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "HEAD"},
-		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization"},
-		AllowCredentials: false,
-		MaxAge:           12 * time.Hour,
-		AllowWildcard:    true,
-		AllowOrigins:     []string{"https://*.metadlw.com", "http://localhost:3000"},
+	profile := os.Getenv("profile")
+	corsSettings := cors.DefaultConfig()
+	if profile != "local" {
+		corsSettings = cors.Config{
+			AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "HEAD"},
+			AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization"},
+			AllowCredentials: false,
+			MaxAge:           12 * time.Hour,
+			AllowWildcard:    true,
+			AllowOrigins:     []string{"https://*.metadlw.com", "http://localhost:3000"},
+		}
 	}
 
 	initialLogger()

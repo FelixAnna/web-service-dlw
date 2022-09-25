@@ -13,7 +13,7 @@ echo "wait for nginx controller up before install services ..."
 kubectl wait --namespace ingress-nginx \
   --for=condition=ready pod \
   --selector=app.kubernetes.io/component=controller \
-  --timeout=150s
+  --timeout=300s
 
 echo "install services ..."
 cd ..

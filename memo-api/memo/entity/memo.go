@@ -6,14 +6,14 @@ import (
 
 type Memo struct {
 	Id               string `json:"Id" binding:"" bson:"_id"`
-	Subject          string `json:"Subject" binding:"required"`
-	Description      string `json:"Description" binding:""`
-	UserId           string `json:"UserId" binding:"required"`
-	MonthDay         int    `json:"MonthDay" binding:"required"`
-	StartYear        int    `json:"StartYear" binding:""`
-	Lunar            bool   `json:"Lunar" binding:""` //user care about chinese Lunar only if checked
-	CreateTime       string `json:"CreateTime,omitempty"`
-	LastModifiedTime string `json:"LastModifiedTime,omitempty"`
+	Subject          string `json:"Subject" binding:"required" bson:"subject"`
+	Description      string `json:"Description" binding:"" bson:"description"`
+	UserId           string `json:"UserId" binding:"required" bson:"userid"`
+	MonthDay         int    `json:"MonthDay" binding:"required" bson:"monthday"`
+	StartYear        int    `json:"StartYear" binding:"" bson:"startyear"`
+	Lunar            bool   `json:"Lunar" binding:"" bson:"lunar"` //user care about chinese Lunar only if checked
+	CreateTime       string `json:"CreateTime,omitempty" bson:"createtime"`
+	LastModifiedTime string `json:"LastModifiedTime,omitempty" bson:"lastmodifiedtime"`
 }
 
 type MemoRequest struct {

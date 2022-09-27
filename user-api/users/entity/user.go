@@ -9,21 +9,21 @@ type Date struct {
 }
 
 type Address struct {
-	Country string `json:"Country" binding:"required"`
-	State   string `json:"State" binding:"required"`
-	City    string `json:"City" binding:"required"`
-	Details string `json:"Details" binding:"required"`
+	Country string `json:"Country" binding:"required" bson:"country"`
+	State   string `json:"State" binding:"required" bson:"state"`
+	City    string `json:"City" binding:"required" bson:"city"`
+	Details string `json:"Details" binding:"required" bson:"details"`
 }
 
 type User struct {
 	Id         string    `json:"Id" binding:"" bson:"_id"`
-	Name       string    `json:"Name" binding:"required"`
-	AvatarUrl  string    `json:"AvatarUrl" binding:""`
-	Email      string    `json:"Email" binding:"required,email"`
-	Phone      string    `json:"Phone" binding:"-"`
-	Birthday   string    `json:"Birthday" binding:"required"`
-	Address    []Address `json:"Address,omitempty" binding:"required,dive,required"`
-	CreateTime string    `json:"CreateTime,omitempty"`
+	Name       string    `json:"Name" binding:"required" bson:"name"`
+	AvatarUrl  string    `json:"AvatarUrl" binding:"" bson:"avatarurl"`
+	Email      string    `json:"Email" binding:"required,email" bson:"email"`
+	Phone      string    `json:"Phone" binding:"-" bson:"phone"`
+	Birthday   string    `json:"Birthday" binding:"required" bson:"birthday"`
+	Address    []Address `json:"Address,omitempty" binding:"required,dive,required" bson:"address"`
+	CreateTime string    `json:"CreateTime,omitempty" bson:"createtime"`
 }
 
 func (d *Date) String() string {

@@ -94,9 +94,11 @@ func (repo *MemoRepoMongoDB) GetByDateRange(start, end, userId string) ([]entity
 	defer cancel()
 
 	//"UserId = :userId and MonthDay BETWEEN :start and :end"
+	istart, _ := strconv.Atoi(start)
+	iend, _ := strconv.Atoi(end)
 	filter := bson.D{{Key: "userid", Value: userId},
-		{Key: "monthday", Value: bson.D{{Key: "$gte", Value: start}}},
-		{Key: "monthday", Value: bson.D{{Key: "$lte", Value: end}}},
+		{Key: "monthday", Value: bson.D{{Key: "$gte", Value: istart}}},
+		{Key: "monthday", Value: bson.D{{Key: "$lte", Value: iend}}},
 	}
 	var results []entity.Memo
 	cursor, err := collection.Find(ctx, filter)

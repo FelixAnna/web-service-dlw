@@ -75,7 +75,7 @@ func (repo *MemoRepoMongoDB) GetByUserId(userId string) ([]entity.Memo, error) {
 	defer cancel()
 
 	var results []entity.Memo
-	cursor, err := collection.Find(ctx, bson.D{{Key: "userId", Value: userId}})
+	cursor, err := collection.Find(ctx, bson.D{{Key: "userid", Value: userId}})
 	if err != nil {
 		log.Println(err)
 		return nil, err
@@ -94,9 +94,9 @@ func (repo *MemoRepoMongoDB) GetByDateRange(start, end, userId string) ([]entity
 	defer cancel()
 
 	//"UserId = :userId and MonthDay BETWEEN :start and :end"
-	filter := bson.D{{Key: "userId", Value: userId},
-		{Key: "monthDay", Value: bson.D{{Key: "$gte", Value: start}}},
-		{Key: "monthDay", Value: bson.D{{Key: "$lte", Value: end}}},
+	filter := bson.D{{Key: "userid", Value: userId},
+		{Key: "monthday", Value: bson.D{{Key: "$gte", Value: start}}},
+		{Key: "monthday", Value: bson.D{{Key: "$lte", Value: end}}},
 	}
 	var results []entity.Memo
 	cursor, err := collection.Find(ctx, filter)
@@ -117,13 +117,13 @@ func (repo *MemoRepoMongoDB) Update(memo entity.Memo) error {
 	ctx, cancel, collection := getCollection(repo, repo.dbMame, repo.collection)
 	defer cancel()
 
-	filter := bson.D{{Key: "userId", Value: memo.UserId}, {Key: "_id", Value: memo.Id}}
+	filter := bson.D{{Key: "userid", Value: memo.UserId}, {Key: "_id", Value: memo.Id}}
 	update := bson.D{{Key: "$set", Value: bson.D{{Key: "subject", Value: memo.Subject}}},
 		{Key: "$set", Value: bson.D{{Key: "description", Value: memo.Description}}},
-		{Key: "$set", Value: bson.D{{Key: "monthDay", Value: strconv.Itoa(memo.MonthDay)}}},
-		{Key: "$set", Value: bson.D{{Key: "startYear", Value: strconv.Itoa(memo.StartYear)}}},
+		{Key: "$set", Value: bson.D{{Key: "monthday", Value: strconv.Itoa(memo.MonthDay)}}},
+		{Key: "$set", Value: bson.D{{Key: "startyear", Value: strconv.Itoa(memo.StartYear)}}},
 		{Key: "$set", Value: bson.D{{Key: "lunar", Value: memo.Lunar}}},
-		{Key: "$set", Value: bson.D{{Key: "lastModifiedTime", Value: strconv.FormatInt(time.Now().UTC().Unix(), 10)}}},
+		{Key: "$set", Value: bson.D{{Key: "lastmodifiedtime", Value: strconv.FormatInt(time.Now().UTC().Unix(), 10)}}},
 	}
 
 	err := collection.FindOneAndUpdate(ctx, filter, update).Err()

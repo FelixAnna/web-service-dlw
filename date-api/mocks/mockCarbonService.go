@@ -23,3 +23,8 @@ func (service *MockCarbonService) GetMonthDate(todayDate int) []entity.DLWDate {
 	args := service.Called(todayDate)
 	return args.Get(0).([]entity.DLWDate)
 }
+
+func (service *MockCarbonService) ToCarbonDate(todayDate int) *entity.DLWDate {
+	args := service.Called(todayDate)
+	return args.Get(0).(*entity.DLWDate)
+}

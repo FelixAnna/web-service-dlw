@@ -164,25 +164,36 @@ func (c *CarbonInMemoryService) GetMonthDate(todayDate int) []entity.DLWDate {
 
 	result := make([]entity.DLWDate, 0)
 	for startCarbon.Lte(endCarbon) {
-		lunarCarbon := startCarbon.Lunar()
-
-		ymd := startCarbon.Year()*10000 + startCarbon.Month()*100 + startCarbon.Day()
-		lunar := lunarCarbon.ToDateString()
-		lunarCarbon.Animal()
-		item := entity.DLWDate{
-			YMD:       ymd,
-			Lunar:     lunar,
-			Animal:    lunarCarbon.Animal(),
-			LeapMonth: lunarCarbon.IsLeapMonth(),
-			Today:     ymd == todayDate,
-			WeekDay:   startCarbon.DayOfWeek(),
-		}
-		result = append(result, item)
-
+		item := getDLWDate(&startCarbon, todayDate)
+		result = append(result, *item)
 		startCarbon = startCarbon.AddDay()
 	}
 
 	return result
+}
+func (c *CarbonInMemoryService) ToCarbonDate(todayDate int) *entity.DLWDate {
+	todayCarbon := c.getCarbonDate(todayDate)
+	item := getDLWDate(todayCarbon, todayDate)
+
+	return item
+}
+
+func getDLWDate(startCarbon *carbon.Carbon, todayDate int) *entity.DLWDate {
+	lunarCarbon := startCarbon.Lunar()
+
+	ymd := startCarbon.Year()*10000 + startCarbon.Month()*100 + startCarbon.Day()
+	lunar := lunarCarbon.ToDateString()
+	lunarCarbon.Animal()
+	item := entity.DLWDate{
+		YMD:       ymd,
+		Lunar:     lunar,
+		Animal:    lunarCarbon.Animal(),
+		LeapMonth: lunarCarbon.IsLeapMonth(),
+		Today:     ymd == todayDate,
+		WeekDay:   startCarbon.DayOfWeek(),
+	}
+
+	return &item
 }
 
 /*

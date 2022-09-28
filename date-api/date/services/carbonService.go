@@ -6,4 +6,5 @@ type CarbonService interface {
 	GetCarbonDistanceWithCacheAside(alignToDate, targetDate int) (before, after int64)
 	GetLunarDistanceWithCacheAside(alignToDate, targetDate int) (before, after int64)
 	GetMonthDate(todayDate int) []entity.DLWDate
+	ToCarbonDate(todayDate int) *entity.DLWDate
 }

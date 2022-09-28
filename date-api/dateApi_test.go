@@ -41,6 +41,21 @@ func TestGetMonthDateNil(t *testing.T) {
 	assert.True(t, len(response) >= 28)
 }
 
+func TestGetLunar(t *testing.T) {
+
+	//Act
+	w := performRequest(router, "GET", "/date/lunar?date=20200101")
+
+	var response entity.DLWDate
+	err := json.Unmarshal(w.Body.Bytes(), &response)
+
+	//Assert
+	assert.Equal(t, http.StatusOK, w.Code)
+	assert.Nil(t, err)
+	assert.EqualValues(t, response.YMD, 20200101)
+	assert.EqualValues(t, response.Lunar, "二零一九年腊月初七")
+}
+
 func TestGetMonthDate(t *testing.T) {
 
 	//Act

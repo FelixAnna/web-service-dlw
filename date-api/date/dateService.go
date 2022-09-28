@@ -33,6 +33,21 @@ func (api *DateApi) GetMonthDate(c *gin.Context) {
 	c.JSON(http.StatusOK, dateList)
 }
 
+func (api *DateApi) ToCarbonDate(c *gin.Context) {
+	//ctx := context.Background()
+	//generate state and return to client can stop CSRF
+	date := c.Query("date")
+	dateInt, err := strconv.Atoi(date)
+	if err != nil {
+		today := time.Now()
+		dateInt = today.Year()*10000 + int(today.Month())*100 + today.Day()
+	}
+
+	datewithlunar := api.CarbonService.ToCarbonDate(dateInt)
+
+	c.JSON(http.StatusOK, *datewithlunar)
+}
+
 func (api *DateApi) GetDateDistance(c *gin.Context) {
 	//ctx := context.Background()
 	//generate state and return to client can stop CSRF

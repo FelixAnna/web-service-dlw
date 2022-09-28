@@ -55,6 +55,36 @@ func TestGetMonthDate(t *testing.T) {
 	mockService.AssertExpectations(t)
 }
 
+func TestToCarbonDateDefault(t *testing.T) {
+	mockService, service := setupService()
+
+	ctx, writer := commonmock.GetGinContext(&commonmock.Parameter{})
+	mockService.On("ToCarbonDate", mockit.Anything).Return(&entity.DLWDate{})
+
+	//need mock gin.Context.Writer
+	service.ToCarbonDate(ctx)
+
+	assert.NotNil(t, ctx)
+	assert.NotNil(t, writer)
+	assert.Equal(t, writer.Code, http.StatusOK)
+	mockService.AssertExpectations(t)
+}
+
+func TestToCarbonDate(t *testing.T) {
+	mockService, service := setupService()
+
+	ctx, writer := commonmock.GetGinContext(&commonmock.Parameter{Query: "date=20200505"})
+	mockService.On("ToCarbonDate", mockit.Anything).Return(&entity.DLWDate{})
+
+	//need mock gin.Context.Writer
+	service.ToCarbonDate(ctx)
+
+	assert.NotNil(t, ctx)
+	assert.NotNil(t, writer)
+	assert.Equal(t, writer.Code, http.StatusOK)
+	mockService.AssertExpectations(t)
+}
+
 func TestGetDateDistanceInvalidStart(t *testing.T) {
 	mockService, service := setupService()
 

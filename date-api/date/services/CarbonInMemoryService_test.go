@@ -171,6 +171,17 @@ func TestGetCarbonDate(t *testing.T) {
 	assert.Equal(t, result.Lunar().Day(), 7)
 }
 
+func TestToCarbonDate(t *testing.T) {
+	date := 20200101
+
+	result := service.ToCarbonDate(date)
+
+	assert.NotNil(t, result)
+	assert.Equal(t, result.YMD, 20200101)
+
+	assert.Equal(t, result.Lunar, "二零一九年腊月初七")
+}
+
 func TestGetLunarDistanceOneWayForward(t *testing.T) {
 	//Arrange
 	alignToDate, targetDate := 20200101, 20200505

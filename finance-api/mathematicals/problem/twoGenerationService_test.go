@@ -172,3 +172,27 @@ func TestGenerateProblemsNoDuplocates(t *testing.T) {
 
 	assert.Equal(t, len(problems), 1)
 }
+
+func TestGenerateProblemsMultiply(t *testing.T) {
+	criteria := &Criteria{
+		Min: 1,
+		Max: 10,
+
+		Range: &Range{
+			Min: 1,
+			Max: 50,
+		},
+		Category: CategoryMultiply,
+	}
+
+	problems := twoGenService.GenerateProblems(criteria)
+
+	assert.NotNil(t, problems)
+	assert.Equal(t, len(problems), 10)
+	for _, problem := range problems {
+		assert.True(t, problem.A >= criteria.Min && problem.A < criteria.Max)
+		assert.True(t, problem.B >= criteria.Min && problem.B < criteria.Max)
+		assert.Equal(t, problem.Op, '*')
+		assert.True(t, problem.A*problem.B == problem.C)
+	}
+}

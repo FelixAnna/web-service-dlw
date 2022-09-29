@@ -11,14 +11,16 @@ import (
 const MaxGenerateTimes = 10000
 
 type TwoGenerationService struct {
-	TwoPlusService  services.ProblemService
-	TwoMinusService services.ProblemService
+	TwoPlusService     services.ProblemService
+	TwoMinusService    services.ProblemService
+	TwoMultiplyService services.ProblemService
 }
 
 func NewTwoGenerationService() *TwoGenerationService {
 	return &TwoGenerationService{
-		TwoPlusService:  di.InitializeTwoPlusService(),
-		TwoMinusService: di.InitializeTwoMinusService(),
+		TwoPlusService:     di.InitializeTwoPlusService(),
+		TwoMinusService:    di.InitializeTwoMinusService(),
+		TwoMultiplyService: di.InitializeTwoMultiplyService(),
 	}
 }
 
@@ -35,6 +37,8 @@ func (service *TwoGenerationService) GenerateProblems(criteria *Criteria) []enti
 		problemService = service.TwoMinusService
 	case CategoryPlus:
 		problemService = service.TwoPlusService
+	case CategoryMultiply:
+		problemService = service.TwoMultiplyService
 	default:
 		log.Println("Invalid Category:", criteria.Category)
 	}

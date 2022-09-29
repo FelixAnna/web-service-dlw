@@ -13,6 +13,7 @@ const (
 const (
 	CategoryPlus int = iota
 	CategoryMinus
+	CategoryMultiply
 )
 
 const (
@@ -33,7 +34,7 @@ type Criteria struct {
 	Range *Range `binding:"-"`
 
 	//+, -
-	Category int `binding:"min=0,max=1"`
+	Category int `binding:"min=0,max=2"`
 
 	//first, second, last
 	Kind int `binding:"min=1,max=3"`

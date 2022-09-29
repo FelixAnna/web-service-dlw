@@ -180,6 +180,7 @@ func TestToCarbonDate(t *testing.T) {
 	assert.Equal(t, result.YMD, 20200101)
 
 	assert.Equal(t, result.Lunar, "二零一九年腊月初七")
+	assert.Equal(t, result.LunarYMD, 20191207)
 }
 
 func TestGetLunarDistanceOneWayForward(t *testing.T) {

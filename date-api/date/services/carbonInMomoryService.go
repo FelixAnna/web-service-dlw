@@ -187,6 +187,7 @@ func getDLWDate(startCarbon *carbon.Carbon, todayDate int) *entity.DLWDate {
 	item := entity.DLWDate{
 		YMD:       ymd,
 		Lunar:     lunar,
+		LunarYMD:  lunarCarbon.Year()*10000 + lunarCarbon.Month()*100 + lunarCarbon.Day(),
 		Animal:    lunarCarbon.Animal(),
 		LeapMonth: lunarCarbon.IsLeapMonth(),
 		Today:     ymd == todayDate,

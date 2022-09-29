@@ -21,6 +21,7 @@ var service *MathApi
 var criteria problem.Criteria
 var criteria2 problem.Criteria
 var criteria3 problem.Criteria
+var criteria4 problem.Criteria
 var saveRquest problem.SaveAnswersRequest
 var questions entity.Questions
 
@@ -55,6 +56,17 @@ func init() {
 		Kind: problem.KindQeustLast,
 
 		Category: problem.CategoryMinus,
+		Type:     problem.TypePlainApplication,
+	}
+
+	criteria4 = problem.Criteria{
+		Min:      1,
+		Max:      100,
+		Quantity: 10,
+
+		Kind: problem.KindQeustLast,
+
+		Category: problem.CategoryMultiply,
 		Type:     problem.TypePlainApplication,
 	}
 
@@ -154,7 +166,7 @@ func TestGetAllQuestionsFailed(t *testing.T) {
 func TestGetAllQuestionsOk(t *testing.T) {
 	initialService(t)
 
-	ctx, writer := commonmock.GetGinContext(&commonmock.Parameter{Body: []problem.Criteria{criteria, criteria2, criteria3}})
+	ctx, writer := commonmock.GetGinContext(&commonmock.Parameter{Body: []problem.Criteria{criteria, criteria2, criteria3, criteria4}})
 	service.GetAllQuestions(ctx)
 
 	assert.NotNil(t, ctx)
@@ -176,7 +188,7 @@ func TestGetAllQuestionFeedsFailed(t *testing.T) {
 func TestGetAllQuestionFeedsOk(t *testing.T) {
 	initialService(t)
 
-	ctx, writer := commonmock.GetGinContext(&commonmock.Parameter{Body: []problem.Criteria{criteria, criteria2, criteria3}})
+	ctx, writer := commonmock.GetGinContext(&commonmock.Parameter{Body: []problem.Criteria{criteria, criteria2, criteria3, criteria4}})
 	service.GetAllQuestionFeeds(ctx)
 
 	assert.NotNil(t, ctx)

@@ -121,6 +121,8 @@ cloud based kubernetes already include metric server by default.
 `deployment/kubernetes/kind/*.yml`: set up kubernetes cluster by using kind, which can run multiple control panel and work nodes by using docker containers in local.
 
 #### Set up kind: 
+This version do not contains SSL/TLS termination and https redirection, and use kubernetes service discovery.
+
 [kind/readme.md](deployment/kubernetes/kind/readme.md)
 
 #### deployments
@@ -128,13 +130,16 @@ install/update/uninstall by following [deploy by helm](#helm-deployments)
 
 ### AKS(nginx)
 #### install /uninstall
+
+This version contains SSL/TLS termination and https redirection, and use consul service discovery.
+
 following： [./deployment/kubernetes/aks_nginx/readme.md](./deployment/kubernetes/aks_nginx/readme.md)
 
 refer: [Securing NGINX-ingress](https://cert-manager.io/v0.14-docs/tutorials/acme/ingress/), [Let's Encrypt](https://letsencrypt.org/)
 
 ### AKS(appgw)
 
-This version contains SSL/TLS termination and https redirection.
+This version contains SSL/TLS termination and https redirection, and use consul service discovery.
 
 #### install
 following： [./deployment/kubernetes/aks_appgw/readme.md](./deployment/kubernetes/aks_appgw/readme.md)

@@ -27,3 +27,10 @@ func InitializeTwoMinusService() services.ProblemService {
 	twoProblem := services.NewTwoProblem(twoMinusStratergy)
 	return twoProblem
 }
+
+func InitializeTwoMultiplyService() services.ProblemService {
+	randomService := data.CreateRandomService()
+	twoMultiplyStratergy := stratergy.NewTwoMultiplyStratergy(randomService)
+	twoProblem := services.NewTwoProblem(twoMultiplyStratergy)
+	return twoProblem
+}

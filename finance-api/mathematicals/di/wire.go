@@ -19,3 +19,8 @@ func InitializeTwoMinusService() services.ProblemService {
 	wire.Build(services.ProblemServiceSet, stratergy.TwoMinusStratergySet, data.RandomServiceSet)
 	return nil
 }
+
+func InitializeTwoMultiplyService() services.ProblemService {
+	wire.Build(services.ProblemServiceSet, stratergy.TwoMultiplyStratergySet, data.RandomServiceSet)
+	return nil
+}

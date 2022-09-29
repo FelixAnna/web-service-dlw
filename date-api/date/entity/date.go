@@ -1,8 +1,9 @@
 package entity
 
 type DLWDate struct {
-	YMD   int
-	Lunar string
+	YMD      int
+	Lunar    string
+	LunarYMD int
 
 	LeapMonth bool
 	Animal    string

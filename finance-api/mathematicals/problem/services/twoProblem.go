@@ -27,6 +27,8 @@ func (tp *TwoProblem) GenerateProblem(criteria ...interface{}) *entity.Problem {
 		op = '+'
 	case *stratergy.TwoMinusStratergy:
 		op = '-'
+	case *stratergy.TwoMultiplyStratergy:
+		op = '*'
 	}
 
 	problem := &entity.Problem{

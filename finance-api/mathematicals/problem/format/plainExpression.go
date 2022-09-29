@@ -29,7 +29,11 @@ func (p *PlainExpression) QuestResult() string {
 func (p *PlainExpression) getOp() string {
 	if p.Op == '+' {
 		return "+"
-	} else {
+	} else if p.Op == '-' {
 		return "-"
+	} else if p.Op == '*' {
+		return "*"
+	} else {
+		return "?" //not supported
 	}
 }

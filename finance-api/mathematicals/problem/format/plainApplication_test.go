@@ -11,9 +11,11 @@ import (
 var plusApp PlainApplication
 var plusApp2 PlainApplication
 var minusApp PlainApplication
+var multiplyApp PlainApplication
+var UnSupportedApp PlainApplication
 
 func init() {
-	const template = "比%v%v%v的数是%v"
+	template := []string{"比%v%s%v的数是%v", "%v的%v%s是%v"}
 	plusApp = PlainApplication{
 		&entity.Problem{
 			A:  1,
@@ -22,7 +24,7 @@ func init() {
 			Op: '+',
 		},
 		template,
-		[]string{"多", "少"},
+		[]string{"多", "少", "倍", "分之一"},
 	}
 
 	plusApp2 = PlainApplication{
@@ -33,7 +35,7 @@ func init() {
 			Op: '+',
 		},
 		template,
-		[]string{"多", "少"},
+		[]string{"多", "少", "倍", "分之一"},
 	}
 
 	minusApp = PlainApplication{
@@ -44,7 +46,29 @@ func init() {
 			Op: '-',
 		},
 		template,
-		[]string{"多", "少"},
+		[]string{"多", "少", "倍", "分之一"},
+	}
+
+	multiplyApp = PlainApplication{
+		&entity.Problem{
+			A:  3,
+			B:  2,
+			C:  6,
+			Op: '*',
+		},
+		template,
+		[]string{"多", "少", "倍", "分之一"},
+	}
+
+	UnSupportedApp = PlainApplication{
+		&entity.Problem{
+			A:  3,
+			B:  2,
+			C:  6,
+			Op: '%',
+		},
+		template,
+		[]string{"多", "少", "倍", "分之一"},
 	}
 }
 
@@ -83,4 +107,14 @@ func TestAppPrintLast(t *testing.T) {
 func TestAppPrintMinusLast(t *testing.T) {
 	result := minusApp.QuestResult()
 	assert.EqualValues(t, fmt.Sprintf("比3少2的数是%v", placeHolder), result)
+}
+
+func TestAppPrintMultiplyLast(t *testing.T) {
+	result := multiplyApp.QuestResult()
+	assert.EqualValues(t, fmt.Sprintf("3的2倍是%v", placeHolder), result)
+}
+
+func TestAppPrintNotSupport(t *testing.T) {
+	result := UnSupportedApp.QuestResult()
+	assert.EqualValues(t, "?", result)
 }

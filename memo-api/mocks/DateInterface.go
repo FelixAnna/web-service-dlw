@@ -18,7 +18,7 @@ func (_m *DateInterface) EXPECT() *DateInterface_Expecter {
 }
 
 // GetDistance provides a mock function with given fields: start, end
-func (_m *DateInterface) GetDistance(start int, end int) (int, int) {
+func (_m *DateInterface) GetDistance(start int, end int) (int, int, int) {
 	ret := _m.Called(start, end)
 
 	var r0 int
@@ -35,7 +35,14 @@ func (_m *DateInterface) GetDistance(start int, end int) (int, int) {
 		r1 = ret.Get(1).(int)
 	}
 
-	return r0, r1
+	var r2 int
+	if rf, ok := ret.Get(2).(func(int, int) int); ok {
+		r2 = rf(start, end)
+	} else {
+		r2 = ret.Get(2).(int)
+	}
+
+	return r0, r1, r2
 }
 
 // DateInterface_GetDistance_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetDistance'
@@ -57,13 +64,13 @@ func (_c *DateInterface_GetDistance_Call) Run(run func(start int, end int)) *Dat
 	return _c
 }
 
-func (_c *DateInterface_GetDistance_Call) Return(before int, after int) *DateInterface_GetDistance_Call {
-	_c.Call.Return(before, after)
+func (_c *DateInterface_GetDistance_Call) Return(before int, after int, lunarYMD int) *DateInterface_GetDistance_Call {
+	_c.Call.Return(before, after, lunarYMD)
 	return _c
 }
 
 // GetLunarDistance provides a mock function with given fields: start, end
-func (_m *DateInterface) GetLunarDistance(start int, end int) (int, int) {
+func (_m *DateInterface) GetLunarDistance(start int, end int) (int, int, int) {
 	ret := _m.Called(start, end)
 
 	var r0 int
@@ -80,7 +87,14 @@ func (_m *DateInterface) GetLunarDistance(start int, end int) (int, int) {
 		r1 = ret.Get(1).(int)
 	}
 
-	return r0, r1
+	var r2 int
+	if rf, ok := ret.Get(2).(func(int, int) int); ok {
+		r2 = rf(start, end)
+	} else {
+		r2 = ret.Get(2).(int)
+	}
+
+	return r0, r1, r2
 }
 
 // DateInterface_GetLunarDistance_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetLunarDistance'
@@ -102,8 +116,8 @@ func (_c *DateInterface_GetLunarDistance_Call) Run(run func(start int, end int))
 	return _c
 }
 
-func (_c *DateInterface_GetLunarDistance_Call) Return(before int, after int) *DateInterface_GetLunarDistance_Call {
-	_c.Call.Return(before, after)
+func (_c *DateInterface_GetLunarDistance_Call) Return(before int, after int, lunarYMD int) *DateInterface_GetLunarDistance_Call {
+	_c.Call.Return(before, after, lunarYMD)
 	return _c
 }
 

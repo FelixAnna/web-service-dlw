@@ -17,4 +17,6 @@ type Distance struct {
 	Lunar     bool
 	Before    int64
 	After     int64
+
+	LunarYMD int
 }

@@ -65,6 +65,7 @@ func (api *DateApi) GetDateDistance(c *gin.Context) {
 	distance := &entity.Distance{
 		StartYMD:  iStart,
 		TargetYMD: iEnd,
+		LunarYMD:  0,
 		Lunar:     false,
 		Before:    before,
 		After:     after,
@@ -89,6 +90,7 @@ func (api *DateApi) GetLunarDateDistance(c *gin.Context) {
 	distance := &entity.Distance{
 		StartYMD:  iStart,
 		TargetYMD: iEnd,
+		LunarYMD:  api.CarbonService.ToCarbonDate(iStart).LunarYMD,
 		Lunar:     true,
 		Before:    before,
 		After:     after,

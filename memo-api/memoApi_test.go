@@ -100,8 +100,8 @@ func TestGetMemosAuthorized(t *testing.T) {
 	//Arrange
 	mockRepo, mockDataService := setupService(t)
 	mockRepo.EXPECT().GetByUserId(mock.Anything).Return([]entity.Memo{memoGregorian, memoLunar}, nil)
-	mockDataService.EXPECT().GetDistance(mock.AnythingOfType("int"), mock.AnythingOfType("int")).Return(-100, 200)
-	mockDataService.EXPECT().GetLunarDistance(mock.AnythingOfType("int"), mock.AnythingOfType("int")).Return(-100, 200)
+	mockDataService.EXPECT().GetDistance(mock.AnythingOfType("int"), mock.AnythingOfType("int")).Return(-100, 200, 20000101)
+	mockDataService.EXPECT().GetLunarDistance(mock.AnythingOfType("int"), mock.AnythingOfType("int")).Return(-100, 200, 20000101)
 
 	//Act
 	w := performRequest(router, "GET", "/memos/?access_code="+validToken, nil)
@@ -119,7 +119,7 @@ func TestGetByIdAuthorized(t *testing.T) {
 	//Arrange
 	mockRepo, mockDataService := setupService(t)
 	mockRepo.EXPECT().GetById(mock.Anything).Return(&memoGregorian, nil)
-	mockDataService.EXPECT().GetDistance(mock.AnythingOfType("int"), mock.AnythingOfType("int")).Return(-100, 200)
+	mockDataService.EXPECT().GetDistance(mock.AnythingOfType("int"), mock.AnythingOfType("int")).Return(-100, 200, 20000101)
 
 	//Act
 	w := performRequest(router, "GET", "/memos/123?access_code="+validToken, nil)
@@ -137,8 +137,8 @@ func TestGetRecentMemosAuthorized(t *testing.T) {
 	//Arrange
 	mockRepo, mockDataService := setupService(t)
 	mockRepo.EXPECT().GetByDateRange(mock.Anything, mock.Anything, mock.Anything).Return([]entity.Memo{memoGregorian, memoLunar}, nil)
-	mockDataService.EXPECT().GetDistance(mock.AnythingOfType("int"), mock.AnythingOfType("int")).Return(-100, 200)
-	mockDataService.EXPECT().GetLunarDistance(mock.AnythingOfType("int"), mock.AnythingOfType("int")).Return(-100, 200)
+	mockDataService.EXPECT().GetDistance(mock.AnythingOfType("int"), mock.AnythingOfType("int")).Return(-100, 200, 20000101)
+	mockDataService.EXPECT().GetLunarDistance(mock.AnythingOfType("int"), mock.AnythingOfType("int")).Return(-100, 200, 20000101)
 
 	//Act
 	w := performRequest(router, "GET", "/memos/recent?start=123&end=234&access_code="+validToken, nil)

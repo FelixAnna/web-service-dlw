@@ -26,6 +26,8 @@ type Distance struct {
 	Lunar     bool
 	Before    int64
 	After     int64
+
+	LunarYMD int
 }
 
 var DateSet = wire.NewSet(ProvideDateService, wire.Bind(new(DateInterface), new(*DateService)))
@@ -47,7 +49,7 @@ func ProvideDateService(registery *mesh.Registry) *DateService {
 Get distance from date-api for given date
 Currently only support POST method
 */
-func (service *DateService) GetDistance(start, end int) (before, after int) {
+func (service *DateService) GetDistance(start, end int) (before, after, lunarYMD int) {
 	return service.getDistance(start, end, false)
 }
 
@@ -55,7 +57,7 @@ func (service *DateService) GetDistance(start, end int) (before, after int) {
 Get distance from date-api for given date (Lunar)
 Currently only support POST method
 */
-func (service *DateService) GetLunarDistance(start, end int) (before, after int) {
+func (service *DateService) GetLunarDistance(start, end int) (before, after, lunarYMD int) {
 	return service.getDistance(start, end, true)
 }
 
@@ -63,7 +65,7 @@ func (service *DateService) GetLunarDistance(start, end int) (before, after int)
 Get distance from date-api for given date (Lunar)
 Currently only support POST method
 */
-func (service *DateService) getDistance(start, end int, lunar bool) (before, after int) {
+func (service *DateService) getDistance(start, end int, lunar bool) (before, after, lunarYMD int) {
 	category := "" //default calender
 	if lunar {
 		category = "/lunar"
@@ -78,7 +80,7 @@ func (service *DateService) getDistance(start, end int, lunar bool) (before, aft
 	err := service.DlwClient.Call(context.Background(), request, response)
 	log.Printf("err:%v response:%#v\n", err, response)
 
-	return int(response.Before), int(response.After)
+	return int(response.Before), int(response.After), (response.LunarYMD)
 }
 
 /*

@@ -111,7 +111,7 @@ func TestGetMemosBy(t *testing.T) {
 	ctx, writer := commonmock.GetGinContext(&commonmock.Parameter{Params: params})
 	ctx.Keys = map[string]any{"userId": "anyuser"}
 	mockRepo.EXPECT().GetById(mock.Anything).Return(&memoGregorian, nil)
-	mockDataService.EXPECT().GetDistance(mock.AnythingOfType("int"), mock.AnythingOfType("int")).Return(-100, 200)
+	mockDataService.EXPECT().GetDistance(mock.AnythingOfType("int"), mock.AnythingOfType("int")).Return(-100, 200, 20000101)
 
 	service.GetMemoById(ctx)
 
@@ -127,7 +127,7 @@ func TestGetMemosByLunar(t *testing.T) {
 	ctx, writer := commonmock.GetGinContext(&commonmock.Parameter{Params: params})
 	ctx.Keys = map[string]any{"userId": "anyuser"}
 	mockRepo.EXPECT().GetById(mock.Anything).Return(&memoLunar, nil)
-	mockDataService.EXPECT().GetLunarDistance(mock.AnythingOfType("int"), mock.AnythingOfType("int")).Return(-100, 200)
+	mockDataService.EXPECT().GetLunarDistance(mock.AnythingOfType("int"), mock.AnythingOfType("int")).Return(-100, 200, 20000101)
 
 	service.GetMemoById(ctx)
 
@@ -158,8 +158,8 @@ func TestGetMemosByUserId(t *testing.T) {
 	ctx, writer := commonmock.GetGinContext(&commonmock.Parameter{})
 	ctx.Keys = map[string]any{"userId": "anyuser"}
 	mockRepo.EXPECT().GetByUserId(mock.Anything).Return([]entity.Memo{memoGregorian, memoLunar}, nil)
-	mockDataService.EXPECT().GetDistance(mock.AnythingOfType("int"), mock.AnythingOfType("int")).Return(-100, 200)
-	mockDataService.EXPECT().GetLunarDistance(mock.AnythingOfType("int"), mock.AnythingOfType("int")).Return(-100, 200)
+	mockDataService.EXPECT().GetDistance(mock.AnythingOfType("int"), mock.AnythingOfType("int")).Return(-100, 200, 20000101)
+	mockDataService.EXPECT().GetLunarDistance(mock.AnythingOfType("int"), mock.AnythingOfType("int")).Return(-100, 200, 20000101)
 
 	service.GetMemosByUserId(ctx)
 
@@ -190,8 +190,8 @@ func TestGetRecentMemos(t *testing.T) {
 	ctx, writer := commonmock.GetGinContext(&commonmock.Parameter{Query: "start=123&end=456"})
 	ctx.Keys = map[string]any{"userId": "anyuser"}
 	mockRepo.EXPECT().GetByDateRange(mock.Anything, mock.Anything, mock.Anything).Return([]entity.Memo{memoGregorian, memoLunar}, nil)
-	mockDataService.EXPECT().GetDistance(mock.AnythingOfType("int"), mock.AnythingOfType("int")).Return(-100, 200)
-	mockDataService.EXPECT().GetLunarDistance(mock.AnythingOfType("int"), mock.AnythingOfType("int")).Return(-100, 200)
+	mockDataService.EXPECT().GetDistance(mock.AnythingOfType("int"), mock.AnythingOfType("int")).Return(-100, 200, 20000101)
+	mockDataService.EXPECT().GetLunarDistance(mock.AnythingOfType("int"), mock.AnythingOfType("int")).Return(-100, 200, 20000101)
 
 	service.GetRecentMemos(ctx)
 

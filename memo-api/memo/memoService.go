@@ -159,10 +159,10 @@ func (api *MemoApi) getDistance(target *time.Time, memo *entity.Memo) []int {
 	targetDate := target.Year()*10000 + int(target.Month())*100 + target.Day()
 
 	if memo.Lunar {
-		before, after := api.DateService.GetLunarDistance(startDate, targetDate)
-		return []int{before, after}
+		before, after, lunarYMD := api.DateService.GetLunarDistance(startDate, targetDate)
+		return []int{before, after, lunarYMD}
 	} else {
-		before, after := api.DateService.GetDistance(startDate, targetDate)
-		return []int{before, after}
+		before, after, lunarYMD := api.DateService.GetDistance(startDate, targetDate)
+		return []int{before, after, lunarYMD}
 	}
 }

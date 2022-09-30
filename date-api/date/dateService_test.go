@@ -162,6 +162,7 @@ func TestGetLunarDateDistance(t *testing.T) {
 
 	ctx, writer := commonmock.GetGinContext(&commonmock.Parameter{Query: "start=20200505&end=20200101"})
 	mockService.On("GetLunarDistanceWithCacheAside", mockit.Anything, mockit.Anything).Return(int64(1), int64(2))
+	mockService.On("ToCarbonDate", mockit.Anything).Return(&entity.DLWDate{})
 
 	service.GetLunarDateDistance(ctx)
 

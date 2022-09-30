@@ -32,6 +32,7 @@ type MemoResponse struct {
 	MonthDay         int    `json:"MonthDay" binding:"required"`
 	StartYear        int    `json:"StartYear" binding:""`
 	Lunar            bool   `json:"Lunar" binding:""`
+	LunarYMD         int    `json:"LunarYMD" binding:""`
 	Distance         []int  `json:"Distance" binding:"required"`
 	CreateTime       string `json:"CreateTime,omitempty"`       //  - TODO convert to formated datetime
 	LastModifiedTime string `json:"LastModifiedTime,omitempty"` //  - TODO convert to formated datetime

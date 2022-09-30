@@ -58,7 +58,9 @@ func (api *MemoApi) GetMemoById(c *gin.Context) {
 	now := time.Now()
 
 	resp := memo.ToResponse(&now)
-	resp.Distance = api.getDistance(&now, memo)
+	distance := api.getDistance(&now, memo)
+	resp.Distance = distance[0:2]
+	resp.LunarYMD = distance[2]
 	c.JSON(http.StatusOK, resp)
 }
 
@@ -74,7 +76,9 @@ func (api *MemoApi) GetMemosByUserId(c *gin.Context) {
 	now := time.Now()
 	for i, val := range memos {
 		resp := val.ToResponse(&now)
-		resp.Distance = api.getDistance(&now, &val)
+		distance := api.getDistance(&now, &val)
+		resp.Distance = distance[0:2]
+		resp.LunarYMD = distance[2]
 		respMemos[i] = resp
 	}
 
@@ -97,7 +101,9 @@ func (api *MemoApi) GetRecentMemos(c *gin.Context) {
 	now := time.Now()
 	for i, val := range memos {
 		resp := val.ToResponse(&now)
-		resp.Distance = api.getDistance(&now, &val)
+		distance := api.getDistance(&now, &val)
+		resp.Distance = distance[0:2]
+		resp.LunarYMD = distance[2]
 		respMemos[i] = resp
 	}
 

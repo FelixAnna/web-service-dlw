@@ -19,7 +19,7 @@ import (
 const SERVER_NAME = "finance-api"
 
 func main() {
-	os.Setenv("DLW_NODE_NO", "1023") //Debug Only
+	os.Setenv("DLW_NODE_NO", "1023") //Debug Only //TODO
 
 	initialDependency()
 	router := GetGinRouter()

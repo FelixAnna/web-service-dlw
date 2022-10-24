@@ -17,6 +17,9 @@
     mockery --all --recursive --output=./mocks --with-expecter
     mockery --name=ProblemService --recursive --output=./mocks --with-expecter
      ```
+### snowflake 
+node number issue
+
 ### document api    
 
 ### research helm upgrade not update replicaset + pod when image version changed

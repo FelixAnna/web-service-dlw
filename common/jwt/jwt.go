@@ -80,3 +80,16 @@ func (service *TokenService) GetToken(c *gin.Context) string {
 	}
 	return token
 }
+
+func ParseUserFromGoogleIDToken(id_token string) (*GoogleTokenInfo, error) {
+	parser := jwt.Parser{}
+	token, _, err := parser.ParseUnverified(id_token, &GoogleTokenInfo{})
+	if err == nil {
+		if tokenInfo, ok := token.Claims.(*GoogleTokenInfo); ok {
+			return tokenInfo, nil
+		}
+	}
+
+	// parse token.payload failed
+	return nil, err
+}

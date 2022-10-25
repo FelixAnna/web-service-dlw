@@ -1,9 +1,7 @@
 package auth
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
 
@@ -15,8 +13,6 @@ import (
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 )
-
-const googleUserUrl = "https://api.google.com/user"
 
 type GoogleUser struct {
 	Email     string `json:"email"`
@@ -38,7 +34,8 @@ func ProvideGoogleAuth(repo repository.UserRepo, awsService *aws.AWSService, jwt
 	confGoogle := &oauth2.Config{
 		ClientID:     awsService.GetParameterByKey("googleClientId"),
 		ClientSecret: awsService.GetParameterByKey("googleClientSecret"),
-		Scopes:       []string{"read:user", "user:email", "read:repo_hook"},
+		RedirectURL:  awsService.GetParameterByKey("googleRedirectURL"),
+		Scopes:       []string{"profile", "email", "openid"},
 		Endpoint:     google.Endpoint,
 	}
 
@@ -75,7 +72,13 @@ func (api *GoogleAuthApi) Login(c *gin.Context) {
 		return
 	}
 
-	user, err := api.getGoogleUser(googleUserUrl, token.AccessToken)
+	//google support openid connect, will return id_token which have user profile
+	idToken, ok := token.Extra("id_token").(string)
+	if !ok {
+		fmt.Println("No id_token")
+	}
+
+	user, err := jwt.ParseUserFromGoogleIDToken(idToken)
 	if err != nil {
 		log.Println(err.Error())
 		c.String(http.StatusInternalServerError, err.Error())
@@ -85,9 +88,9 @@ func (api *GoogleAuthApi) Login(c *gin.Context) {
 	nativeUser, err := api.Repo.GetByEmail(user.Email)
 	if err != nil {
 		api.Repo.Add(&entity.User{
-			AvatarUrl: user.AvatarUrl,
+			AvatarUrl: user.Picture,
 			Email:     user.Email,
-			Name:      user.Login,
+			Name:      user.Name,
 			Birthday:  "2000-01-01",
 			Address:   make([]entity.Address, 0),
 		})
@@ -122,31 +125,4 @@ func (api *GoogleAuthApi) CheckNativeToken(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, claims)
-}
-
-func (api *GoogleAuthApi) getGoogleUser(url, token string) (*GoogleUser, error) {
-	request, err := http.NewRequest(http.MethodGet, url, nil)
-	if err != nil {
-		log.Println(err.Error())
-		return nil, err
-	}
-
-	request.Header.Add("Authorization", fmt.Sprintf("token %v", token))
-	response, err := http.DefaultClient.Do(request)
-
-	if err != nil {
-		log.Println(err.Error())
-		return nil, err
-	}
-
-	responseData, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		log.Println(err)
-		return nil, err
-	}
-
-	var user *GoogleUser = &GoogleUser{}
-	json.Unmarshal(responseData, &user)
-
-	return user, nil
 }

@@ -4,10 +4,9 @@ go 1.18
 
 require (
 	github.com/FelixAnna/web-service-dlw/common v0.0.0-20220925093908-8bafa29fb329
-	github.com/asim/go-micro/plugins/client/http/v4 v4.0.0-20220622010113-107bd74187e7
 	github.com/aws/aws-sdk-go v1.44.55
 	github.com/gin-gonic/gin v1.8.1
-	go-micro.dev/v4 v4.7.0
+	go-micro.dev/v4 v4.9.0
 )
 
 require (
@@ -21,9 +20,6 @@ require (
 	github.com/ProtonMail/go-crypto v0.0.0-20220714114130-e85cedf506cd // indirect
 	github.com/acomagu/bufpipe v1.0.3 // indirect
 	github.com/armon/go-metrics v0.4.0 // indirect
-	github.com/asim/go-micro/plugins/registry/consul/v4 v4.7.0 // indirect
-	github.com/asim/go-micro/plugins/registry/kubernetes/v4 v4.7.0 // indirect
-	github.com/asim/go-micro/plugins/server/http/v4 v4.7.0 // indirect
 	github.com/bitly/go-simplejson v0.5.0 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
@@ -35,6 +31,10 @@ require (
 	github.com/go-git/gcfg v1.5.0 // indirect
 	github.com/go-git/go-billy/v5 v5.3.1 // indirect
 	github.com/go-git/go-git/v5 v5.4.2 // indirect
+	github.com/go-micro/plugins/v4/client/http v1.1.0 // indirect
+	github.com/go-micro/plugins/v4/registry/consul v1.1.0 // indirect
+	github.com/go-micro/plugins/v4/registry/kubernetes v1.1.0 // indirect
+	github.com/go-micro/plugins/v4/server/http v1.1.1 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-playground/validator/v10 v10.11.0 // indirect

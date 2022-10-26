@@ -35,9 +35,9 @@ require (
 	github.com/ProtonMail/go-crypto v0.0.0-20220714114130-e85cedf506cd // indirect
 	github.com/acomagu/bufpipe v1.0.3 // indirect
 	github.com/armon/go-metrics v0.4.0 // indirect
-	github.com/asim/go-micro/plugins/registry/consul/v4 v4.7.0 // indirect
-	github.com/asim/go-micro/plugins/registry/kubernetes/v4 v4.7.0 // indirect
-	github.com/asim/go-micro/plugins/server/http/v4 v4.7.0 // indirect
+	github.com/go-micro/plugins/v4/registry/consul v1.1.0 // indirect
+	github.com/go-micro/plugins/v4/registry/kubernetes v1.1.0 // indirect
+	github.com/go-micro/plugins/v4/server/http v1.1.1 // indirect
 	github.com/aws/aws-sdk-go v1.44.55 // indirect
 	github.com/bitly/go-simplejson v0.5.0 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect

@@ -6,7 +6,7 @@ import (
 	"log"
 
 	"github.com/FelixAnna/web-service-dlw/common/mesh"
-	httpClient "github.com/asim/go-micro/plugins/client/http/v4"
+	httpClient "github.com/go-micro/plugins/v4/client/http"
 	"go-micro.dev/v4/client"
 	"go-micro.dev/v4/selector"
 

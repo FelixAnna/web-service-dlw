@@ -216,7 +216,8 @@ func setupService(t *testing.T) *mocks.UserRepo {
 	service := &users.UserApi{Repo: mockRepo}
 	apiBoot = &ApiBoot{
 		UserApi: service,
-		//AuthApi:              di.InitialGithubAuthApi(),
+		//AuthGithubApi:              di.InitialGithubAuthApi(),
+		//AuthGoogleApi:              di.InitialGoogleAuthApi(),
 		AuthorizationHandler: di.InitialMockAuthorizationMiddleware(),
 		ErrorHandler:         di.InitialErrorMiddleware(),
 		Registry:             di.InitialMockRegistry(),

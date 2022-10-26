@@ -24,6 +24,11 @@ func InitialGithubAuthApi() *auth.GithubAuthApi {
 	return &auth.GithubAuthApi{}
 }
 
+func InitialGoogleAuthApi() *auth.GoogleAuthApi {
+	wire.Build(auth.ProvideGoogleAuth, repository.MongoRepoSet, jwt.JwtSet)
+	return &auth.GoogleAuthApi{}
+}
+
 func InitialRegistry() *mesh.Registry {
 	wire.Build(mesh.ProvideRegistry,
 		aws.ProvideAWSService,

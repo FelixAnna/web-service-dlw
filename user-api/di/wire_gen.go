@@ -38,6 +38,15 @@ func InitialGithubAuthApi() *auth.GithubAuthApi {
 	return githubAuthApi
 }
 
+func InitialGoogleAuthApi() *auth.GoogleAuthApi {
+	awsHelper := aws.ProvideAwsHelper()
+	awsService := aws.ProvideAWSService(awsHelper)
+	userRepoMongoDB := repository.ProvideUserRepoMongoDB(awsService)
+	tokenService := jwt.ProvideTokenService(awsService)
+	googleAuthApi := auth.ProvideGoogleAuth(userRepoMongoDB, awsService, tokenService)
+	return googleAuthApi
+}
+
 func InitialRegistry() *mesh.Registry {
 	awsHelper := aws.ProvideAwsHelper()
 	awsService := aws.ProvideAWSService(awsHelper)

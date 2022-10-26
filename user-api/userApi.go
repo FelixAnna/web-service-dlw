@@ -25,7 +25,8 @@ func main() {
 
 type ApiBoot struct {
 	UserApi              *users.UserApi
-	AuthApi              *auth.GithubAuthApi
+	AuthGithubApi        *auth.GithubAuthApi
+	AuthGoogleApi        *auth.GoogleAuthApi
 	ErrorHandler         *middleware.ErrorHandlingMiddleware
 	AuthorizationHandler *middleware.AuthorizationMiddleware
 	Registry             *mesh.Registry
@@ -36,7 +37,8 @@ var apiBoot *ApiBoot
 func initialDependency() {
 	apiBoot = &ApiBoot{
 		UserApi:              di.InitialUserApi(),
-		AuthApi:              di.InitialGithubAuthApi(),
+		AuthGithubApi:        di.InitialGithubAuthApi(),
+		AuthGoogleApi:        di.InitialGoogleAuthApi(),
 		AuthorizationHandler: di.InitialAuthorizationMiddleware(),
 		ErrorHandler:         di.InitialErrorMiddleware(),
 		Registry:             di.InitialRegistry(),
@@ -59,12 +61,18 @@ func defineRoutes(router *gin.Engine) {
 
 	authGitHubRouter := router.Group("/oauth2/github")
 	{
-		authGitHubRouter.GET("/authorize", apiBoot.AuthApi.AuthorizeGithub)
-		authGitHubRouter.GET("/authorize/url", apiBoot.AuthApi.AuthorizeGithubUrl)
-		authGitHubRouter.GET("/redirect", apiBoot.AuthApi.GetGithubToken)
-		authGitHubRouter.GET("/login", apiBoot.AuthApi.Login)
-		authGitHubRouter.GET("/user", apiBoot.AuthApi.GetNativeToken)
-		authGitHubRouter.GET("/checktoken", apiBoot.AuthApi.CheckNativeToken)
+		authGitHubRouter.GET("/authorize", apiBoot.AuthGithubApi.AuthorizeGithub)
+		authGitHubRouter.GET("/authorize/url", apiBoot.AuthGithubApi.AuthorizeGithubUrl)
+		authGitHubRouter.GET("/redirect", apiBoot.AuthGithubApi.GetGithubToken)
+		authGitHubRouter.GET("/login", apiBoot.AuthGithubApi.Login)
+		authGitHubRouter.GET("/user", apiBoot.AuthGithubApi.GetNativeToken)
+		authGitHubRouter.GET("/checktoken", apiBoot.AuthGithubApi.CheckNativeToken)
+	}
+
+	authGoogleRouter := router.Group("/oauth2/google")
+	{
+		authGoogleRouter.GET("/login", apiBoot.AuthGoogleApi.Login)
+		authGoogleRouter.GET("/checktoken", apiBoot.AuthGoogleApi.CheckNativeToken)
 	}
 
 	userGroupRouter := router.Group("/users", apiBoot.AuthorizationHandler.AuthorizationHandler())

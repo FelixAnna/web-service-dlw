@@ -3,9 +3,6 @@ module github.com/FelixAnna/web-service-dlw/common
 go 1.18
 
 require (
-	github.com/asim/go-micro/plugins/registry/consul/v4 v4.7.0
-	github.com/asim/go-micro/plugins/registry/kubernetes/v4 v4.7.0
-	github.com/asim/go-micro/plugins/server/http/v4 v4.7.0
 	github.com/aws/aws-sdk-go v1.44.55
 	github.com/bwmarrin/snowflake v0.3.0
 	github.com/gin-contrib/cors v1.4.0
@@ -13,7 +10,7 @@ require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/google/wire v0.5.0
 	github.com/stretchr/testify v1.8.0
-	go-micro.dev/v4 v4.7.0
+	go-micro.dev/v4 v4.9.0
 )
 
 require (
@@ -31,6 +28,9 @@ require (
 	github.com/go-git/gcfg v1.5.0 // indirect
 	github.com/go-git/go-billy/v5 v5.3.1 // indirect
 	github.com/go-git/go-git/v5 v5.4.2 // indirect
+	github.com/go-micro/plugins/v4/registry/consul v1.1.0 // indirect
+	github.com/go-micro/plugins/v4/registry/kubernetes v1.1.0 // indirect
+	github.com/go-micro/plugins/v4/server/http v1.1.1 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-playground/validator/v10 v10.11.0 // indirect

@@ -10,8 +10,8 @@ import (
 	"github.com/gin-contrib/cors"
 	"go-micro.dev/v4"
 
-	httpServer "github.com/asim/go-micro/plugins/server/http/v4"
 	"github.com/gin-gonic/gin"
+	httpServer "github.com/go-micro/plugins/v4/server/http"
 	"go-micro.dev/v4/registry"
 	"go-micro.dev/v4/server"
 )

@@ -4,8 +4,8 @@ import (
 	"os"
 
 	"github.com/FelixAnna/web-service-dlw/common/aws"
-	"github.com/asim/go-micro/plugins/registry/consul/v4"
-	"github.com/asim/go-micro/plugins/registry/kubernetes/v4"
+	"github.com/go-micro/plugins/v4/registry/consul"
+	"github.com/go-micro/plugins/v4/registry/kubernetes"
 	"go-micro.dev/v4/registry"
 )
 

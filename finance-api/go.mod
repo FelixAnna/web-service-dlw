@@ -3,7 +3,7 @@ module github.com/FelixAnna/web-service-dlw/finance-api
 go 1.18
 
 require (
-	github.com/FelixAnna/web-service-dlw/common v0.0.0-20221026133908-6c03061b7998
+	github.com/FelixAnna/web-service-dlw/common v0.0.0-20221027123919-6e9849007e11
 	github.com/gin-gonic/gin v1.8.1
 	go-micro.dev/v4 v4.9.0 // indirect
 )
@@ -25,7 +25,7 @@ require (
 	github.com/go-micro/plugins/v4/server/http v1.1.1 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/go-cmp v0.5.9 // indirect
-	github.com/klauspost/compress v1.15.11 // indirect
+	github.com/klauspost/compress v1.15.12 // indirect
 	github.com/microsoft/go-mssqldb v0.17.0 // indirect
 	github.com/montanaflynn/stats v0.6.6 // indirect
 	github.com/tidwall/pretty v1.2.1 // indirect
@@ -40,7 +40,7 @@ require (
 	github.com/ProtonMail/go-crypto v0.0.0-20221026131551-cf6655e29de4 // indirect
 	github.com/acomagu/bufpipe v1.0.3 // indirect
 	github.com/armon/go-metrics v0.4.1 // indirect
-	github.com/aws/aws-sdk-go v1.44.123 // indirect
+	github.com/aws/aws-sdk-go v1.44.125 // indirect
 	github.com/bitly/go-simplejson v0.5.0 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect

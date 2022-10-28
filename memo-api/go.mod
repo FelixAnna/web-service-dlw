@@ -3,8 +3,8 @@ module github.com/FelixAnna/web-service-dlw/memo-api
 go 1.18
 
 require (
-	github.com/FelixAnna/web-service-dlw/common v0.0.0-20221026133908-6c03061b7998
-	github.com/aws/aws-sdk-go v1.44.123
+	github.com/FelixAnna/web-service-dlw/common v0.0.0-20221027123919-6e9849007e11
+	github.com/aws/aws-sdk-go v1.44.125
 	github.com/gin-gonic/gin v1.8.1
 	go-micro.dev/v4 v4.9.0
 )
@@ -57,7 +57,7 @@ require (
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/kevinburke/ssh_config v1.2.0 // indirect
-	github.com/klauspost/compress v1.15.11 // indirect
+	github.com/klauspost/compress v1.15.12 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.16 // indirect

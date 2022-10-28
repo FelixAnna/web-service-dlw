@@ -35,3 +35,9 @@ helm install cert-manager jetstack/cert-manager \
 echo "deploy consul for service discovery and mesh"
 cd ../../../components/consul
 sh install.sh
+
+or:
+
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm install my-release bitnami/consul
+# Read more about the installation in the HashiCorp Consul packaged by Bitnami Chart Github repository

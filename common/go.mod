@@ -3,7 +3,7 @@ module github.com/FelixAnna/web-service-dlw/common
 go 1.18
 
 require (
-	github.com/aws/aws-sdk-go v1.44.123
+	github.com/aws/aws-sdk-go v1.44.127
 	github.com/bwmarrin/snowflake v0.3.0
 	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-gonic/gin v1.8.1
@@ -70,7 +70,7 @@ require (
 	github.com/sergi/go-diff v1.2.0 // indirect
 	github.com/stretchr/objx v0.5.0 // indirect
 	github.com/ugorji/go/codec v1.2.7 // indirect
-	github.com/urfave/cli/v2 v2.20.3 // indirect
+	github.com/urfave/cli/v2 v2.23.0 // indirect
 	github.com/xanzy/ssh-agent v0.3.2 // indirect
 	github.com/xrash/smetrics v0.0.0-20201216005158-039620a65673 // indirect
 	golang.org/x/crypto v0.1.0 // indirect

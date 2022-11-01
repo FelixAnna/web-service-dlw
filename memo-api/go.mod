@@ -3,8 +3,8 @@ module github.com/FelixAnna/web-service-dlw/memo-api
 go 1.18
 
 require (
-	github.com/FelixAnna/web-service-dlw/common v0.0.0-20221027123919-6e9849007e11
-	github.com/aws/aws-sdk-go v1.44.125
+	github.com/FelixAnna/web-service-dlw/common v0.0.0-20221028144211-41e94f4814fa
+	github.com/aws/aws-sdk-go v1.44.127
 	github.com/gin-gonic/gin v1.8.1
 	go-micro.dev/v4 v4.9.0
 )
@@ -43,7 +43,6 @@ require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
-	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/hashicorp/consul/api v1.15.3 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
@@ -79,7 +78,7 @@ require (
 	github.com/stretchr/objx v0.5.0 // indirect
 	github.com/tidwall/pretty v1.2.1 // indirect
 	github.com/ugorji/go/codec v1.2.7 // indirect
-	github.com/urfave/cli/v2 v2.20.3 // indirect
+	github.com/urfave/cli/v2 v2.23.0 // indirect
 	github.com/xanzy/ssh-agent v0.3.2 // indirect
 	github.com/xdg-go/pbkdf2 v1.0.0 // indirect
 	github.com/xdg-go/scram v1.1.1 // indirect

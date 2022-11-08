@@ -1,15 +1,15 @@
 module github.com/FelixAnna/web-service-dlw/common
 
-go 1.18
+go 1.19
 
 require (
-	github.com/aws/aws-sdk-go v1.44.127
+	github.com/aws/aws-sdk-go v1.44.132
 	github.com/bwmarrin/snowflake v0.3.0
 	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-gonic/gin v1.8.1
-	github.com/go-micro/plugins/v4/registry/consul v1.1.0
-	github.com/go-micro/plugins/v4/registry/kubernetes v1.1.0
-	github.com/go-micro/plugins/v4/server/http v1.1.1
+	github.com/go-micro/plugins/v4/registry/consul v1.2.0
+	github.com/go-micro/plugins/v4/registry/kubernetes v1.1.1
+	github.com/go-micro/plugins/v4/server/http v1.2.0
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/google/wire v0.5.0
 	github.com/stretchr/testify v1.8.1
@@ -70,14 +70,14 @@ require (
 	github.com/sergi/go-diff v1.2.0 // indirect
 	github.com/stretchr/objx v0.5.0 // indirect
 	github.com/ugorji/go/codec v1.2.7 // indirect
-	github.com/urfave/cli/v2 v2.23.0 // indirect
+	github.com/urfave/cli/v2 v2.23.4 // indirect
 	github.com/xanzy/ssh-agent v0.3.2 // indirect
 	github.com/xrash/smetrics v0.0.0-20201216005158-039620a65673 // indirect
 	golang.org/x/crypto v0.1.0 // indirect
 	golang.org/x/mod v0.6.0 // indirect
 	golang.org/x/net v0.1.0 // indirect
 	golang.org/x/sync v0.1.0 // indirect
-	golang.org/x/sys v0.1.0 // indirect
+	golang.org/x/sys v0.2.0 // indirect
 	golang.org/x/text v0.4.0 // indirect
 	golang.org/x/tools v0.2.0 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect

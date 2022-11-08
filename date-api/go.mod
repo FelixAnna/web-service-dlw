@@ -1,11 +1,11 @@
 module github.com/FelixAnna/web-service-dlw/date-api
 
-go 1.18
+go 1.19
 
 require (
-	github.com/FelixAnna/web-service-dlw/common v0.0.0-20221028144211-41e94f4814fa
+	github.com/FelixAnna/web-service-dlw/common v0.0.0-20221101123805-f13def4d5fb6
 	github.com/gin-gonic/gin v1.8.1
-	github.com/golang-module/carbon/v2 v2.2.1
+	github.com/golang-module/carbon/v2 v2.2.2
 	go-micro.dev/v4 v4.9.0 // indirect
 )
 
@@ -19,7 +19,7 @@ require (
 	github.com/ProtonMail/go-crypto v0.0.0-20221026131551-cf6655e29de4 // indirect
 	github.com/acomagu/bufpipe v1.0.3 // indirect
 	github.com/armon/go-metrics v0.4.1 // indirect
-	github.com/aws/aws-sdk-go v1.44.127 // indirect
+	github.com/aws/aws-sdk-go v1.44.132 // indirect
 	github.com/bitly/go-simplejson v0.5.0 // indirect
 	github.com/cloudflare/circl v1.2.0 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect
@@ -32,9 +32,9 @@ require (
 	github.com/go-git/gcfg v1.5.0 // indirect
 	github.com/go-git/go-billy/v5 v5.3.1 // indirect
 	github.com/go-git/go-git/v5 v5.4.2 // indirect
-	github.com/go-micro/plugins/v4/registry/consul v1.1.0 // indirect
-	github.com/go-micro/plugins/v4/registry/kubernetes v1.1.0 // indirect
-	github.com/go-micro/plugins/v4/server/http v1.1.1 // indirect
+	github.com/go-micro/plugins/v4/registry/consul v1.2.0 // indirect
+	github.com/go-micro/plugins/v4/registry/kubernetes v1.1.1 // indirect
+	github.com/go-micro/plugins/v4/server/http v1.2.0 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-playground/validator/v10 v10.11.1 // indirect
@@ -73,14 +73,14 @@ require (
 	github.com/sergi/go-diff v1.2.0 // indirect
 	github.com/stretchr/objx v0.5.0 // indirect
 	github.com/ugorji/go/codec v1.2.7 // indirect
-	github.com/urfave/cli/v2 v2.23.0 // indirect
+	github.com/urfave/cli/v2 v2.23.4 // indirect
 	github.com/xanzy/ssh-agent v0.3.2 // indirect
 	github.com/xrash/smetrics v0.0.0-20201216005158-039620a65673 // indirect
 	golang.org/x/crypto v0.1.0 // indirect
 	golang.org/x/mod v0.6.0 // indirect
 	golang.org/x/net v0.1.0 // indirect
 	golang.org/x/sync v0.1.0 // indirect
-	golang.org/x/sys v0.1.0 // indirect
+	golang.org/x/sys v0.2.0 // indirect
 	golang.org/x/text v0.4.0 // indirect
 	golang.org/x/tools v0.2.0 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect

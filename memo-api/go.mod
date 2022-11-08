@@ -1,19 +1,19 @@
 module github.com/FelixAnna/web-service-dlw/memo-api
 
-go 1.18
+go 1.19
 
 require (
-	github.com/FelixAnna/web-service-dlw/common v0.0.0-20221028144211-41e94f4814fa
-	github.com/aws/aws-sdk-go v1.44.127
+	github.com/FelixAnna/web-service-dlw/common v0.0.0-20221101123805-f13def4d5fb6
+	github.com/aws/aws-sdk-go v1.44.132
 	github.com/gin-gonic/gin v1.8.1
 	go-micro.dev/v4 v4.9.0
 )
 
 require (
-	github.com/go-micro/plugins/v4/client/http v1.1.0
+	github.com/go-micro/plugins/v4/client/http v1.2.0
 	github.com/google/wire v0.5.0
 	github.com/stretchr/testify v1.8.1
-	go.mongodb.org/mongo-driver v1.10.3
+	go.mongodb.org/mongo-driver v1.11.0
 )
 
 require (
@@ -33,9 +33,9 @@ require (
 	github.com/go-git/gcfg v1.5.0 // indirect
 	github.com/go-git/go-billy/v5 v5.3.1 // indirect
 	github.com/go-git/go-git/v5 v5.4.2 // indirect
-	github.com/go-micro/plugins/v4/registry/consul v1.1.0 // indirect
-	github.com/go-micro/plugins/v4/registry/kubernetes v1.1.0 // indirect
-	github.com/go-micro/plugins/v4/server/http v1.1.1 // indirect
+	github.com/go-micro/plugins/v4/registry/consul v1.2.0 // indirect
+	github.com/go-micro/plugins/v4/registry/kubernetes v1.1.1 // indirect
+	github.com/go-micro/plugins/v4/server/http v1.2.0 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-playground/validator/v10 v10.11.1 // indirect
@@ -78,7 +78,7 @@ require (
 	github.com/stretchr/objx v0.5.0 // indirect
 	github.com/tidwall/pretty v1.2.1 // indirect
 	github.com/ugorji/go/codec v1.2.7 // indirect
-	github.com/urfave/cli/v2 v2.23.0 // indirect
+	github.com/urfave/cli/v2 v2.23.4 // indirect
 	github.com/xanzy/ssh-agent v0.3.2 // indirect
 	github.com/xdg-go/pbkdf2 v1.0.0 // indirect
 	github.com/xdg-go/scram v1.1.1 // indirect
@@ -89,7 +89,7 @@ require (
 	golang.org/x/mod v0.6.0 // indirect
 	golang.org/x/net v0.1.0 // indirect
 	golang.org/x/sync v0.1.0 // indirect
-	golang.org/x/sys v0.1.0 // indirect
+	golang.org/x/sys v0.2.0 // indirect
 	golang.org/x/text v0.4.0 // indirect
 	golang.org/x/tools v0.2.0 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect

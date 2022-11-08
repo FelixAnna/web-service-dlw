@@ -3,7 +3,7 @@
 ##
 ## build
 ##
-FROM golang:1.18.3-alpine3.16 AS build
+FROM golang:1.19.3-alpine3.16 AS build
 # RUN apk add build-base
 
 # disable cgo : CGO_ENABLED = 0

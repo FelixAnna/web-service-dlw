@@ -7,7 +7,7 @@ ns=dlwns
 echo "removing all services"
 
 ## switch context
-az aks get-credentials --resource-group $rgName --name $clusterName
+az aks get-credentials --resource-group $rgName --name $clusterName --overwrite-existing
 
 ## uninstall services
 helm uninstall dlw -n $ns

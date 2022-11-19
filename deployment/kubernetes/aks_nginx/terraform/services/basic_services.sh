@@ -7,7 +7,7 @@ clusterName=devCluster
 echo "installing basic services"
 
 ## switch context
-az aks get-credentials --resource-group $rgName --name $clusterName
+az aks get-credentials --resource-group $rgName --name $clusterName --overwrite-existing
 
 ## deploy nginx
 nodeResourceGroup=$(az aks show -n $clusterName -g $rgName -o tsv --query "nodeResourceGroup")

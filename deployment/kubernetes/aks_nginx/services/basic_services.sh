@@ -1,7 +1,8 @@
 
-rgName=dev-rg
+env=$1
+rgName=dlw-$env-rg
 ipName=nginxIp
-clusterName=devCluster
+clusterName="${env}Cluster"
 
 ## installing basic services
 echo "installing basic services"
@@ -15,29 +16,42 @@ STATIC_IP=$(az network public-ip show -n $ipName -g $nodeResourceGroup --query "
 NAMESPACE=ingress-basic
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 helm repo update
+
 helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx \
     --create-namespace \
     --namespace $NAMESPACE \
     --set controller.service.loadBalancerIP=$STATIC_IP \
     --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-health-probe-request-path"=/healthz \
-    --set controller.service.externalTrafficPolicy=Local
+    --set controller.service.externalTrafficPolicy=Local \
+    --wait
 
+echo "wait for nginx controller up before install services ..."
+kubectl wait  --namespace $NAMESPACE \
+              --for=condition=ready pod \
+              --selector=app.kubernetes.io/component=controller \
+              --timeout=600s
+
+## deploy consul
+echo "deploy consul for service discovery ..."
+cd ../../components/consul
+sh install.sh
+# Read more about the installation in the HashiCorp Consul packaged by Bitnami Chart Github repository
+
+echo "installing cert-manager ..."
 ## config cert-manager
 helm repo add jetstack https://charts.jetstack.io
 helm repo update
 
 helm install cert-manager jetstack/cert-manager \
-  --namespace cert-manager  --create-namespace \
-  --version v1.9.1 \
-  --set installCRDs=true
+  --namespace cert-manager \
+  --create-namespace \
+  --version v1.10.0 \
+  --set installCRDs=true \
+  --wait
 
-## deploy consul
-echo "deploy consul for service discovery and mesh"
-cd ../../../components/consul
-sh install.sh
 
-or:
+# or:
 
-helm repo add bitnami https://charts.bitnami.com/bitnami
-helm install my-release bitnami/consul
+# helm repo add bitnami https://charts.bitnami.com/bitnami
+# helm install my-release bitnami/consul
 # Read more about the installation in the HashiCorp Consul packaged by Bitnami Chart Github repository

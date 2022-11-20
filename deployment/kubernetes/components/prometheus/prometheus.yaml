@@ -36,7 +36,7 @@ spec:
         volumeMounts:
           - mountPath: /etc/prometheus
             name: config-prom
-      serviceAccountName: prom-sericeaccount
+      serviceAccountName: prom-service-account
       volumes:
       - name: config-prom
         configMap:

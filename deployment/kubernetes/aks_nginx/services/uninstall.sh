@@ -1,6 +1,6 @@
-
-rgName=dev-rg
-clusterName=devCluster
+env=$1
+rgName=dlw-$env-rg
+clusterName="${env}Cluster"
 ns=dlwns
 
 ## installing all services

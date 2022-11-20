@@ -60,7 +60,7 @@ rules:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: {{ .Release.Name }}-sericeaccount
+  name: {{ .Release.Name }}-service-account
   {{- template "mytemplate.defaultLabel" }}
 
 ---
@@ -76,7 +76,7 @@ subjects:
 # You can specify more than one "subject"
 - kind: ServiceAccount
   #name: system:serviceaccount:{{ .Release.Name }}-dev:default # "name" is case sensitive
-  name: {{ .Release.Name }}-sericeaccount
+  name: {{ .Release.Name }}-service-account
   #apiGroup: rbac.authorization.k8s.io
 roleRef:
   # "roleRef" specifies the binding to a Role / ClusterRole

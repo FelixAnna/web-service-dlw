@@ -23,7 +23,7 @@ rules:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: prom-sericeaccount
+  name: prom-service-account
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -35,5 +35,5 @@ roleRef:
   name: prometheus
 subjects:
 - kind: ServiceAccount
-  name: prom-sericeaccount
+  name: prom-service-account
   namespace: dlw-dev

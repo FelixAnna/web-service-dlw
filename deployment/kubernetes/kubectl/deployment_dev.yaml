@@ -38,7 +38,7 @@ rules:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: dlw-sericeaccount
+  name: dlw-service-account
   namespace: dlw-dev
 
 ---
@@ -54,7 +54,7 @@ subjects:
 # You can specify more than one "subject"
 - kind: ServiceAccount
   #name: system:serviceaccount:dlw-dev:default # "name" is case sensitive
-  name: dlw-sericeaccount
+  name: dlw-service-account
   namespace: dlw-dev
   #apiGroup: rbac.authorization.k8s.io
 roleRef:
@@ -111,7 +111,7 @@ spec:
         volumeMounts:
           - mountPath: /var/run/secrets/tokens
             name: vault-token
-      serviceAccountName: dlw-sericeaccount
+      serviceAccountName: dlw-service-account
       volumes:
       - name: vault-token
         projected:
@@ -169,7 +169,7 @@ spec:
         volumeMounts:
           - mountPath: /var/run/secrets/tokens
             name: vault-token
-      serviceAccountName: dlw-sericeaccount
+      serviceAccountName: dlw-service-account
       volumes:
       - name: vault-token
         projected:
@@ -227,7 +227,7 @@ spec:
         volumeMounts:
           - mountPath: /var/run/secrets/tokens
             name: vault-token
-      serviceAccountName: dlw-sericeaccount
+      serviceAccountName: dlw-service-account
       volumes:
       - name: vault-token
         projected:
@@ -285,7 +285,7 @@ spec:
         volumeMounts:
           - mountPath: /var/run/secrets/tokens
             name: vault-token
-      serviceAccountName: dlw-sericeaccount
+      serviceAccountName: dlw-service-account
       volumes:
       - name: vault-token
         projected:

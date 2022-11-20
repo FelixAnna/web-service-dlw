@@ -15,7 +15,7 @@ serviceAccount:
   annotations: {}
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
-  name: "dlw-sericeaccount"
+  name: "dlw-service-account"
 
 config:
   awsKeyId: ==
@@ -33,7 +33,7 @@ quota:
 
 ingress:
   ingressClassName: nginx
-  dnsName: api.metadlw.com
+  dnsName: api-dev-dlw.metadlw.com
   issuer: letsencrypt-staging ## letsencrypt-prod
   server: https://acme-staging-v02.api.letsencrypt.org/directory ## https://acme-v02.api.letsencrypt.org/directory
   email: yuecnu@hotmail.com  ## need real email address

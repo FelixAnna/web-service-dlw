@@ -1,11 +1,12 @@
 
-env=$1
-rgName=dlw-$env-rg
+app=$1
+env=$2
+rgName=$app-$env-rg
 ipName=nginxIp
 clusterName="${env}Cluster"
 
 ## installing basic services
-echo "installing basic services"
+echo "installing basic services ..."
 
 ## switch context
 az aks get-credentials --resource-group $rgName --name $clusterName --overwrite-existing
@@ -42,13 +43,12 @@ echo "installing cert-manager ..."
 helm repo add jetstack https://charts.jetstack.io
 helm repo update
 
-helm install cert-manager jetstack/cert-manager \
+helm upgrade --install cert-manager jetstack/cert-manager \
   --namespace cert-manager \
   --create-namespace \
   --version v1.10.0 \
   --set installCRDs=true \
   --wait
-
 
 # or:
 

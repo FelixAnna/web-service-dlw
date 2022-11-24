@@ -1,9 +1,10 @@
 ## uninstall basic 
-env=$1
+app=dlw  # microservice/deployment name
+env=$1  # dev or prod
 
 cd ./services
 
-sh uninstall.sh $env
+sh uninstall.sh $app $env
 
 ## destory infrastructure
 

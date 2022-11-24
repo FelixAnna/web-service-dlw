@@ -1,7 +1,10 @@
-env=$1
-rgName=dlw-$env-rg
+
+
+app=$1
+env=$2
+rgName=$app-$env-rg
 clusterName="${env}Cluster"
-ns=dlwns
+ns="${app}ns"
 
 ## installing all services
 echo "removing all services"
@@ -10,7 +13,7 @@ echo "removing all services"
 az aks get-credentials --resource-group $rgName --name $clusterName --overwrite-existing
 
 ## uninstall services
-helm uninstall dlw -n $ns
+helm uninstall $app -n $ns
 helm uninstall consul -n consul
 helm uninstall cert-manager -n cert-manager
 helm uninstall ingress-nginx  -n ingress-basic

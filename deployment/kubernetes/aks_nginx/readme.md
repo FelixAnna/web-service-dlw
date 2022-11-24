@@ -7,6 +7,17 @@
 
 
 ## terraform
+
+All-in-one install/uninstall:
+
+```
+## install everything
+sh install.sh dev # dev or prod  
+
+## uninstall everything
+sh uninstall.sh dev # dev or prod
+```
+
 [infrastructure](./terraform/) apply/destroy by terraform:
 
 ```

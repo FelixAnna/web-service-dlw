@@ -14,14 +14,17 @@ type Registry struct {
 }
 
 func ProvideRegistry(awsService *aws.AWSService) *Registry {
-	consulRegAddr := awsService.GetParameterByKey("mesh/consulRegAddr")
+	profile := os.Getenv("profile")
+	var consulRegAddr string
+	if profile == "dev" || profile == "prod" {
+		consulRegAddr = awsService.GetParameterByKey("mesh/consulRegAddr")
+	}
 
 	return &Registry{consulRegAddr: consulRegAddr}
 }
 
 func (service *Registry) GetRegistry() registry.Registry {
-	profile := os.Getenv("profile")
-	if profile == "dev" || profile == "prod" {
+	if service.consulRegAddr != "" {
 		return service.getConsulRegistry()
 	}
 

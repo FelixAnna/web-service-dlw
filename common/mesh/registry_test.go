@@ -10,36 +10,49 @@ import (
 )
 
 var service *Registry
+var helper aws.AwsInterface
 
 func init() {
-	helper := mocks.MockAwsHelper{}
-	service = ProvideRegistry(aws.ProvideAWSService(&helper))
+	helper = &mocks.MockAwsHelper{}
 }
 
 func TestProvideRegistry(t *testing.T) {
+	service = ProvideRegistry(aws.ProvideAWSService(helper))
+
+	assert.NotNil(t, service)
+	assert.Empty(t, service.consulRegAddr)
+}
+
+func TestProvideRegistryProd(t *testing.T) {
+	os.Setenv("profile", "prod")
+
+	service = ProvideRegistry(aws.ProvideAWSService(helper))
+
 	assert.NotNil(t, service)
 	assert.NotEmpty(t, service.consulRegAddr)
 }
 
-func TestGetRegistryProd(t *testing.T) {
-	os.Setenv("profile", "prod")
-
-	result := service.GetRegistry()
-
-	assert.NotNil(t, result)
-}
-
-func TestGetRegistryDev(t *testing.T) {
+func TestProvideRegistryDev(t *testing.T) {
 	os.Setenv("profile", "dev")
 
-	result := service.GetRegistry()
+	service = ProvideRegistry(aws.ProvideAWSService(helper))
 
+	assert.NotNil(t, service)
+	assert.NotEmpty(t, service.consulRegAddr)
+}
+
+func TestGetRegistryConsul(t *testing.T) {
+	os.Setenv("profile", "prod")
+
+	service = ProvideRegistry(aws.ProvideAWSService(helper))
+	result := service.GetRegistry()
 	assert.NotNil(t, result)
 }
 
 func SkipTestGetRegistryOther(t *testing.T) {
 	os.Setenv("profile", "Local")
 
+	service = ProvideRegistry(aws.ProvideAWSService(helper))
 	result := service.GetRegistry()
 
 	//need mock kubernetes.NewRegistry

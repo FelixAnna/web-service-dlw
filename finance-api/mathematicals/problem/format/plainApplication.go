@@ -42,14 +42,14 @@ func (p *PlainApplication) Sprintf(a, b, c interface{}) string {
 func (p *PlainApplication) getTemplate() string {
 	if p.Op == '+' || p.Op == '-' {
 		return p.Template[0]
-	} else if p.Op == '*' {
+	} else if p.Op == '*' || p.Op == '/' {
 		return p.Template[1]
 	} else {
 		return "?" //not supported
 	}
 }
 
-//"比%v%s%v的数是%s"
+// "比%v%s%v的数是%s"
 func (p *PlainApplication) getOp() string {
 	if p.Op == '+' {
 		return p.Ops[0]
@@ -57,6 +57,8 @@ func (p *PlainApplication) getOp() string {
 		return p.Ops[1]
 	} else if p.Op == '*' {
 		return p.Ops[2]
+	} else if p.Op == '/' {
+		return p.Ops[3]
 	} else {
 		return "?" //not supported
 	}

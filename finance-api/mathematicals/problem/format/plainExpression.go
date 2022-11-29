@@ -33,6 +33,8 @@ func (p *PlainExpression) getOp() string {
 		return "-"
 	} else if p.Op == '*' {
 		return "*"
+	} else if p.Op == '/' {
+		return "/"
 	} else {
 		return "?" //not supported
 	}

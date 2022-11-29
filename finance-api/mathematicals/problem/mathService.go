@@ -132,7 +132,7 @@ func GetResponse(results []entity.Problem, criteria *Criteria) []QuestionModel {
 			//FullText: expression.String(),
 			Kind:     criteria.Kind,
 			Category: criteria.Category,
-			Type:     criteria.Category,
+			Type:     criteria.Type,
 
 			Question: question,
 			Answer:   answer,

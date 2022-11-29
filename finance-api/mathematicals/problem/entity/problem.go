@@ -12,7 +12,7 @@ type Problem struct {
 
 func (p *Problem) IndenticalString() string {
 	a, b, c := p.A, p.B, p.C
-	if p.Op == '+' /*|| p.Op == '*' */ {
+	if p.Op == '+' || p.Op == '*' {
 		if a > b {
 			a, b = b, a
 		}

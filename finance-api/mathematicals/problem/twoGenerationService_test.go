@@ -196,3 +196,27 @@ func TestGenerateProblemsMultiply(t *testing.T) {
 		assert.True(t, problem.A*problem.B == problem.C)
 	}
 }
+
+func TestGenerateProblemsDivide(t *testing.T) {
+	criteria := &Criteria{
+		Min: 1,
+		Max: 100,
+
+		Range: &Range{
+			Min: 1,
+			Max: 10,
+		},
+		Category: CategoryDivide,
+	}
+
+	problems := twoGenService.GenerateProblems(criteria)
+
+	assert.NotNil(t, problems)
+	assert.Equal(t, len(problems), 10)
+	for _, problem := range problems {
+		assert.True(t, problem.C >= criteria.Min && problem.C < criteria.Max)
+		assert.True(t, problem.B >= criteria.Min && problem.B < criteria.Max)
+		assert.Equal(t, problem.Op, '/')
+		assert.True(t, problem.A/problem.B == problem.C)
+	}
+}

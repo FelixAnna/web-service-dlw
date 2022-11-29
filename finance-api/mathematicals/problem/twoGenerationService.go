@@ -14,6 +14,7 @@ type TwoGenerationService struct {
 	TwoPlusService     services.ProblemService
 	TwoMinusService    services.ProblemService
 	TwoMultiplyService services.ProblemService
+	TwoDivideService   services.ProblemService
 }
 
 func NewTwoGenerationService() *TwoGenerationService {
@@ -21,6 +22,7 @@ func NewTwoGenerationService() *TwoGenerationService {
 		TwoPlusService:     di.InitializeTwoPlusService(),
 		TwoMinusService:    di.InitializeTwoMinusService(),
 		TwoMultiplyService: di.InitializeTwoMultiplyService(),
+		TwoDivideService:   di.InitializeTwoDivideService(),
 	}
 }
 
@@ -39,6 +41,8 @@ func (service *TwoGenerationService) GenerateProblems(criteria *Criteria) []enti
 		problemService = service.TwoPlusService
 	case CategoryMultiply:
 		problemService = service.TwoMultiplyService
+	case CategoryDivide:
+		problemService = service.TwoDivideService
 	default:
 		log.Println("Invalid Category:", criteria.Category)
 	}

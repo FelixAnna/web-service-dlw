@@ -24,3 +24,8 @@ func InitializeTwoMultiplyService() services.ProblemService {
 	wire.Build(services.ProblemServiceSet, stratergy.TwoMultiplyStratergySet, data.RandomServiceSet)
 	return nil
 }
+
+func InitializeTwoDivideService() services.ProblemService {
+	wire.Build(services.ProblemServiceSet, stratergy.TwoDivideStratergySet, data.RandomServiceSet)
+	return nil
+}

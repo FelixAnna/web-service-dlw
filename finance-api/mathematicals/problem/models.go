@@ -14,6 +14,7 @@ const (
 	CategoryPlus int = iota
 	CategoryMinus
 	CategoryMultiply
+	CategoryDivide
 )
 
 const (

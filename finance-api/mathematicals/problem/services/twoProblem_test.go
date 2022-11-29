@@ -54,3 +54,13 @@ func TestGenerateProblemMultiply(t *testing.T) {
 	assert.Equal(t, problem.Op, '*')
 	assert.True(t, problem.A*problem.B == problem.C)
 }
+func TestGenerateProblemDivide(t *testing.T) {
+	twoProblem = NewTwoProblem(stratergy.NewTwoDivideStratergy(dataService))
+
+	problem := twoProblem.GenerateProblem(100, 200)
+	assert.NotNil(t, problem)
+	assert.True(t, problem.C >= 100 && problem.C <= 200)
+	assert.True(t, problem.B >= 100 && problem.B <= 200)
+	assert.Equal(t, problem.Op, '/')
+	assert.True(t, problem.A/problem.B == problem.C)
+}

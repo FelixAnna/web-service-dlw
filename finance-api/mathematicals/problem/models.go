@@ -35,7 +35,7 @@ type Criteria struct {
 	Range *Range `binding:"-"`
 
 	//+, -
-	Category int `binding:"min=0,max=2"`
+	Category int `binding:"min=0,max=3"`
 
 	//first, second, last
 	Kind int `binding:"min=1,max=3"`

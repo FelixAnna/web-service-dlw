@@ -27,7 +27,7 @@ func (rd *RandomService) GetData(criteria ...interface{}) int {
 	bottom, up := 0, math.MaxInt32
 	if len(criteria) >= 2 {
 		bottom, up = criteria[0].(int), criteria[1].(int)
-		return r1.Intn(up-bottom) + bottom
+		return r1.Intn(up-bottom+1) + bottom //+1 to include {up} itself
 	}
 	return r1.Intn(up-bottom) + bottom
 }

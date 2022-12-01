@@ -4,10 +4,10 @@ kind create cluster --config dlw-cluster.yml
 
 echo "install nginx  ..."
 echo "(if you need kong, please uninstall nginx, then follow readme.md)"
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml --wait
 
 echo "install metrics server ..."
-kubectl apply -f ../components/metrics/metrics.yaml
+kubectl apply -f ../components/metrics/metrics.yaml --wait
 
 echo "wait for nginx controller up before install services ..."
 kubectl wait --namespace ingress-nginx \

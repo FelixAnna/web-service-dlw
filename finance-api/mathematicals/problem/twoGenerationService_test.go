@@ -36,8 +36,8 @@ func TestGetQuestions(t *testing.T) {
 	assert.NotNil(t, problems)
 	assert.Equal(t, len(problems), criteria.Quantity)
 	for _, problem := range problems {
-		assert.True(t, problem.A >= criteria.Min && problem.A < criteria.Max)
-		assert.True(t, problem.B >= criteria.Min && problem.B < criteria.Max)
+		assert.True(t, problem.A >= criteria.Min && problem.A <= criteria.Max)
+		assert.True(t, problem.B >= criteria.Min && problem.B <= criteria.Max)
 		assert.Equal(t, problem.Op, '+')
 		assert.True(t, problem.A+problem.B == problem.C)
 	}
@@ -63,8 +63,8 @@ func TestGetQuestionsWithinRange(t *testing.T) {
 	assert.NotNil(t, problems)
 	assert.Equal(t, len(problems), criteria.Quantity)
 	for _, problem := range problems {
-		assert.True(t, problem.A >= criteria.Min && problem.A < criteria.Max)
-		assert.True(t, problem.B >= criteria.Min && problem.B < criteria.Max)
+		assert.True(t, problem.A >= criteria.Min && problem.A <= criteria.Max)
+		assert.True(t, problem.B >= criteria.Min && problem.B <= criteria.Max)
 		assert.Equal(t, problem.Op, '+')
 		assert.True(t, problem.C <= criteria.Range.Max)
 		assert.True(t, problem.A+problem.B == problem.C)
@@ -92,8 +92,8 @@ func TestGenerateProblemsMinus(t *testing.T) {
 	assert.Equal(t, len(problems), criteria.Quantity)
 	for _, problem := range problems {
 		fmt.Println(problem)
-		assert.True(t, problem.A >= criteria.Min && problem.A < criteria.Max)
-		assert.True(t, problem.B >= criteria.Min && problem.B < criteria.Max)
+		assert.True(t, problem.A >= criteria.Min && problem.A <= criteria.Max)
+		assert.True(t, problem.B >= criteria.Min && problem.B <= criteria.Max)
 		assert.Equal(t, problem.Op, '-')
 		assert.True(t, problem.A-problem.B == problem.C)
 		assert.True(t, problem.A >= problem.B)
@@ -116,8 +116,8 @@ func TestGenerateProblemsMinusPos(t *testing.T) {
 	assert.NotNil(t, problems)
 	assert.Equal(t, len(problems), 10)
 	for _, problem := range problems {
-		assert.True(t, problem.A >= criteria.Min && problem.A < criteria.Max)
-		assert.True(t, problem.B >= criteria.Min && problem.B < criteria.Max)
+		assert.True(t, problem.A >= criteria.Min && problem.A <= criteria.Max)
+		assert.True(t, problem.B >= criteria.Min && problem.B <= criteria.Max)
 		assert.Equal(t, problem.Op, '-')
 		assert.True(t, problem.A >= problem.B)
 		assert.True(t, problem.A-problem.B == problem.C)
@@ -190,8 +190,8 @@ func TestGenerateProblemsMultiply(t *testing.T) {
 	assert.NotNil(t, problems)
 	assert.Equal(t, len(problems), 10)
 	for _, problem := range problems {
-		assert.True(t, problem.A >= criteria.Min && problem.A < criteria.Max)
-		assert.True(t, problem.B >= criteria.Min && problem.B < criteria.Max)
+		assert.True(t, problem.A >= criteria.Min && problem.A <= criteria.Max)
+		assert.True(t, problem.B >= criteria.Min && problem.B <= criteria.Max)
 		assert.Equal(t, problem.Op, '*')
 		assert.True(t, problem.A*problem.B == problem.C)
 	}
@@ -214,8 +214,8 @@ func TestGenerateProblemsDivide(t *testing.T) {
 	assert.NotNil(t, problems)
 	assert.Equal(t, len(problems), 10)
 	for _, problem := range problems {
-		assert.True(t, problem.C >= criteria.Min && problem.C < criteria.Max)
-		assert.True(t, problem.B >= criteria.Min && problem.B < criteria.Max)
+		assert.True(t, problem.C >= criteria.Min && problem.C <= criteria.Max)
+		assert.True(t, problem.B >= criteria.Min && problem.B <= criteria.Max)
 		assert.Equal(t, problem.Op, '/')
 		assert.True(t, problem.A/problem.B == problem.C)
 	}

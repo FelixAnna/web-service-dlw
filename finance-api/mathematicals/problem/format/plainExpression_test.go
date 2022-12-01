@@ -12,6 +12,7 @@ var plusProblem PlainExpression
 var plusProblem2 PlainExpression
 var minusProblem PlainExpression
 var multiplyProblem PlainExpression
+var divideProblem PlainExpression
 var UnSupportedProblem PlainExpression
 
 func init() {
@@ -51,12 +52,21 @@ func init() {
 		},
 	}
 
-	UnSupportedProblem = PlainExpression{
+	divideProblem = PlainExpression{
 		&entity.Problem{
 			A:  3,
 			B:  2,
 			C:  6,
 			Op: '/',
+		},
+	}
+
+	UnSupportedProblem = PlainExpression{
+		&entity.Problem{
+			A:  3,
+			B:  2,
+			C:  6,
+			Op: '&',
 		},
 	}
 }
@@ -101,6 +111,11 @@ func TestPrintMinusLast(t *testing.T) {
 func TestPrintMultiplyLast(t *testing.T) {
 	result := multiplyProblem.QuestResult()
 	assert.EqualValues(t, fmt.Sprintf("3 * 2 = %v", placeHolder), result)
+}
+
+func TestPrintDivide(t *testing.T) {
+	result := divideProblem.QuestResult()
+	assert.EqualValues(t, fmt.Sprintf("3 / 2 = %v", placeHolder), result)
 }
 
 func TestPrintNotSupport(t *testing.T) {

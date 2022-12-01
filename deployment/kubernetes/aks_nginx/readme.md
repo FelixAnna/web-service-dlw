@@ -8,7 +8,7 @@
 
 ## terraform
 
-All-in-one install/uninstall:
+**All-In-One** install/uninstall:
 
 ```
 ## install everything

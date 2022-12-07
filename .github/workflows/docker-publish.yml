@@ -86,8 +86,8 @@ jobs:
         name: Build and push date-api
         uses: docker/build-push-action@v2
         with:
-          context: ./date-api
-          file: ./date-api/Dockerfile
+          context: ./src/date-api
+          file: ./src/date-api/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta-date.outputs.tags }}
           labels: ${{ steps.meta-date.outputs.labels }}
@@ -95,8 +95,8 @@ jobs:
         name: Build and push memo-api
         uses: docker/build-push-action@v2
         with:
-          context: ./memo-api
-          file: ./memo-api/Dockerfile
+          context: ./src/memo-api
+          file: ./src/memo-api/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta-memo.outputs.tags }}
           labels: ${{ steps.meta-memo.outputs.labels }}
@@ -104,8 +104,8 @@ jobs:
         name: Build and push finance-api
         uses: docker/build-push-action@v2
         with:
-          context: ./finance-api
-          file: ./finance-api/Dockerfile
+          context: ./src/finance-api
+          file: ./src/finance-api/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta-finance.outputs.tags }}
           labels: ${{ steps.meta-finance.outputs.labels }}
@@ -113,8 +113,8 @@ jobs:
         name: Build and push user-api
         uses: docker/build-push-action@v2
         with:
-          context: ./user-api
-          file: ./user-api/Dockerfile
+          context: ./src/user-api
+          file: ./src/user-api/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta-user.outputs.tags }}
           labels: ${{ steps.meta-user.outputs.labels }}

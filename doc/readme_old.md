@@ -69,14 +69,14 @@ kubectl config use-context kind-dlw-cluster
 4. Finance api service: [finance api service](/finance-api/readme.md) [![Go Report Card](https://goreportcard.com/badge/github.com/FelixAnna/web-service-dlw/finance-api)](https://goreportcard.com/report/github.com/FelixAnna/web-service-dlw/finance-api)
 
 #### kubectl deployment templetes
-`deployment/kubernetes/*.yaml`: native kubernetes deployments templements, include microservices and nginx ingress.
+`devops/*.yaml`: native kubernetes deployments templements, include microservices and nginx ingress.
 
 #### helm deployment templetes (autoscaling)
 
-`deployment/kubernetes/dlw-chart`: include autoscaling configurations which only supported by kubectl 1.23+ or above.
+`devops/dlw-chart`: include autoscaling configurations which only supported by kubectl 1.23+ or above.
 
 #### helm deployment templetes(no autoscaling)
-`deployment/kubernetes/dlw-helm`: no autoscaling configurations in the deployments templements
+`devops/dlw-helm`: no autoscaling configurations in the deployments templements
 
 
 ### Ingress Controller
@@ -98,12 +98,12 @@ helm upgrade --install ingress-nginx ingress-nginx \
 
 
 ### Metric Server
-`deployment/kubernetes/metrics/*.yaml`: enable metrics server which is necessary for horizontalautoscaler or veticalautoscaler if metric server not deployed by default, --kubelet-insecure-tls args is used for local, --metric-resolution can be set to longer if use docker-desktop
+`devops/metrics/*.yaml`: enable metrics server which is necessary for horizontalautoscaler or veticalautoscaler if metric server not deployed by default, --kubelet-insecure-tls args is used for local, --metric-resolution can be set to longer if use docker-desktop
 
 cloud based kubernetes already include metric server by default.
 
 ### Dashboard
-`deployment/kubernetes/dashboard`: follow the instructions to enable dashboard.
+`devops/dashboard`: follow the instructions to enable dashboard.
 
 ## Deployments
 ### Helm Deployments
@@ -276,9 +276,9 @@ consul agent -node=client-1 -join=172.17.0.2
 
 ## Target
 ### Kind
-`deployment/kubernetes/kind/*.yml`: set up kubernetes cluster by using kind, which can run multiple control panel and work nodes by using docker containers in local.
+`devops/kind/*.yml`: set up kubernetes cluster by using kind, which can run multiple control panel and work nodes by using docker containers in local.
 
-see details in: [kind/readme.md](deployment/kubernetes/kind/readme.md)
+see details in: [kind/readme.md](devops/kind/readme.md)
 
 ### AKS
 1. create acr, like: dlwcr

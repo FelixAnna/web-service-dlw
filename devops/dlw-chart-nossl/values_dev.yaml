@@ -71,7 +71,7 @@ applications:
         cpu: "128m"
   - name: finance
     port: 8484
-    image: yufelix/dlw-finance-api:1.9.6
+    image: yufelix/dlw-finance-api:2.0.2
     resources:
       requests:
         memory: 64Mi

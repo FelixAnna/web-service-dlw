@@ -2,7 +2,7 @@
 
 [![Build Status](https://github.com/FelixAnna/web-service-dlw/workflows/Run%20Tests/badge.svg?branch=master)](https://github.com/FelixAnna/web-service-dlw/actions?query=branch%3Amaster)
 [![codecov](https://codecov.io/gh/FelixAnna/web-service-dlw/branch/master/graph/badge.svg)](https://codecov.io/gh/FelixAnna/web-service-dlw)
-[![Go Report Card](https://goreportcard.com/badge/github.com/FelixAnna/web-service-dlw/common)](https://goreportcard.com/report/github.com/FelixAnna/web-service-dlw/common)
+[![Go Report Card](https://goreportcard.com/badge/github.com/FelixAnna/web-service-dlw/src/common)](https://goreportcard.com/report/github.com/FelixAnna/web-service-dlw/src/common)
 
 # Table of Contents
 
@@ -67,27 +67,27 @@ kubectl config use-context kind-dlw-cluster
 
 Service | Path | Tags
 --- | --- | ---
-User api service | [user api service](/user-api/readme.md) | [![Go Report Card](https://goreportcard.com/badge/github.com/FelixAnna/web-service-dlw/user-api)](https://goreportcard.com/report/github.com/FelixAnna/web-service-dlw/user-api)
-Memo api service | [memo api service](/memo-api/readme.md) | [![Go Report Card](https://goreportcard.com/badge/github.com/FelixAnna/web-service-dlw/memo-api)](https://goreportcard.com/report/github.com/FelixAnna/web-service-dlw/memo-api)
-Date api service | [date api service](/date-api/readme.md) | [![Go Report Card](https://goreportcard.com/badge/github.com/FelixAnna/web-service-dlw/date-api)](https://goreportcard.com/report/github.com/FelixAnna/web-service-dlw/date-api)
-Finance api service | [finance api service](/finance-api/readme.md) | [![Go Report Card](https://goreportcard.com/badge/github.com/FelixAnna/web-service-dlw/finance-api)](https://goreportcard.com/report/github.com/FelixAnna/web-service-dlw/finance-api)
+User api service | [user api service](/src/user-api/readme.md) | [![Go Report Card](https://goreportcard.com/badge/github.com/FelixAnna/web-service-dlw/src/user-api)](https://goreportcard.com/report/github.com/FelixAnna/web-service-dlw/src/user-api)
+Memo api service | [memo api service](/src/memo-api/readme.md) | [![Go Report Card](https://goreportcard.com/badge/github.com/FelixAnna/web-service-dlw/src/memo-api)](https://goreportcard.com/report/github.com/FelixAnna/web-service-dlw/src/memo-api)
+Date api service | [date api service](/src/date-api/readme.md) | [![Go Report Card](https://goreportcard.com/badge/github.com/FelixAnna/web-service-dlw/src/date-api)](https://goreportcard.com/report/github.com/FelixAnna/web-service-dlw/src/date-api)
+Finance api service | [finance api service](/src/finance-api/readme.md) | [![Go Report Card](https://goreportcard.com/badge/github.com/FelixAnna/web-service-dlw/src/finance-api)](https://goreportcard.com/report/github.com/FelixAnna/web-service-dlw/src/finance-api)
 
 ### Helm deployment templetes (autoscaling)
 
-`deployment/kubernetes/dlw-chart`: include autoscaling components which only supported by kubectl 1.23+ .
+`devops/dlw-chart`: include autoscaling components which only supported by kubectl 1.23+ .
 
-`deployment/kubernetes/dlw-chart-nossl`: same as above, except not include cert-manager, ingress with public ip, use this for local development.
+`devops/dlw-chart-nossl`: same as above, except not include cert-manager, ingress with public ip, use this for local development.
 ### Ingress
-reference [ingress](./deployment/kubernetes/ingress/readme.md)
+reference [ingress](./devops/ingress/readme.md)
 
 
 ### Metric Server
-`deployment/kubernetes/metrics/*.yaml`: enable metrics server which is necessary for horizontalautoscaler or veticalautoscaler if metric server not deployed by default, --kubelet-insecure-tls args is used for local, --metric-resolution can be set to longer if use docker-desktop
+`devops/metrics/*.yaml`: enable metrics server which is necessary for horizontalautoscaler or veticalautoscaler if metric server not deployed by default, --kubelet-insecure-tls args is used for local, --metric-resolution can be set to longer if use docker-desktop
 
 cloud based kubernetes already include metric server by default.
 
 ### Dashboard
-`deployment/kubernetes/dashboard`: follow the instructions to enable dashboard.
+`devops/dashboard`: follow the instructions to enable dashboard.
 
 ## Deployments
 ### Helm Deployments
@@ -100,8 +100,8 @@ cloud based kubernetes already include metric server by default.
 	helm repo add bitnami https://charts.bitnami.com/bitnami
 	```
 #### deploy
-1. update the *awsKeyId* and *awsSecretKey* to correct value in: `deployment\kubernetes\dlw-chart\values_*.yaml`
-2. cd to `deployment\kubernetes` folder, run:
+1. update the *awsKeyId* and *awsSecretKey* to correct value in: `devops\dlw-chart\values_*.yaml`
+2. cd to `devops` folder, run:
 	```bash
 	helm install dlw ./dlw-chart/ --namespace dlw-dev --create-namespace  --values ./dlw-chart/values_*.yaml
 	```
@@ -118,12 +118,12 @@ cloud based kubernetes already include metric server by default.
 ## Target
 
 ### Kind
-`deployment/kubernetes/kind/*.yml`: set up kubernetes cluster by using kind, which can run multiple control panel and work nodes by using docker containers in local.
+`devops/kind/*.yml`: set up kubernetes cluster by using kind, which can run multiple control panel and work nodes by using docker containers in local.
 
 #### Set up kind: 
 This version do not contains SSL/TLS termination and https redirection, and use kubernetes service discovery.
 
-[kind/readme.md](deployment/kubernetes/kind/readme.md)
+[kind/readme.md](devops/kind/readme.md)
 
 #### deployments
 install/update/uninstall by following [deploy by helm](#helm-deployments)
@@ -133,7 +133,7 @@ install/update/uninstall by following [deploy by helm](#helm-deployments)
 
 This version contains SSL/TLS termination and https redirection, and use consul service discovery.
 
-following： [./deployment/kubernetes/aks_nginx/readme.md](./deployment/kubernetes/aks_nginx/readme.md)
+following： [./devops/aks_nginx/readme.md](./devops/aks_nginx/readme.md)
 
 refer: [Securing NGINX-ingress](https://cert-manager.io/v0.14-docs/tutorials/acme/ingress/), [Let's Encrypt](https://letsencrypt.org/)
 
@@ -142,7 +142,7 @@ refer: [Securing NGINX-ingress](https://cert-manager.io/v0.14-docs/tutorials/acm
 This version contains SSL/TLS termination and https redirection, and use consul service discovery.
 
 #### install
-following： [./deployment/kubernetes/aks_appgw/readme.md](./deployment/kubernetes/aks_appgw/readme.md)
+following： [./devops/aks_appgw/readme.md](./devops/aks_appgw/readme.md)
 
  refer: [aks](https://docs.microsoft.com/en-us/cli/azure/aks?view=azure-cli-latest#az-aks-create), [application gateway for aks](https://docs.microsoft.com/en-us/azure/application-gateway/tutorial-ingress-controller-add-on-existing#code-try-2),
  [application-gateway-kubernetes-ingress](https://azure.github.io/application-gateway-kubernetes-ingress)

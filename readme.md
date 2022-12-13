@@ -54,7 +54,7 @@
 
 ## Switch kubectl context
 
-after you connected to aks, you context is attached to aks by default, if you want to check your local kubernetes status, you need switch context:
+after you connected to aks, you context is attached to aks by default, if you want to check your local Kubernetes status, you need switch context:
 
 ```bash
 kubectl config view
@@ -62,7 +62,7 @@ kubectl config use-context kind-dlw-cluster
 ```
 
 ## Components
-### Microservices
+### Microservices (Here is the Application Gateway version, Nginx version is very similar)
 ![architecture overview](docs/architecture_dlw.png)
 
 Service | Path | Tags

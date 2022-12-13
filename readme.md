@@ -62,7 +62,8 @@ kubectl config use-context kind-dlw-cluster
 ```
 
 ## Components
-### Microservices (Here is the Application Gateway version, Nginx version is very similar)
+### Microservices 
+(Here is the Application Gateway version, Nginx version is very similar)
 ![architecture overview](docs/architecture_dlw.png)
 
 Service | Path | Tags

@@ -38,9 +38,7 @@
    
    use KMS customer managed keys if necessary.
 
-3. [deprecated]Create Tables in aws DynamoDB:
-
-   dlf.Memos, dlf.Users
+~~3. [deprecated]Create Tables in aws DynamoDB: dlf.Memos, dlf.Users~~
    
 4. Prepare an SQL Server instance to store data for finance api, table will be automatic migrated
 

@@ -37,9 +37,7 @@
    
    use KMS customer managed keys if necessary.
 
-3. [deprecated]Create Tables in aws DynamoDB:
-
-   dlf.Memos, dlf.Users
+~~3. [deprecated]Create Tables in aws DynamoDB: dlf.Memos, dlf.Users~~
    
 4. Prepare an SQL Server instance to store data for finance api, table will be automatic migrated
 
@@ -73,7 +71,7 @@
 
 ## Switch kubectl context
 
-after you connected to aks, you context is attached to aks by default, if you want to check your local kubernetes status, you need switch context:
+after you connected to aks, you context is attached to aks by default, if you want to check your local Kubernetes status, you need switch context:
 
 ```bash
 kubectl config view
@@ -81,8 +79,9 @@ kubectl config use-context kind-dlw-cluster
 ```
 
 ## Components
-### Microservices
-![architecture overview](./docs/architecture_dlw.png)
+### Microservices 
+(Here is the Application Gateway version, Nginx version is very similar)
+![architecture overview](docs/architecture_dlw.png)
 
 Service | Path | Tags
 --- | --- | ---

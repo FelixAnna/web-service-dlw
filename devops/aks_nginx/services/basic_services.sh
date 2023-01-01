@@ -1,6 +1,7 @@
 
-app=$1
-env=$2
+env=$1
+app=$2
+
 rgName=$app-$env-rg
 ipName=nginxIp
 clusterName="${env}Cluster"
@@ -49,6 +50,7 @@ helm upgrade --install cert-manager jetstack/cert-manager \
   --version v1.10.0 \
   --set installCRDs=true \
   --wait
+
 
 # or:
 

@@ -1,13 +1,18 @@
 ## uninstall basic 
-app=dlw  # microservice/deployment name
 env=$1  # dev or prod
+app=$2  # microservice/deployment name
+
+if [ "$app" == '' ];
+then
+    app=dlw
+fi
 
 cd ./services
 
-sh uninstall.sh $app $env
+sh uninstall.sh $env $app
 
 ## destory infrastructure
 
 cd ../terraform/profiles/$env
-
+terraform init -reconfigure
 terraform destroy -auto-approve

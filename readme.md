@@ -116,23 +116,23 @@ microservice helm chart is located in "./dlw-chart" and "./dlw-chart-nossl".
 
   cd src/date-api
   docker build -t dlw-date-api:$tag -f Dockerfile . 
-  docker image tag dlw-date-api:$tag hssdevacr.azurecr.io/dlw-date-api:$tag
-  docker image push hssdevacr.azurecr.io/dlw-date-api:$tag
+  docker image tag dlw-date-api:$tag yufelix/dlw-date-api:$tag
+  docker image push yufelix/dlw-date-api:$tag
   
   cd ../finance-api
   docker build -t dlw-finance-api:$tag -f Dockerfile . 
-  docker image tag dlw-finance-api:$tag hssdevacr.azurecr.io/dlw-finance-api:$tag
-  docker image push hssdevacr.azurecr.io/dlw-finance-api:$tag
+  docker image tag dlw-finance-api:$tag yufelix/dlw-finance-api:$tag
+  docker image push yufelix/dlw-finance-api:$tag
 
   cd ../memo-api
   docker build -t dlw-memo-api:$tag -f Dockerfile . 
-  docker image tag dlw-memo-api:$tag hssdevacr.azurecr.io/dlw-memo-api:$tag
-  docker image push hssdevacr.azurecr.io/dlw-memo-api:$tag
+  docker image tag dlw-memo-api:$tag yufelix/dlw-memo-api:$tag
+  docker image push yufelix/dlw-memo-api:$tag
 
   cd ../user-api
   docker build -t dlw-user-api:$tag -f Dockerfile . 
-  docker image tag dlw-user-api:$tag hssdevacr.azurecr.io/dlw-user-api:$tag
-  docker image push hssdevacr.azurecr.io/dlw-user-api:$tag
+  docker image tag dlw-user-api:$tag yufelix/dlw-user-api:$tag
+  docker image push yufelix/dlw-user-api:$tag
 ```
 ```
   ## if you do not have docker

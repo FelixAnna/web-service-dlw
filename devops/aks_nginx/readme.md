@@ -34,9 +34,9 @@ terraform destroy -auto-approve
 
 ```
 cd services
-sh basic_services.sh
-sh dlw_services.sh
+sh basic_services.sh dev dlw
+sh main_services.sh dev dlw
 
 ## uninstall before destroy
-sh uninstall.sh
+sh uninstall.sh dev dlw
 ```

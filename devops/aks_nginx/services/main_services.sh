@@ -1,6 +1,6 @@
 
-app=$1
-env=$2
+env=$1
+app=$2
 build="D:\code\github\keep-hands-on\important\dlw-app\build"
 storage=dlwstorage916
 

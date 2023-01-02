@@ -30,7 +30,7 @@ sed -i "s/awsKeyIdPlaceHolder/$(echo -n $AWS_ACCESS_KEY_ID | base64)/" ./$app-ch
 sed -i "s/awsSecretKeyPlaceHolder/$(echo -n $AWS_SECRET_ACCESS_KEY | base64)/" ./$app-chart/values_aks_$env.yaml
 sed -i "s/imageVersion/$tag/" ./$app-chart/values_aks_$env.yaml
 
-cd aks/services
+cd aks_nginx/services
 
 sh basic_services.sh $env $app
 sh main_services.sh $env $app

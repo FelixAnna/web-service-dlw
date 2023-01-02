@@ -14,6 +14,13 @@ then
 fi
 
 echo $app
+
+## define your variables somewhere:
+## AWS_ACCESS_KEY_ID=xxx
+## AWS_SECRET_ACCESS_KEY=xxx
+source d:/code/config.sh
+echo $AWS_ACCESS_KEY_ID
+
 cd ./terraform/profiles/$env
 terraform init -reconfigure
 
@@ -23,9 +30,6 @@ terraform apply -auto-approve
 ## install basic 
 
 cd ../../../../
-AWS_ACCESS_KEY_ID=awsKeyIdPlaceHolder
-AWS_SECRET_ACCESS_KEY=awsSecretKeyPlaceHolder
-echo $AWS_SECRET_ACCESS_KEY
 sed -i "s/awsKeyIdPlaceHolder/$(echo -n $AWS_ACCESS_KEY_ID | base64)/" ./$app-chart/values_aks_$env.yaml
 sed -i "s/awsSecretKeyPlaceHolder/$(echo -n $AWS_SECRET_ACCESS_KEY | base64)/" ./$app-chart/values_aks_$env.yaml
 sed -i "s/imageVersion/$tag/" ./$app-chart/values_aks_$env.yaml

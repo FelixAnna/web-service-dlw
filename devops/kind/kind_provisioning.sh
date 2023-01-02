@@ -13,6 +13,12 @@ fi
 
 ns="${app}ns"
 
+## define your variables somewhere:
+## AWS_ACCESS_KEY_ID=xxx
+## AWS_SECRET_ACCESS_KEY=xxx
+source d:/code/config.sh
+echo $AWS_ACCESS_KEY_ID
+
 kind delete clusters $app-cluster
 
 kind create cluster --config $app-cluster.yml
@@ -33,9 +39,6 @@ kubectl wait --namespace ingress-nginx \
 echo "install services ..."
 cd ..
 
-AWS_ACCESS_KEY_ID=awsKeyIdPlaceHolder
-AWS_SECRET_ACCESS_KEY=awsSecretKeyPlaceHolder
-echo $AWS_ACCESS_KEY_ID
 sed -i "s/awsKeyIdPlaceHolder/$(echo -n $AWS_ACCESS_KEY_ID | base64)/" ./$app-chart-nossl/values_dev.yaml
 sed -i "s/awsSecretKeyPlaceHolder/$(echo -n $AWS_SECRET_ACCESS_KEY | base64)/" ./$app-chart-nossl/values_dev.yaml
 sed -i "s/imageVersion/$tag/" ./$app-chart-nossl/values_dev.yaml

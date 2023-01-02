@@ -1,7 +1,7 @@
 
 
-app=$1
-env=$2
+env=$1
+app=$2
 rgName=$app-$env-rg
 clusterName="${env}Cluster"
 ns="${app}ns"

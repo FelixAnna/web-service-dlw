@@ -18,4 +18,9 @@ resource "aws_route53_record" "web" {
   ttl     = 10
 
   records = [ azurerm_cdn_endpoint.dlw_origin.fqdn ]
+
+  depends_on = [
+    azurerm_cdn_endpoint_custom_domain.dlw_dns,
+    azurerm_cdn_endpoint.dlw_origin
+  ]
 }

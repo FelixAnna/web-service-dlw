@@ -38,6 +38,7 @@ cd aks_nginx/services
 
 sh basic_services.sh $env $app
 sh main_services.sh $env $app
+sh frontend.sh $app
 
 cd ../../
 sed -i "s/$(echo -n $AWS_ACCESS_KEY_ID | base64)/awsKeyIdPlaceHolder/" ./$app-chart/values_aks_$env.yaml

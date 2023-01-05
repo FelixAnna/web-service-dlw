@@ -32,7 +32,7 @@ jobs:
   - task: AzureCLI@2
     displayName: 'Uninstall All Services'
     inputs:
-      azureSubscription: 'Visual Studio Professional Subscription (6edd6bd3-4741-4bd4-87bc-f7f59b8679b5)'
+      azureSubscription: 'azure resource manager'
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
@@ -55,7 +55,7 @@ jobs:
       command: init
       workingDirectory: 'devops/aks_nginx/terraform/profiles/$(env)'
       backendType: azurerm
-      backendServiceArm: 'Visual Studio Professional Subscription (6edd6bd3-4741-4bd4-87bc-f7f59b8679b5)'
+      backendServiceArm: 'azure resource manager'
       backendAzureRmSubscriptionId: '$(ARM_SUBSCRIPTION_ID)'
       backendAzureRmResourceGroupName: 'configuration-rg'
       backendAzureRmStorageAccountName: configstoragefelix
@@ -68,7 +68,7 @@ jobs:
     inputs:
       command: destroy
       workingDirectory: 'devops/aks_nginx/terraform/profiles/$(env)'
-      environmentServiceName: 'Visual Studio Professional Subscription (6edd6bd3-4741-4bd4-87bc-f7f59b8679b5)'
+      environmentServiceName: 'azure resource manager'
       providerAzureRmSubscriptionId: '$(ARM_SUBSCRIPTION_ID)'
       runAzLogin: true
       commandOptions: '-auto-approve'

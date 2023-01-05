@@ -13,7 +13,7 @@ resource "azurerm_kubernetes_cluster" "dlwCluster" {
     name            = "default"
     max_count = 3
     min_count = 1
-    node_count      = 1
+    //node_count      = 1
     vm_size         = "Standard_B2s"
     os_disk_size_gb = 30
     enable_auto_scaling = true

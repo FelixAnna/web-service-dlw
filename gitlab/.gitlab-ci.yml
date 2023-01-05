@@ -1,0 +1,149 @@
+# This file is a template, and might need editing before it works on your project.
+# You can copy and paste this template into a new `.gitlab-ci.yml` file.
+# You should not add this template to an existing `.gitlab-ci.yml` file by using the `include:` keyword.
+#
+# To contribute improvements to CI/CD templates, please follow the Development guide at:
+# https://docs.gitlab.com/ee/development/cicd/templates.html
+# This specific template is located at:
+# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Bash.gitlab-ci.yml
+
+# See https://docs.gitlab.com/ee/ci/yaml/index.html for all available options
+
+# you can delete this line if you're not using Docker
+stages:
+  - test
+  - build
+  - deploy
+
+image: docker
+services:
+  - docker:dind
+variables:  
+  DOCKER_HOST: tcp://localhost:2375/
+  imageTag: latest
+  env: dev
+  app: demo
+
+workflow:
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: always  
+    - if: $CI_COMMIT_BRANCH == 'develop'
+      when: always
+    - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH && $CI_COMMIT_BRANCH != 'develop'
+      when: never
+
+before_script:
+  - echo "Before script section"
+  - while ! nc -z localhost 2375 ; do sleep 1 ; done
+  - docker login -u $ACR_USER -p $ACR_KEY hssdevacr.azurecr.io
+  - docker info
+  - echo $imageTag
+
+after_script:
+  - echo "After script section"
+  - echo "For example you might do some cleanup here"
+
+test:
+  stage: test
+  image: golang:1.19.3-alpine3.16
+  before_script:
+    - export CGO_ENABLED=0
+  script:
+    - echo "Do a test here"
+    - echo "For example run a test suite"
+    - cd src
+    - cd date-api/
+    - go test ./...
+    - cd ../memo-api/
+    - go test ./...
+    - cd ../finance-api/
+    - go test ./...
+    - cd ../user-api/
+    - go test ./...
+    - cd ../common/
+    - go test ./...
+
+docker-build-date:
+  stage: build
+  needs: ['test']
+  script:    
+    - cd src/date-api
+
+    - docker build -t dlw-date-api:$imageTag -f Dockerfile . 
+
+    - docker image tag dlw-date-api:$imageTag hssdevacr.azurecr.io/dlw-date-api:$imageTag
+    - docker image push hssdevacr.azurecr.io/dlw-date-api:$imageTag
+
+docker-build-memo:
+  stage: build
+  needs: ['test']
+  script:    
+    - cd src/memo-api
+
+    - docker build -t dlw-memo-api:$imageTag -f Dockerfile . 
+
+    - docker image tag dlw-memo-api:$imageTag hssdevacr.azurecr.io/dlw-memo-api:$imageTag
+    - docker image push hssdevacr.azurecr.io/dlw-memo-api:$imageTag
+
+docker-build-finance:
+  stage: build
+  needs: ['test']
+  script:    
+    - cd src/finance-api
+
+    - docker build -t dlw-finance-api:$imageTag -f Dockerfile . 
+
+    - docker image tag dlw-finance-api:$imageTag hssdevacr.azurecr.io/dlw-finance-api:$imageTag
+    - docker image push hssdevacr.azurecr.io/dlw-finance-api:$imageTag
+
+docker-build-user:
+  stage: build
+  needs: ['test']
+  script:    
+    - cd src/user-api
+
+    - docker build -t dlw-user-api:$imageTag -f Dockerfile . 
+
+    - docker image tag dlw-user-api:$imageTag hssdevacr.azurecr.io/dlw-user-api:$imageTag
+    - docker image push hssdevacr.azurecr.io/dlw-user-api:$imageTag
+
+
+deploy-infrastructure:
+  stage: deploy
+  needs: ['docker-build-date','docker-build-memo','docker-build-finance','docker-build-user']
+  before_script:
+    - ''
+  image:
+    name: hashicorp/terraform:latest
+    entrypoint:
+      - '/usr/bin/env'
+      - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+  script:
+    - echo "Deploy infrastructure"
+    - cd devops/aks_nginx/terraform/profiles/$env
+    - rm -rf .terraform
+    - terraform --version
+    - terraform init
+    - terraform apply -auto-approve
+
+deploy-services:
+  stage: deploy
+  before_script:
+    - apk add py3-pip
+    - apk add gcc musl-dev python3-dev libffi-dev openssl-dev cargo make
+    - pip install --upgrade pip
+    - pip install azure-cli
+    - sh
+    - az login --service-principal --username="${ARM_CLIENT_ID}" --password="${ARM_CLIENT_SECRET}" --tenant=${ARM_TENANT_ID}
+  image: dtzar/helm-kubectl:latest
+  needs: ['deploy-infrastructure']
+  script:
+    - echo "Deploy services"
+    - cd devops/
+    - sed -i "s/awsKeyIdPlaceHolder/$(echo -n $AWS_ACCESS_KEY_ID | base64)/" ./$app-chart/values_aks_$env.yaml
+    - sed -i "s/awsSecretKeyPlaceHolder/$(echo -n $AWS_SECRET_ACCESS_KEY | base64)/" ./$app-chart/values_aks_$env.yaml
+    - sed -i "s/imageVersion/$imageTag/" ./$app-chart/values_aks_$env.yaml
+    - cd aks_nginx/services
+    - sh basic_services.sh $env $app
+    - sh main_services.sh $env $app

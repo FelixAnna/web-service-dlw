@@ -1,0 +1,76 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger: none  # manually
+
+parameters:
+  - name: environment
+    displayName: Which to DESTROY?
+    type: string
+    default: dev
+    values:
+    - prod
+    - dev
+
+variables:
+- group: ${{parameters.environment}}-variable-group
+- name: env
+  value: ${{parameters.environment}}
+
+pool:
+  name: Azure Pipelines
+  vmImage: 'ubuntu-latest'
+  
+jobs:
+- job: unintallServices
+  displayName: Uninstall All Services # Human-readable name for the job. 
+  timeoutInMinutes: 15
+
+  steps:
+  - task: AzureCLI@2
+    displayName: 'Uninstall All Services'
+    inputs:
+      azureSubscription: 'Visual Studio Professional Subscription (6edd6bd3-4741-4bd4-87bc-f7f59b8679b5)'
+      scriptType: bash
+      scriptLocation: inlineScript
+      inlineScript: |
+        sh uninstall.sh $(env) $(app)
+      useGlobalConfig: true
+      workingDirectory: 'devops/aks_nginx/services'
+
+- job: destroyInfrastructure
+  displayName: Destroy infrastructure # Human-readable name for the job. 
+  dependsOn: unintallServices
+  timeoutInMinutes: 30
+  
+  steps:
+  - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
+    displayName: 'Use Terraform latest'
+
+  - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
+    displayName: 'terraform initial'
+    inputs:
+      command: init
+      workingDirectory: 'devops/aks_nginx/terraform/profiles/$(env)'
+      backendType: azurerm
+      backendServiceArm: 'Visual Studio Professional Subscription (6edd6bd3-4741-4bd4-87bc-f7f59b8679b5)'
+      backendAzureRmSubscriptionId: '$(ARM_SUBSCRIPTION_ID)'
+      backendAzureRmResourceGroupName: 'configuration-rg'
+      backendAzureRmStorageAccountName: configstoragefelix
+      backendAzureRmContainerName: tfstate
+      backendAzureRmKey: 'dlw-$(env).nginx.tfstate'
+      commandOptions: '-reconfigure'
+
+  - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
+    displayName: 'terraform destroy'
+    inputs:
+      command: destroy
+      workingDirectory: 'devops/aks_nginx/terraform/profiles/$(env)'
+      environmentServiceName: 'Visual Studio Professional Subscription (6edd6bd3-4741-4bd4-87bc-f7f59b8679b5)'
+      providerAzureRmSubscriptionId: '$(ARM_SUBSCRIPTION_ID)'
+      runAzLogin: true
+      commandOptions: '-auto-approve'
+      providerServiceAws: 'aws connection'
+      providerAwsRegion: '$(AWS_DEFAULT_REGION)'

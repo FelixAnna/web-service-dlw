@@ -4,7 +4,7 @@ terraform {
     resource_group_name  = "configuration-rg"
     storage_account_name = "configstoragefelix"
     container_name       = "tfstate"
-    key                  = "api-prod-dlw.terraform.tfstate"
+    key                  = "dlw-prod.terraform.tfstate"
   }
 
   required_providers {

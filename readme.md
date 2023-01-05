@@ -186,7 +186,7 @@ following： [./devops/aks_appgw/readme.md](./devops/aks_appgw/readme.md)
 
 ### local deployment
 
-There is another folder "./demo-chart-nossl" which is for deploying to a local kind cluster, it doesn't depend on cert-manager, and consul.
+There is another folder "./dlw-chart-nossl" which is for deploying to a local kind cluster, it doesn't depend on cert-manager, and consul.
 
 follow: [./devops/kind/readme.md](./devops/kind/readme.md)
 

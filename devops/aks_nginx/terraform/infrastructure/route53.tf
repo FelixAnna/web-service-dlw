@@ -20,7 +20,6 @@ resource "aws_route53_record" "web" {
   records = [ azurerm_cdn_endpoint.dlw_origin.fqdn ]
 
   depends_on = [
-    azurerm_cdn_endpoint.dlw_cnd_profile,
     azurerm_cdn_endpoint.dlw_origin,
     azurerm_cdn_endpoint_custom_domain.dlw_dns
   ]

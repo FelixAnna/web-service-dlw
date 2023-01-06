@@ -110,7 +110,7 @@ microservice helm chart is located in "./dlw-chart" and "./dlw-chart-nossl".
 ### Docker build & push to azure container registry
 
 ```
-  ## if you have docker
+  ## if you have docker, and want to push to docker hub
 
   tag=latest
 
@@ -135,7 +135,7 @@ microservice helm chart is located in "./dlw-chart" and "./dlw-chart-nossl".
   docker image push yufelix/dlw-user-api:$tag
 ```
 ```
-  ## if you do not have docker
+  ## if you do not have docker, and want to push to acr
     
   tag=latest
   cd src/date-api

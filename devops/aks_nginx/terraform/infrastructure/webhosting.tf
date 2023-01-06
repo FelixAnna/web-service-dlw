@@ -56,7 +56,7 @@ resource "azurerm_cdn_endpoint_custom_domain" "dlw_dns" {
   host_name       = var.frontendDNS
 
   depends_on = [
-    azurerm_cdn_endpoint.dlw_origin,
-    aws_route53_record.web
+    azurerm_cdn_endpoint.dlw_cnd_profile,
+    azurerm_cdn_endpoint.dlw_origin
   ]
 }

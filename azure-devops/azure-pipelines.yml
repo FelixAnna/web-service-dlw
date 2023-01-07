@@ -31,93 +31,93 @@ pool:
   vmImage: 'ubuntu-latest'
   
 jobs:
-- job: runTest
-  displayName: Run Tests # Human-readable name for the job. 
-  timeoutInMinutes: 5
+# - job: runTest
+#   displayName: Run Tests # Human-readable name for the job. 
+#   timeoutInMinutes: 5
 
-  steps:
-  - task: GoTool@0
-    displayName: 'Use Go 1.19.3'
-    inputs:
-      version: 1.19.3
+#   steps:
+#   - task: GoTool@0
+#     displayName: 'Use Go 1.19.3'
+#     inputs:
+#       version: 1.19.3
 
-  - task: Go@0
-    displayName: 'Run Test Cases - Common'
-    inputs:
-      command: test
-      arguments: ./...
-      workingDirectory: 'src/common'
+#   - task: Go@0
+#     displayName: 'Run Test Cases - Common'
+#     inputs:
+#       command: test
+#       arguments: ./...
+#       workingDirectory: 'src/common'
 
-  - task: Go@0
-    displayName: 'Run Test Cases - Date API'
-    inputs:
-      command: test
-      arguments: ./...
-      workingDirectory: 'src/date-api'
+#   - task: Go@0
+#     displayName: 'Run Test Cases - Date API'
+#     inputs:
+#       command: test
+#       arguments: ./...
+#       workingDirectory: 'src/date-api'
 
-  - task: Go@0
-    displayName: 'Run Test Cases - Memo API'
-    inputs:
-      command: test
-      arguments: ./...
-      workingDirectory: 'src/memo-api'
+#   - task: Go@0
+#     displayName: 'Run Test Cases - Memo API'
+#     inputs:
+#       command: test
+#       arguments: ./...
+#       workingDirectory: 'src/memo-api'
 
-  - task: Go@0
-    displayName: 'Run Test Cases - Finance API'
-    inputs:
-      command: test
-      arguments: ./...
-      workingDirectory: 'src/finance-api'
+#   - task: Go@0
+#     displayName: 'Run Test Cases - Finance API'
+#     inputs:
+#       command: test
+#       arguments: ./...
+#       workingDirectory: 'src/finance-api'
 
-  - task: Go@0
-    displayName: 'Run Test Cases - User API'
-    inputs:
-      command: test
-      arguments: ./...
-      workingDirectory: 'src/user-api'
-  #Multi-configuration and multi-agent job options are not exported to YAML. Configure these options using documentation guidance: https://docs.microsoft.com/vsts/pipelines/process/phases
+#   - task: Go@0
+#     displayName: 'Run Test Cases - User API'
+#     inputs:
+#       command: test
+#       arguments: ./...
+#       workingDirectory: 'src/user-api'
+#   #Multi-configuration and multi-agent job options are not exported to YAML. Configure these options using documentation guidance: https://docs.microsoft.com/vsts/pipelines/process/phases
 
-- job: buildAndPush
-  displayName: Build and Push Images # Human-readable name for the job. 
-  dependsOn: runTest
-  timeoutInMinutes: 10
+# - job: buildAndPush
+#   displayName: Build and Push Images # Human-readable name for the job. 
+#   dependsOn: runTest
+#   timeoutInMinutes: 10
 
-  steps:
-  - task: Docker@2
-    displayName: 'Build Date Api image'
-    inputs:
-      containerRegistry: sharedacr
-      repository: 'dlw-date-api'
-      Dockerfile: 'src/date-api/Dockerfile'
-      buildContext: 'src/date-api'
-      tags: '$(imageTag)'
+#   steps:
+#   - task: Docker@2
+#     displayName: 'Build Date Api image'
+#     inputs:
+#       containerRegistry: sharedacr
+#       repository: 'dlw-date-api'
+#       Dockerfile: 'src/date-api/Dockerfile'
+#       buildContext: 'src/date-api'
+#       tags: '$(imageTag)'
 
-  - task: Docker@2
-    displayName: 'Build Memo Api image'
-    inputs:
-      containerRegistry: sharedacr
-      repository: 'dlw-memo-api'
-      Dockerfile: 'src/memo-api/Dockerfile'
-      buildContext: 'src/memo-api'
-      tags: '$(imageTag)'
+#   - task: Docker@2
+#     displayName: 'Build Memo Api image'
+#     inputs:
+#       containerRegistry: sharedacr
+#       repository: 'dlw-memo-api'
+#       Dockerfile: 'src/memo-api/Dockerfile'
+#       buildContext: 'src/memo-api'
+#       tags: '$(imageTag)'
 
-  - task: Docker@2
-    displayName: 'Build Finance Api image'
-    inputs:
-      containerRegistry: sharedacr
-      repository: 'dlw-finance-api'
-      Dockerfile: 'src/finance-api/Dockerfile'
-      buildContext: 'src/finance-api'
-      tags: '$(imageTag)'
+#   - task: Docker@2
+#     displayName: 'Build Finance Api image'
+#     inputs:
+#       containerRegistry: sharedacr
+#       repository: 'dlw-finance-api'
+#       Dockerfile: 'src/finance-api/Dockerfile'
+#       buildContext: 'src/finance-api'
+#       tags: '$(imageTag)'
 
-  - task: Docker@2
-    displayName: 'Build User Api image'
-    inputs:
-      containerRegistry: sharedacr
-      repository: 'dlw-user-api'
-      Dockerfile: 'src/user-api/Dockerfile'
-      buildContext: 'src/user-api'
-      tags: '$(imageTag)'
+#   - task: Docker@2
+#     displayName: 'Build User Api image'
+#     inputs:
+#       containerRegistry: sharedacr
+#       repository: 'dlw-user-api'
+#       Dockerfile: 'src/user-api/Dockerfile'
+#       buildContext: 'src/user-api'
+#       tags: '$(imageTag)'
 
 
 - job: provisioningInfrastructure

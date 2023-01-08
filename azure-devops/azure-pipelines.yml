@@ -201,7 +201,7 @@ jobs:
         sh basic_services.sh $(env) $(app)
       useGlobalConfig: true
       workingDirectory: 'devops/aks_nginx/services'
-      
+
   - task: AzureCLI@2
     displayName: 'Deploy Main Charts'
     inputs:

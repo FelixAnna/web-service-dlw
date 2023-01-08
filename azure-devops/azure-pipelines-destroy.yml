@@ -64,6 +64,20 @@ jobs:
       commandOptions: '-reconfigure'
 
   - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
+    displayName: 'terraform destroy dns'
+    inputs:
+      command: destroy
+      workingDirectory: 'devops/aks_nginx/terraform/profiles/$(env)'
+      backendType: azurerm
+      backendServiceArm: 'azure resource manager'
+      backendAzureRmSubscriptionId: '$(ARM_SUBSCRIPTION_ID)'
+      backendAzureRmResourceGroupName: 'configuration-rg'
+      backendAzureRmStorageAccountName: configstoragefelix
+      backendAzureRmContainerName: tfstate
+      backendAzureRmKey: 'dlw-$(env).nginx.tfstate'
+      commandOptions: '--target aws_route53_record.web -reconfigure'
+
+  - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
     displayName: 'terraform destroy'
     inputs:
       command: destroy

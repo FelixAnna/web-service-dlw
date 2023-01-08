@@ -29,6 +29,19 @@ jobs:
   timeoutInMinutes: 15
 
   steps:
+  
+  - task: AzureCLI@2
+    displayName: 'Ensure Bypass CNAME Check For CustomDomain Deletion Registered'
+    inputs:
+      azureSubscription: 'azure resource manager'
+      scriptType: bash
+      scriptLocation: inlineScript
+      inlineScript: |
+        az feature register --namespace Microsoft.Network --name BypassCnameCheckForCustomDomainDeletion
+        az provider register -n Microsoft.Network
+      useGlobalConfig: true
+      workingDirectory: 'devops/aks_nginx/services'
+
   - task: AzureCLI@2
     displayName: 'Uninstall All Services'
     inputs:
@@ -62,20 +75,6 @@ jobs:
       backendAzureRmContainerName: tfstate
       backendAzureRmKey: 'dlw-$(env).nginx.tfstate'
       commandOptions: '-reconfigure'
-
-  - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
-    displayName: 'terraform destroy dns'
-    inputs:
-      command: destroy
-      workingDirectory: 'devops/aks_nginx/terraform/profiles/$(env)'
-      backendType: azurerm
-      backendServiceArm: 'azure resource manager'
-      backendAzureRmSubscriptionId: '$(ARM_SUBSCRIPTION_ID)'
-      backendAzureRmResourceGroupName: 'configuration-rg'
-      backendAzureRmStorageAccountName: configstoragefelix
-      backendAzureRmContainerName: tfstate
-      backendAzureRmKey: 'dlw-$(env).nginx.tfstate'
-      commandOptions: '--target aws_route53_record.web -auto-approve'
 
   - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
     displayName: 'terraform destroy'

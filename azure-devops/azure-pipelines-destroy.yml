@@ -46,9 +46,9 @@ jobs:
     inputs:
       awsCredentials: 'aws connection'
       regionName: 'ap-southeast-1'
-      awsCommand: 'route53 change-resource-record-sets'
-      awsSubCommand: '--hosted-zone-id Z022788838QVNX9DPP3IQ --change-batch'
-      awsArguments: '''{   "Comment": "Delete host zone record",   "Changes": [     {       "Action": "DELETE",       "ResourceRecordSet": {         "Name": "www.metadlw.com",         "Type": "CNAME", 		"TTL": 10, 		"ResourceRecords": [ 		  { 			"Value": "dlwendpoint.azureedge.net" 		  }]       }     }   ] }'''
+      awsCommand: 'route53'
+      awsSubCommand: ' change-resource-record-sets'
+      awsArguments: '--hosted-zone-id Z022788838QVNX9DPP3IQ --change-batch ''{   "Comment": "Delete host zone record",   "Changes": [     {       "Action": "DELETE",       "ResourceRecordSet": {         "Name": "www.metadlw.com",         "Type": "CNAME", 		"TTL": 10, 		"ResourceRecords": [ 		  { 			"Value": "dlwendpoint.azureedge.net" 		  }]       }     }   ] }'''
 
   - task: AzureCLI@2
     displayName: 'Uninstall All Services'

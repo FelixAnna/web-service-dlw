@@ -1,0 +1,17 @@
+{
+  "Comment": "Delete host zone record",
+  "Changes": [
+    {
+      "Action": "DELETE",
+      "ResourceRecordSet": {
+        "Name": "www.metadlw.com",
+        "Type": "CNAME",
+		"TTL": 10,
+		"ResourceRecords": [
+		  {
+			"Value": "dlwendpoint.azureedge.net"
+		  }]
+      }
+    }
+  ]
+}

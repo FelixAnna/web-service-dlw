@@ -42,13 +42,13 @@ jobs:
   #     useGlobalConfig: true
   #     workingDirectory: 'devops/aks_nginx/services'
       
-  - task: AWSCLI@1
-    inputs:
-      awsCredentials: 'aws connection'
-      regionName: 'ap-southeast-1'
-      awsCommand: 'route53'
-      awsSubCommand: 'change-resource-record-sets'
-      awsArguments: '--hosted-zone-id Z022788838QVNX9DPP3IQ --change-batch file://github.com/FelixAnna/web-service-dlw/blob/master/azure-devops/deleteHostZoneRecord.json'
+  #  - task: AWSCLI@1
+  #    inputs:
+  #      awsCredentials: 'aws connection'
+  #      regionName: 'ap-southeast-1'
+  #      awsCommand: 'route53'
+  #      awsSubCommand: 'change-resource-record-sets'
+  #      awsArguments: '--hosted-zone-id Z022788838QVNX9DPP3IQ --change-batch file://github.com/FelixAnna/web-service-dlw/blob/master/azure-devops/deleteHostZoneRecord.json'
   
   - task: AzureCLI@2
     displayName: 'Uninstall All Services'

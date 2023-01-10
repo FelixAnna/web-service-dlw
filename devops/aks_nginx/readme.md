@@ -40,3 +40,26 @@ sh main_services.sh dev dlw
 ## uninstall before destroy
 sh uninstall.sh dev dlw
 ```
+
+## workaround for cdn custom domain delete issue
+
+delete it manually before uninstall everything
+```
+aws route53 change-resource-record-sets --hosted-zone-id Z022788838QVNX9DPP3IQ --change-batch '{
+  "Comment": "Delete host zone record",
+  "Changes": [
+    {
+      "Action": "DELETE",
+      "ResourceRecordSet": {
+        "Name": "www.metadlw.com",
+        "Type": "CNAME",
+		"TTL": 10,
+		"ResourceRecords": [
+		  {
+			"Value": "dlwendpoint.azureedge.net"
+		  }]
+      }
+    }
+  ]
+}'
+```

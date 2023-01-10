@@ -24,10 +24,10 @@ RUN go build -o /docker-date-api
 ##
 ## Deploy
 ##
-FROM alpine:3.16.0
+FROM alpine:3.17.0
 
-RUN apk update \
-   && rm -rf /var/lib/apt/lists/*
+#RUN apk update \
+#   && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /
 

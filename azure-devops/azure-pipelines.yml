@@ -122,7 +122,7 @@ jobs:
 
 - job: provisioningInfrastructure
   displayName: Apply infrastructure # Human-readable name for the job. 
-#  dependsOn: buildAndPush
+  dependsOn: buildAndPush
   timeoutInMinutes: 10
 
   steps:

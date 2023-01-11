@@ -48,8 +48,7 @@ jobs:
       regionName: 'ap-southeast-1'
       awsCommand: 'route53'
       awsSubCommand: 'change-resource-record-sets'
-      awsArguments: '--hosted-zone-id ${AWS_HOST_ZONE_ID} --change-batch file://./azure-devops/deleteHostZoneRecord.json'
-      workingDirectory: 'azure-devops'
+      awsArguments: '--hosted-zone-id $(AWS_HOST_ZONE_ID) --change-batch file://./azure-devops/deleteHostZoneRecord.json'
 
   - task: AzureCLI@2
     displayName: 'Uninstall All Services'

@@ -43,6 +43,7 @@ jobs:
   #     workingDirectory: 'devops/aks_nginx/services'
       
   - task: AWSCLI@1
+    displayName: 'Manually delete frontend domain'
     inputs:
       awsCredentials: 'aws connection'
       regionName: 'ap-southeast-1'

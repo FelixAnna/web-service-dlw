@@ -15,5 +15,5 @@ sh uninstall.sh $env $app
 
 cd ../terraform/profiles/$env
 terraform init -reconfigure
-terraform destory --target aws_route53_record.web -auto-approve
+terraform destroy --target aws_route53_record.web -auto-approve
 terraform destroy -auto-approve

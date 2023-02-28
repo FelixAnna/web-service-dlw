@@ -37,6 +37,7 @@ kubectl wait  --namespace $NAMESPACE \
 echo "deploy consul for service discovery ..."
 cd ../../components/consul
 sh install.sh
+cd ../../aks_nginx/services ## return to current: ./aks_nginx/services dir
 # Read more about the installation in the HashiCorp Consul packaged by Bitnami Chart Github repository
 
 echo "installing cert-manager ..."

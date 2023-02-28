@@ -23,24 +23,23 @@ echo $AWS_ACCESS_KEY_ID
 
 cd ./terraform/profiles/$env
 terraform init -reconfigure
-
 terraform apply -auto-approve
-
+cd ../../../  ## return to current: ./aks dir
 
 ## install basic 
 
-cd ../../../../
-sed -i "s/awsKeyIdPlaceHolder/$(echo -n $AWS_ACCESS_KEY_ID | base64)/" ./$app-chart/values_aks_$env.yaml
-sed -i "s/awsSecretKeyPlaceHolder/$(echo -n $AWS_SECRET_ACCESS_KEY | base64)/" ./$app-chart/values_aks_$env.yaml
-sed -i "s/imageVersion/$tag/" ./$app-chart/values_aks_$env.yaml
 
-cd aks_nginx/services
+sed -i "s/awsKeyIdPlaceHolder/$(echo -n $AWS_ACCESS_KEY_ID | base64)/" ../$app-chart/values_aks_$env.yaml
+sed -i "s/awsSecretKeyPlaceHolder/$(echo -n $AWS_SECRET_ACCESS_KEY | base64)/" ../$app-chart/values_aks_$env.yaml
+sed -i "s/imageVersion/$tag/" ../$app-chart/values_aks_$env.yaml
+
+cd services/
 
 sh basic_services.sh $env $app
 sh main_services.sh $env $app
 sh frontend.sh $app
 
-cd ../../
-sed -i "s/$(echo -n $AWS_ACCESS_KEY_ID | base64)/awsKeyIdPlaceHolder/" ./$app-chart/values_aks_$env.yaml
-sed -i "s/$(echo -n $AWS_SECRET_ACCESS_KEY | base64)/awsSecretKeyPlaceHolder/" ./$app-chart/values_aks_$env.yaml
-sed -i "s/$tag/imageVersion/" ./$app-chart/values_aks_$env.yaml
+cd ../
+sed -i "s/$(echo -n $AWS_ACCESS_KEY_ID | base64)/awsKeyIdPlaceHolder/" ../$app-chart/values_aks_$env.yaml
+sed -i "s/$(echo -n $AWS_SECRET_ACCESS_KEY | base64)/awsSecretKeyPlaceHolder/" ../$app-chart/values_aks_$env.yaml
+sed -i "s/$tag/imageVersion/" ../$app-chart/values_aks_$env.yaml

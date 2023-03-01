@@ -33,10 +33,6 @@ quota:
 
 ingress:
   ingressClassName: nginx
-  dnsName: api-dev.metadlw.com
-  issuer: letsencrypt-staging
-  server: https://acme-staging-v02.api.letsencrypt.org/directory
-  email: yuecnu@hotmail.com  ## need real email address
 
 applications:
   - name: user

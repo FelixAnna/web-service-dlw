@@ -232,7 +232,6 @@ metadata:
     kubernetes.io/ingress.class: {{$.Values.ingress.ingressClassName}}
   {{ if eq $.Values.ingress.ingressClassName "nginx" }}
     nginx.ingress.kubernetes.io/rewrite-target: /$1 # for nginx only
-    cert-manager.io/cluster-issuer: {{ $.Values.ingress.issuer | quote }}
   {{ end }}
   {{ if eq $.Values.ingress.ingressClassName "kong" }}
     konghq.com/strip-path: "true"  # for kong only

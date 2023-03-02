@@ -1,6 +1,6 @@
 module github.com/FelixAnna/web-service-dlw/user-api
 
-go 1.19
+go 1.20
 
 require (
 	github.com/FelixAnna/web-service-dlw/common v0.0.0-20221108131911-e1839d512525

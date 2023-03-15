@@ -36,13 +36,8 @@ kubectl wait --namespace ingress-nginx \
   --selector=app.kubernetes.io/component=controller \
   --timeout=900s
 
-echo "install services ..."
-cd ..
 
-sed -i "s/awsKeyIdPlaceHolder/$(echo -n $AWS_ACCESS_KEY_ID | base64)/" ./$app-chart-nossl/values_dev.yaml
-sed -i "s/awsSecretKeyPlaceHolder/$(echo -n $AWS_SECRET_ACCESS_KEY | base64)/" ./$app-chart-nossl/values_dev.yaml
-sed -i "s/imageVersion/$tag/" ./$app-chart-nossl/values_dev.yaml
-
+echo "load images ..."
 # docker login -u $ACR_USER -p $ACR_KEY $ACR
 
 # docker pull $ACR/$app-date-api:$tag
@@ -50,10 +45,31 @@ sed -i "s/imageVersion/$tag/" ./$app-chart-nossl/values_dev.yaml
 # docker pull $ACR/$app-finance-api:$tag
 # docker pull $ACR/$app-user-api:$tag
 
-# kind load docker-image $ACR/$app-date-api:$tag -n $app-cluster
-# kind load docker-image $ACR/$app-memo-api:$tag -n $app-cluster
-# kind load docker-image $ACR/$app-finance-api:$tag -n $app-cluster
-# kind load docker-image $ACR/$app-user-api:$tag -n $app-cluster
+# kind load docker-image $ACR/$app-date-api:$tag --namen $app-cluster
+# kind load docker-image $ACR/$app-memo-api:$tag --name $app-cluster
+# kind load docker-image $ACR/$app-finance-api:$tag --name $app-cluster
+# kind load docker-image $ACR/$app-user-api:$tag --name $app-cluster
+
+
+ACR="yufelix"
+docker pull $ACR/$app-date-api:$tag
+docker pull $ACR/$app-memo-api:$tag
+docker pull $ACR/$app-finance-api:$tag
+docker pull $ACR/$app-user-api:$tag
+
+kind load docker-image $ACR/$app-date-api:$tag --name $app-cluster
+kind load docker-image $ACR/$app-memo-api:$tag --name $app-cluster
+kind load docker-image $ACR/$app-finance-api:$tag --name $app-cluster
+kind load docker-image $ACR/$app-user-api:$tag --name $app-cluster
+
+
+echo "install services ..."
+cd ..
+
+sed -i "s/awsKeyIdPlaceHolder/$(echo -n $AWS_ACCESS_KEY_ID | base64)/" ./$app-chart-nossl/values_dev.yaml
+sed -i "s/awsSecretKeyPlaceHolder/$(echo -n $AWS_SECRET_ACCESS_KEY | base64)/" ./$app-chart-nossl/values_dev.yaml
+sed -i "s/imageVersion/$tag/" ./$app-chart-nossl/values_dev.yaml
+
 
 helm upgrade --install $app ./$app-chart-nossl/ \
 --namespace $ns \

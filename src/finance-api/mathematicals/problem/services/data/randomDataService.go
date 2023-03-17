@@ -5,10 +5,11 @@ import (
 	"math/rand"
 	"time"
 
+	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem/entity"
 	"github.com/google/wire"
 )
 
-var RandomServiceSet = wire.NewSet(CreateRandomService, wire.Bind(new(DataService), new(*RandomService)))
+var RandomServiceSet = wire.NewSet(CreateRandomService, wire.Bind(new(DataService[int]), new(*RandomService[int])))
 
 var r1 *rand.Rand
 
@@ -17,17 +18,41 @@ func init() {
 	r1 = rand.New(s1)
 }
 
-type RandomService struct{}
+type RandomService[number entity.Number] struct{}
 
-func CreateRandomService() *RandomService {
-	return &RandomService{}
+func CreateRandomService() *RandomService[int] {
+	return &RandomService[int]{}
 }
 
-func (rd *RandomService) GetData(criteria ...interface{}) int {
-	bottom, up := 0, math.MaxInt32
-	if len(criteria) >= 2 {
-		bottom, up = criteria[0].(int), criteria[1].(int)
-		return r1.Intn(up-bottom+1) + bottom //+1 to include {up} itself
+func (rd *RandomService[number]) GetData(criteria ...interface{}) number {
+	var bottom, up number
+
+	_, ok := interface{}(&bottom).(float32)
+	if ok {
+		bottom = 0.0
+		up = interface{}(math.MaxFloat32).(number)
+	} else {
+		bottom = 0.0
+		up = interface{}(math.MaxInt32).(number)
 	}
-	return r1.Intn(up-bottom) + bottom
+
+	if len(criteria) >= 2 {
+		bottom, up = criteria[0].(number), criteria[1].(number)
+		return rd.GetRand(up+1, bottom, ok) + bottom //+1 to include {up} itself
+	}
+
+	return rd.GetRand(up, bottom, ok) + bottom
+}
+
+func (rd *RandomService[number]) GetRand(up, bottom number, ok bool) number {
+	if ok {
+		var data = (interface{}(r1.Float32())).(number)
+		for data > up-bottom {
+			data -= up - bottom
+		}
+		return data
+	} else {
+		var start = (interface{}(up - bottom)).(int)
+		return (interface{}(r1.Intn(start))).(number)
+	}
 }

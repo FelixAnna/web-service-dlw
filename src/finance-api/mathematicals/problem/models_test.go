@@ -8,7 +8,7 @@ import (
 )
 
 func TestGetRange(t *testing.T) {
-	criteria := &Criteria{
+	criteria := &Criteria[int]{
 		Min: 100,
 		Max: 200,
 
@@ -24,7 +24,7 @@ func TestGetRange(t *testing.T) {
 }
 
 func TestGetRangeReverse(t *testing.T) {
-	criteria := &Criteria{
+	criteria := &Criteria[int]{
 		Range: &Range{
 			Min: 200,
 			Max: 100,
@@ -38,7 +38,7 @@ func TestGetRangeReverse(t *testing.T) {
 }
 
 func TestGetRangeSorted(t *testing.T) {
-	criteria := &Criteria{
+	criteria := &Criteria[int]{
 		Range: &Range{
 			Min: 100,
 			Max: 200,

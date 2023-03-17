@@ -1,24 +1,27 @@
 package stratergy
 
-import "github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem/services/data"
+import (
+	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem/entity"
+	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem/services/data"
+)
 
-type Stratergy interface {
-	Generate(criteria ...interface{}) []int
+type Stratergy[number entity.Number] interface {
+	Generate(criteria ...interface{}) []number
 }
 
-type TwoNumStratergy struct {
-	DataService data.DataService
+type TwoNumStratergy[number entity.Number] struct {
+	DataService data.DataService[number]
 }
 
-func NewTwoNumStratergy(service data.DataService) *TwoNumStratergy {
-	return &TwoNumStratergy{
+func NewTwoNumStratergy[number entity.Number](service data.DataService[number]) *TwoNumStratergy[number] {
+	return &TwoNumStratergy[number]{
 		DataService: service,
 	}
 }
 
-func (ts *TwoNumStratergy) Generate(criteria ...interface{}) []int {
+func (ts *TwoNumStratergy[number]) Generate(criteria ...interface{}) []number {
 	a := ts.DataService.GetData(criteria...)
 	b := ts.DataService.GetData(criteria...)
 
-	return []int{a, b}
+	return []number{a, b}
 }

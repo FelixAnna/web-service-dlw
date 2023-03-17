@@ -8,16 +8,16 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var plusApp PlainApplication
-var plusApp2 PlainApplication
-var minusApp PlainApplication
-var multiplyApp PlainApplication
-var UnSupportedApp PlainApplication
+var plusApp PlainApplication[int]
+var plusApp2 PlainApplication[int]
+var minusApp PlainApplication[int]
+var multiplyApp PlainApplication[int]
+var UnSupportedApp PlainApplication[int]
 
 func init() {
 	template := []string{"比%v%s%v的数是%v", "%v的%v%s是%v"}
-	plusApp = PlainApplication{
-		&entity.Problem{
+	plusApp = PlainApplication[int]{
+		&entity.Problem[int]{
 			A:  1,
 			B:  2,
 			C:  3,
@@ -27,8 +27,8 @@ func init() {
 		[]string{"多", "少", "倍", "分之一"},
 	}
 
-	plusApp2 = PlainApplication{
-		&entity.Problem{
+	plusApp2 = PlainApplication[int]{
+		&entity.Problem[int]{
 			A:  2,
 			B:  1,
 			C:  3,
@@ -38,8 +38,8 @@ func init() {
 		[]string{"多", "少", "倍", "分之一"},
 	}
 
-	minusApp = PlainApplication{
-		&entity.Problem{
+	minusApp = PlainApplication[int]{
+		&entity.Problem[int]{
 			A:  3,
 			B:  2,
 			C:  1,
@@ -49,8 +49,8 @@ func init() {
 		[]string{"多", "少", "倍", "分之一"},
 	}
 
-	multiplyApp = PlainApplication{
-		&entity.Problem{
+	multiplyApp = PlainApplication[int]{
+		&entity.Problem[int]{
 			A:  3,
 			B:  2,
 			C:  6,
@@ -60,8 +60,8 @@ func init() {
 		[]string{"多", "少", "倍", "分之一"},
 	}
 
-	UnSupportedApp = PlainApplication{
-		&entity.Problem{
+	UnSupportedApp = PlainApplication[int]{
+		&entity.Problem[int]{
 			A:  3,
 			B:  2,
 			C:  6,

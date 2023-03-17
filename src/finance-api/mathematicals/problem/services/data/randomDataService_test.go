@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var service DataService
+var service DataService[int]
 
 func init() {
 	service = CreateRandomService()

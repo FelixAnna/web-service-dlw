@@ -2,6 +2,8 @@ package problem
 
 import (
 	"math"
+
+	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem/entity"
 )
 
 const (
@@ -28,7 +30,7 @@ type Range struct {
 	Min, Max int
 }
 
-type Criteria struct {
+type Criteria[number entity.Number] struct {
 	Min, Max int `binding:"-"`
 	Quantity int `binding:"min=1,max=10000"`
 
@@ -44,27 +46,27 @@ type Criteria struct {
 	Type int `binding:"min=0,max=255"`
 }
 
-func (s *Criteria) GetRange() (min, max int) {
+func (s *Criteria[number]) GetRange() (min, max number) {
 	min, max = math.MinInt32, math.MaxInt32
 	if s.Range == nil {
 		return
 	}
 
 	if s.Range.Min > s.Range.Max {
-		return s.Range.Max, s.Range.Min
+		return (interface{}(s.Range.Max)).(number), (interface{}(s.Range.Min)).(number)
 	}
 
-	return s.Range.Min, s.Range.Max
+	return (interface{}(s.Range.Min)).(number), (interface{}(s.Range.Max)).(number)
 }
 
-type QuestionResponse struct {
-	Questions  []QuestionModel
+type QuestionResponse[number entity.Number] struct {
+	Questions  []QuestionModel[number]
 	QuestionId string
 }
 
-type QuestionModel struct {
+type QuestionModel[number entity.Number] struct {
 	Question string
-	Answer   int
+	Answer   number
 
 	Category int
 	Kind     int

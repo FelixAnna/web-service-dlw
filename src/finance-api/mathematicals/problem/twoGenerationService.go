@@ -10,15 +10,15 @@ import (
 
 const MaxGenerateTimes = 10000
 
-type TwoGenerationService struct {
-	TwoPlusService     services.ProblemService
-	TwoMinusService    services.ProblemService
-	TwoMultiplyService services.ProblemService
-	TwoDivideService   services.ProblemService
+type TwoGenerationService[number entity.Number] struct {
+	TwoPlusService     services.ProblemService[number]
+	TwoMinusService    services.ProblemService[number]
+	TwoMultiplyService services.ProblemService[number]
+	TwoDivideService   services.ProblemService[number]
 }
 
-func NewTwoGenerationService() *TwoGenerationService {
-	return &TwoGenerationService{
+func NewTwoGenerationService[number entity.Number]() *TwoGenerationService[number] {
+	return &TwoGenerationService[number]{
 		TwoPlusService:     di.InitializeTwoPlusService(),
 		TwoMinusService:    di.InitializeTwoMinusService(),
 		TwoMultiplyService: di.InitializeTwoMultiplyService(),
@@ -26,14 +26,14 @@ func NewTwoGenerationService() *TwoGenerationService {
 	}
 }
 
-func (service *TwoGenerationService) GenerateProblems(criteria *Criteria) []entity.Problem {
+func (service *TwoGenerationService[number]) GenerateProblems(criteria *Criteria[number]) []entity.Problem[number] {
 	if criteria.Quantity == 0 {
 		criteria.Quantity = 10
 	}
 
-	var problems []entity.Problem = []entity.Problem{}
+	var problems []entity.Problem[number] = []entity.Problem[number]{}
 
-	var problemService services.ProblemService
+	var problemService services.ProblemService[number]
 	switch criteria.Category {
 	case CategoryMinus:
 		problemService = service.TwoMinusService
@@ -51,7 +51,7 @@ func (service *TwoGenerationService) GenerateProblems(criteria *Criteria) []enti
 	return problems
 }
 
-func GenerateProblems(criteria *Criteria, problemService services.ProblemService, problems *[]entity.Problem) {
+func GenerateProblems[number entity.Number](criteria *Criteria[number], problemService services.ProblemService[number], problems *[]entity.Problem[number]) {
 	round := 0
 	problemTexts := map[string]bool{}
 	for i := 0; i < criteria.Quantity; i++ {

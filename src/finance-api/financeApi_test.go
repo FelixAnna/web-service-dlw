@@ -69,9 +69,9 @@ func TestSearchAuthorized(t *testing.T) {
 
 func TestGetQuestionsInvalid(t *testing.T) {
 	//Act
-	w := performRequest(router, "POST", "/homework/math/", problem.Criteria{Min: 10, Max: 20, Category: 1000})
+	w := performRequest(router, "POST", "/homework/math/", problem.Criteria[int]{Min: 10, Max: 20, Category: 1000})
 
-	var response []mathEntity.Problem
+	var response []mathEntity.Problem[int]
 	err := json.Unmarshal(w.Body.Bytes(), &response)
 
 	//Assert
@@ -81,7 +81,7 @@ func TestGetQuestionsInvalid(t *testing.T) {
 
 func TestGetQuestions(t *testing.T) {
 	//Act
-	w := performRequest(router, "POST", "/homework/math/", problem.Criteria{
+	w := performRequest(router, "POST", "/homework/math/", problem.Criteria[int]{
 		Min:      10,
 		Max:      20,
 		Quantity: 100,
@@ -90,7 +90,7 @@ func TestGetQuestions(t *testing.T) {
 		Type:     problem.TypePlainExpression,
 	})
 
-	var response problem.QuestionResponse
+	var response problem.QuestionResponse[int]
 	err := json.Unmarshal(w.Body.Bytes(), &response)
 
 	//Assert
@@ -101,7 +101,7 @@ func TestGetQuestions(t *testing.T) {
 
 func TestGetQuestionsMultiple(t *testing.T) {
 	//Act
-	w := performRequest(router, "POST", "/homework/math/multiple", []problem.Criteria{
+	w := performRequest(router, "POST", "/homework/math/multiple", []problem.Criteria[int]{
 		{
 			Min:      10,
 			Max:      20,
@@ -112,7 +112,7 @@ func TestGetQuestionsMultiple(t *testing.T) {
 		},
 	})
 
-	var response problem.QuestionResponse
+	var response problem.QuestionResponse[int]
 	err := json.Unmarshal(w.Body.Bytes(), &response)
 
 	//Assert
@@ -126,7 +126,7 @@ func TestGetQuestionsMultiple(t *testing.T) {
 
 func TestGetQuestionFeedsMultiple(t *testing.T) {
 	//Act
-	w := performRequest(router, "POST", "/homework/math/multiple/feeds", []problem.Criteria{
+	w := performRequest(router, "POST", "/homework/math/multiple/feeds", []problem.Criteria[int]{
 		{
 			Min:      10,
 			Max:      20,

@@ -8,10 +8,10 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var twoNumStratergy *TwoNumStratergy
+var twoNumStratergy *TwoNumStratergy[int]
 
 func init() {
-	twoNumStratergy = NewTwoNumStratergy(data.CreateRandomService())
+	twoNumStratergy = NewTwoNumStratergy[int](data.CreateRandomService())
 }
 
 func TestNewTwoNumStratergy(t *testing.T) {

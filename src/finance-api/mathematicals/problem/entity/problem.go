@@ -2,15 +2,15 @@ package entity
 
 import "fmt"
 
-type Problem struct {
-	A int
-	B int
-	C int
+type Problem[number Number] struct {
+	A number
+	B number
+	C number
 
 	Op rune
 }
 
-func (p *Problem) IndenticalString() string {
+func (p *Problem[number]) IndenticalString() string {
 	a, b, c := p.A, p.B, p.C
 	if p.Op == '+' || p.Op == '*' {
 		if a > b {

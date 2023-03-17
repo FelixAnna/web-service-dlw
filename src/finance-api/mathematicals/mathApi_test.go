@@ -17,16 +17,16 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-var service *MathApi
-var criteria problem.Criteria
-var criteria2 problem.Criteria
-var criteria3 problem.Criteria
-var criteria4 problem.Criteria
+var service *MathApi[int]
+var criteria problem.Criteria[int]
+var criteria2 problem.Criteria[int]
+var criteria3 problem.Criteria[int]
+var criteria4 problem.Criteria[int]
 var saveRquest problem.SaveAnswersRequest
 var questions entity.Questions
 
 func init() {
-	criteria = problem.Criteria{
+	criteria = problem.Criteria[int]{
 		Min:      100,
 		Max:      200,
 		Quantity: 10,
@@ -36,7 +36,7 @@ func init() {
 		Category: problem.CategoryPlus,
 	}
 
-	criteria2 = problem.Criteria{
+	criteria2 = problem.Criteria[int]{
 		Min:      100,
 		Max:      200,
 		Quantity: 10,
@@ -48,7 +48,7 @@ func init() {
 		Type: problem.TypePlainExpression,
 	}
 
-	criteria3 = problem.Criteria{
+	criteria3 = problem.Criteria[int]{
 		Min:      100,
 		Max:      200,
 		Quantity: 10,
@@ -59,7 +59,7 @@ func init() {
 		Type:     problem.TypePlainApplication,
 	}
 
-	criteria4 = problem.Criteria{
+	criteria4 = problem.Criteria[int]{
 		Min:      1,
 		Max:      100,
 		Quantity: 10,
@@ -130,7 +130,7 @@ func TestGetQuestionsFailed(t *testing.T) {
 func TestGetQuestionsInvalid(t *testing.T) {
 	initialService(t)
 
-	criteriaInvalid := problem.Criteria{
+	criteriaInvalid := problem.Criteria[int]{
 		Kind: 255,
 	}
 	ctx, writer := commonmock.GetGinContext(&commonmock.Parameter{Body: criteriaInvalid})
@@ -166,7 +166,7 @@ func TestGetAllQuestionsFailed(t *testing.T) {
 func TestGetAllQuestionsOk(t *testing.T) {
 	initialService(t)
 
-	ctx, writer := commonmock.GetGinContext(&commonmock.Parameter{Body: []problem.Criteria{criteria, criteria2, criteria3, criteria4}})
+	ctx, writer := commonmock.GetGinContext(&commonmock.Parameter{Body: []problem.Criteria[int]{criteria, criteria2, criteria3, criteria4}})
 	service.GetAllQuestions(ctx)
 
 	assert.NotNil(t, ctx)
@@ -188,7 +188,7 @@ func TestGetAllQuestionFeedsFailed(t *testing.T) {
 func TestGetAllQuestionFeedsOk(t *testing.T) {
 	initialService(t)
 
-	ctx, writer := commonmock.GetGinContext(&commonmock.Parameter{Body: []problem.Criteria{criteria, criteria2, criteria3, criteria4}})
+	ctx, writer := commonmock.GetGinContext(&commonmock.Parameter{Body: []problem.Criteria[int]{criteria, criteria2, criteria3, criteria4}})
 	service.GetAllQuestionFeeds(ctx)
 
 	assert.NotNil(t, ctx)
@@ -224,7 +224,7 @@ func TestSaveResultsInvalid(t *testing.T) {
 
 func TestSaveResultsError(t *testing.T) {
 	mockRepo := mocks.NewQuestionRepo(t)
-	mathService := problem.NewMathService(problem.NewTwoGenerationService(), mockRepo)
+	mathService := problem.NewMathService(problem.NewTwoGenerationService[int](), mockRepo)
 	service = ProvideMathApi(mathService)
 
 	mockRepo.EXPECT().GetQuestion(mock.Anything).Return(nil)
@@ -241,7 +241,7 @@ func TestSaveResultsError(t *testing.T) {
 
 func TestSaveResultsOk(t *testing.T) {
 	mockRepo := mocks.NewQuestionRepo(t)
-	mathService := problem.NewMathService(problem.NewTwoGenerationService(), mockRepo)
+	mathService := problem.NewMathService(problem.NewTwoGenerationService[int](), mockRepo)
 	service = ProvideMathApi(mathService)
 
 	mockRepo.EXPECT().GetQuestion(mock.Anything).Return(nil)
@@ -258,6 +258,6 @@ func TestSaveResultsOk(t *testing.T) {
 }
 
 func initialService(t *testing.T) {
-	mathService := problem.NewMathService(problem.NewTwoGenerationService(), mocks.NewQuestionRepo(t))
+	mathService := problem.NewMathService(problem.NewTwoGenerationService[int](), mocks.NewQuestionRepo(t))
 	service = ProvideMathApi(mathService)
 }

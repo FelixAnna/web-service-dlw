@@ -1,18 +1,19 @@
 package stratergy
 
 import (
+	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem/entity"
 	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem/services/data"
 	"github.com/google/wire"
 )
 
-var TwoDivideStratergySet = wire.NewSet(NewTwoDivideStratergy, wire.Bind(new(Stratergy), new(*TwoDivideStratergy)))
+var TwoDivideStratergySet = wire.NewSet(NewTwoDivideStratergy[int], wire.Bind(new(Stratergy[int]), new(*TwoDivideStratergy[int])))
 
-type TwoDivideStratergy struct {
-	*TwoNumStratergy
+type TwoDivideStratergy[number entity.Number] struct {
+	*TwoNumStratergy[number]
 }
 
-func NewTwoDivideStratergy(service data.DataService) *TwoDivideStratergy {
-	return &TwoDivideStratergy{
+func NewTwoDivideStratergy[number entity.Number](service data.DataService[number]) *TwoDivideStratergy[number] {
+	return &TwoDivideStratergy[number]{
 		TwoNumStratergy: NewTwoNumStratergy(service),
 	}
 }
@@ -23,7 +24,7 @@ func NewTwoDivideStratergy(service data.DataService) *TwoDivideStratergy {
 criteria[0]: bottom num
 criteria[1]: ceiling num
 */
-func (tp *TwoDivideStratergy) Generate(criteria ...interface{}) []int {
+func (tp *TwoDivideStratergy[number]) Generate(criteria ...interface{}) []number {
 	nums := tp.TwoNumStratergy.Generate(criteria...)
 
 	// avoid divide by 0
@@ -31,6 +32,6 @@ func (tp *TwoDivideStratergy) Generate(criteria ...interface{}) []int {
 		nums = tp.TwoNumStratergy.Generate(criteria...)
 	}
 
-	nums = append([]int{nums[0] * nums[1], nums[0]}, nums[1])
+	nums = append([]number{nums[0] * nums[1], nums[0]}, nums[1])
 	return nums
 }

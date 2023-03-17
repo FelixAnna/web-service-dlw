@@ -11,33 +11,33 @@ import (
 	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem/repositories"
 )
 
-type MathService struct {
-	genService *TwoGenerationService
+type MathService[number entity.Number] struct {
+	genService *TwoGenerationService[number]
 	qaService  repositories.QuestionRepo
 }
 
-func NewMathService(genService *TwoGenerationService, qaService repositories.QuestionRepo) *MathService {
-	return &MathService{
+func NewMathService[number entity.Number](genService *TwoGenerationService[number], qaService repositories.QuestionRepo) *MathService[number] {
+	return &MathService[number]{
 		genService: genService,
 		qaService:  qaService,
 	}
 }
 
-func (service *MathService) GenerateProblems(criterias ...Criteria) *QuestionResponse {
-	var results []QuestionModel
+func (service *MathService[number]) GenerateProblems(criterias ...Criteria[number]) *QuestionResponse[number] {
+	var results []QuestionModel[number]
 	for _, criteria := range criterias {
 		cr := criteria
 		problems := GetResponse(service.genService.GenerateProblems(&cr), &cr)
 		results = append(results, problems...)
 	}
 
-	return &QuestionResponse{
+	return &QuestionResponse[number]{
 		Questions:  results,
 		QuestionId: snowflake.GenerateSnowflake(),
 	}
 }
 
-func (service *MathService) SaveResults(request *SaveAnswersRequest, userId string) error {
+func (service *MathService[number]) SaveResults(request *SaveAnswersRequest, userId string) error {
 	err := ensureSaveQuestions(service, request)
 	if err != nil {
 		return err
@@ -47,7 +47,7 @@ func (service *MathService) SaveResults(request *SaveAnswersRequest, userId stri
 	return err
 }
 
-func saveAnswers(userId string, request *SaveAnswersRequest, service *MathService) error {
+func saveAnswers[number entity.Number](userId string, request *SaveAnswersRequest, service *MathService[number]) error {
 	answers := entity.Answers{
 		Id: snowflake.GenerateSnowflake(),
 
@@ -72,7 +72,7 @@ func saveAnswers(userId string, request *SaveAnswersRequest, service *MathServic
 	return err
 }
 
-func ensureSaveQuestions(service *MathService, request *SaveAnswersRequest) error {
+func ensureSaveQuestions[number entity.Number](service *MathService[number], request *SaveAnswersRequest) error {
 	question := service.qaService.GetQuestion(request.QuestionId)
 	if question == nil {
 		questions := entity.Questions{
@@ -100,7 +100,7 @@ func ensureSaveQuestions(service *MathService, request *SaveAnswersRequest) erro
 	return nil
 }
 
-func (service *MathService) GenerateFeeds(criterias ...Criteria) *QuestionFeedModel {
+func (service *MathService[number]) GenerateFeeds(criterias ...Criteria[number]) *QuestionFeedModel {
 	ch := make(chan []string)
 	wg := &sync.WaitGroup{}
 	wg.Add(len(criterias))
@@ -121,14 +121,14 @@ func (service *MathService) GenerateFeeds(criterias ...Criteria) *QuestionFeedMo
 	return result
 }
 
-func GetResponse(results []entity.Problem, criteria *Criteria) []QuestionModel {
-	questions := []QuestionModel{}
+func GetResponse[number entity.Number](results []entity.Problem[number], criteria *Criteria[number]) []QuestionModel[number] {
+	questions := []QuestionModel[number]{}
 
 	for _, pb := range results {
 		expression := getFormatInterface(&pb, criteria)
 		question, answer := getDisplayQandA(criteria, expression, pb)
 
-		model := QuestionModel{
+		model := QuestionModel[number]{
 			//FullText: expression.String(),
 			Kind:     criteria.Kind,
 			Category: criteria.Category,
@@ -144,7 +144,7 @@ func GetResponse(results []entity.Problem, criteria *Criteria) []QuestionModel {
 	return questions
 }
 
-func GetResponseFeed(results []entity.Problem, criteria *Criteria, wg *sync.WaitGroup, ch chan<- []string) {
+func GetResponseFeed[number entity.Number](results []entity.Problem[number], criteria *Criteria[number], wg *sync.WaitGroup, ch chan<- []string) {
 	defer wg.Done()
 
 	for _, pb := range results {
@@ -154,9 +154,9 @@ func GetResponseFeed(results []entity.Problem, criteria *Criteria, wg *sync.Wait
 	}
 }
 
-func getDisplayQandA(criteria *Criteria, expression format.FormatInterface, pb entity.Problem) (string, int) {
+func getDisplayQandA[number entity.Number](criteria *Criteria[number], expression format.FormatInterface, pb entity.Problem[number]) (string, number) {
 	var question string
-	var answer int
+	var answer number
 	switch criteria.Kind {
 	case KindQuestFirst:
 		question = expression.QuestFirst()
@@ -171,7 +171,7 @@ func getDisplayQandA(criteria *Criteria, expression format.FormatInterface, pb e
 	return question, answer
 }
 
-func formart(input interface{}, idx int) string {
+func formart[number entity.Number](input interface{}, idx number) string {
 	return fmt.Sprintf("%v. %v", idx, input)
 }
 
@@ -192,27 +192,27 @@ func processingResults(ch chan []string) (*QuestionFeedModel, *sync.WaitGroup) {
 	return result, wg2
 }
 
-func getFormatInterface(pb *entity.Problem, criteria *Criteria) format.FormatInterface {
+func getFormatInterface[number entity.Number](pb *entity.Problem[number], criteria *Criteria[number]) format.FormatInterface {
 	var expression format.FormatInterface
 	switch criteria.Type {
 	case TypePlainExpression:
-		expression = &format.PlainExpression{
+		expression = &format.PlainExpression[number]{
 			Problem: pb,
 		}
 	case TypePlainApplication:
-		expression = &format.PlainApplication{
+		expression = &format.PlainApplication[number]{
 			Problem:  pb,
 			Template: []string{"比%v%s%v的数是%v", "%v的%v%s是%v"},
 			Ops:      []string{"多", "少", "倍", "分之一"},
 		}
 	case TypeAppleApplication:
-		expression = &format.PlainApplication{
+		expression = &format.PlainApplication[number]{
 			Problem:  pb,
 			Template: []string{"小明有%v个苹果，小红比小明%s%v个，小红有%v个苹果？", "小明有%v个苹果，小红的苹果是小明的%v%s，小红有%v个苹果？"},
 			Ops:      []string{"多", "少", "倍", "分之一"},
 		}
 	case TypeTemplateApplication:
-		expression = &format.PlainApplication{
+		expression = &format.PlainApplication[number]{
 			Problem:  pb,
 			Template: []string{"哥哥身高%v厘米，妹妹比哥哥%s%v厘米，妹妹身高%v厘米？", "哥哥身高%v厘米，妹妹的身高是哥哥的%v%s，妹妹身高%v厘米？"},
 			Ops:      []string{"高", "矮", "倍", "分之一"},

@@ -6,34 +6,34 @@ import (
 	"github.com/google/wire"
 )
 
-var ProblemServiceSet = wire.NewSet(NewTwoProblem, wire.Bind(new(ProblemService), new(*TwoProblem)))
+var ProblemServiceSet = wire.NewSet(NewTwoProblem[int], wire.Bind(new(ProblemService[int]), new(*TwoProblem[int])))
 
-type TwoProblem struct {
-	Stratergy stratergy.Stratergy
+type TwoProblem[number entity.Number] struct {
+	Stratergy stratergy.Stratergy[number]
 }
 
-func NewTwoProblem(stratergy stratergy.Stratergy) *TwoProblem {
-	return &TwoProblem{
+func NewTwoProblem[number entity.Number](stratergy stratergy.Stratergy[number]) *TwoProblem[number] {
+	return &TwoProblem[number]{
 		Stratergy: stratergy,
 	}
 }
 
-func (tp *TwoProblem) GenerateProblem(criteria ...interface{}) *entity.Problem {
+func (tp *TwoProblem[number]) GenerateProblem(criteria ...interface{}) *entity.Problem[number] {
 	nums := tp.Stratergy.Generate(criteria...)
 
 	var op rune
 	switch tp.Stratergy.(type) {
-	case *stratergy.TwoPlusStratergy:
+	case *stratergy.TwoPlusStratergy[number]:
 		op = '+'
-	case *stratergy.TwoMinusStratergy:
+	case *stratergy.TwoMinusStratergy[number]:
 		op = '-'
-	case *stratergy.TwoMultiplyStratergy:
+	case *stratergy.TwoMultiplyStratergy[number]:
 		op = '*'
-	case *stratergy.TwoDivideStratergy:
+	case *stratergy.TwoDivideStratergy[number]:
 		op = '/'
 	}
 
-	problem := &entity.Problem{
+	problem := &entity.Problem[number]{
 		A: nums[0],
 		B: nums[1],
 		C: nums[2],

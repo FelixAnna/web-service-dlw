@@ -8,16 +8,16 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var plusProblem PlainExpression
-var plusProblem2 PlainExpression
-var minusProblem PlainExpression
-var multiplyProblem PlainExpression
-var divideProblem PlainExpression
-var UnSupportedProblem PlainExpression
+var plusProblem PlainExpression[int]
+var plusProblem2 PlainExpression[int]
+var minusProblem PlainExpression[int]
+var multiplyProblem PlainExpression[int]
+var divideProblem PlainExpression[int]
+var UnSupportedProblem PlainExpression[int]
 
 func init() {
-	plusProblem = PlainExpression{
-		&entity.Problem{
+	plusProblem = PlainExpression[int]{
+		&entity.Problem[int]{
 			A:  1,
 			B:  2,
 			C:  3,
@@ -25,8 +25,8 @@ func init() {
 		},
 	}
 
-	plusProblem2 = PlainExpression{
-		&entity.Problem{
+	plusProblem2 = PlainExpression[int]{
+		&entity.Problem[int]{
 			A:  2,
 			B:  1,
 			C:  3,
@@ -34,8 +34,8 @@ func init() {
 		},
 	}
 
-	minusProblem = PlainExpression{
-		&entity.Problem{
+	minusProblem = PlainExpression[int]{
+		&entity.Problem[int]{
 			A:  3,
 			B:  2,
 			C:  1,
@@ -43,8 +43,8 @@ func init() {
 		},
 	}
 
-	multiplyProblem = PlainExpression{
-		&entity.Problem{
+	multiplyProblem = PlainExpression[int]{
+		&entity.Problem[int]{
 			A:  3,
 			B:  2,
 			C:  6,
@@ -52,8 +52,8 @@ func init() {
 		},
 	}
 
-	divideProblem = PlainExpression{
-		&entity.Problem{
+	divideProblem = PlainExpression[int]{
+		&entity.Problem[int]{
 			A:  3,
 			B:  2,
 			C:  6,
@@ -61,8 +61,8 @@ func init() {
 		},
 	}
 
-	UnSupportedProblem = PlainExpression{
-		&entity.Problem{
+	UnSupportedProblem = PlainExpression[int]{
+		&entity.Problem[int]{
 			A:  3,
 			B:  2,
 			C:  6,

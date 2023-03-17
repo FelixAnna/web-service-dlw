@@ -9,10 +9,10 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var twoGenService *TwoGenerationService
+var twoGenService *TwoGenerationService[int]
 
 func init() {
-	twoGenService = NewTwoGenerationService()
+	twoGenService = NewTwoGenerationService[int]()
 }
 
 func TestTwoGenerationService(t *testing.T) {
@@ -22,7 +22,7 @@ func TestTwoGenerationService(t *testing.T) {
 }
 
 func TestGetQuestions(t *testing.T) {
-	criteria := &Criteria{
+	criteria := &Criteria[int]{
 		Min: 100,
 		Max: 200,
 
@@ -44,7 +44,7 @@ func TestGetQuestions(t *testing.T) {
 }
 
 func TestGetQuestionsWithinRange(t *testing.T) {
-	criteria := &Criteria{
+	criteria := &Criteria[int]{
 		Min: 100,
 		Max: 200,
 
@@ -72,7 +72,7 @@ func TestGetQuestionsWithinRange(t *testing.T) {
 }
 
 func TestGenerateProblemsMinus(t *testing.T) {
-	criteria := &Criteria{
+	criteria := &Criteria[int]{
 		Min: 10,
 		Max: 100,
 
@@ -100,7 +100,7 @@ func TestGenerateProblemsMinus(t *testing.T) {
 	}
 }
 func TestGenerateProblemsMinusPos(t *testing.T) {
-	criteria := &Criteria{
+	criteria := &Criteria[int]{
 		Min: 10,
 		Max: 100,
 
@@ -125,7 +125,7 @@ func TestGenerateProblemsMinusPos(t *testing.T) {
 }
 
 func TestGenerateProblemsMinusImpossible(t *testing.T) {
-	criteria := &Criteria{
+	criteria := &Criteria[int]{
 		Min: 10,
 		Max: 100,
 
@@ -143,7 +143,7 @@ func TestGenerateProblemsMinusImpossible(t *testing.T) {
 }
 
 func TestGenerateProblemsNoDuplocates(t *testing.T) {
-	criteria := &Criteria{
+	criteria := &Criteria[int]{
 		Min: 10,
 		Max: 100,
 
@@ -158,10 +158,10 @@ func TestGenerateProblemsNoDuplocates(t *testing.T) {
 
 	problemService := mocks.NewProblemService(t)
 
-	problems := []entity.Problem{}
+	problems := []entity.Problem[int]{}
 
 	problemService.EXPECT().GenerateProblem(criteria.Min, criteria.Max).Return(
-		&entity.Problem{
+		&entity.Problem[int]{
 			A:  15,
 			B:  12,
 			C:  3,
@@ -174,7 +174,7 @@ func TestGenerateProblemsNoDuplocates(t *testing.T) {
 }
 
 func TestGenerateProblemsMultiply(t *testing.T) {
-	criteria := &Criteria{
+	criteria := &Criteria[int]{
 		Min: 1,
 		Max: 10,
 
@@ -198,7 +198,7 @@ func TestGenerateProblemsMultiply(t *testing.T) {
 }
 
 func TestGenerateProblemsDivide(t *testing.T) {
-	criteria := &Criteria{
+	criteria := &Criteria[int]{
 		Min: 1,
 		Max: 100,
 

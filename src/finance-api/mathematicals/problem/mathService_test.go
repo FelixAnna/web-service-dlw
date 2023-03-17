@@ -13,17 +13,17 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-var service *MathService
-var criteria Criteria
-var criteria2 Criteria
-var criteria3 Criteria
-var criteria4 Criteria
-var criteria5 Criteria
+var service *MathService[int]
+var criteria Criteria[int]
+var criteria2 Criteria[int]
+var criteria3 Criteria[int]
+var criteria4 Criteria[int]
+var criteria5 Criteria[int]
 var saveRquest SaveAnswersRequest
 var questions entity.Questions
 
 func init() {
-	criteria = Criteria{
+	criteria = Criteria[int]{
 		Min:      100,
 		Max:      200,
 		Quantity: 10,
@@ -33,7 +33,7 @@ func init() {
 		Category: CategoryPlus,
 	}
 
-	criteria2 = Criteria{
+	criteria2 = Criteria[int]{
 		Min:      100,
 		Max:      200,
 		Quantity: 10,
@@ -45,7 +45,7 @@ func init() {
 		Type: TypePlainExpression,
 	}
 
-	criteria3 = Criteria{
+	criteria3 = Criteria[int]{
 		Min:      100,
 		Max:      200,
 		Quantity: 10,
@@ -56,7 +56,7 @@ func init() {
 		Type:     TypePlainApplication,
 	}
 
-	criteria4 = Criteria{
+	criteria4 = Criteria[int]{
 		Min:      100,
 		Max:      200,
 		Quantity: 10,
@@ -67,7 +67,7 @@ func init() {
 		Type:     TypeAppleApplication,
 	}
 
-	criteria5 = Criteria{
+	criteria5 = Criteria[int]{
 		Min:      100,
 		Max:      200,
 		Quantity: 10,
@@ -119,7 +119,7 @@ func init() {
 }
 
 func TestNewMathService(t *testing.T) {
-	service = NewMathService(NewTwoGenerationService(), mocks.NewQuestionRepo(t))
+	service = NewMathService(NewTwoGenerationService[int](), mocks.NewQuestionRepo(t))
 
 	assert.NotNil(t, service)
 	assert.NotNil(t, service.genService)
@@ -129,7 +129,7 @@ func TestNewMathService(t *testing.T) {
 }
 
 func TestGenerateProblems(t *testing.T) {
-	service = NewMathService(NewTwoGenerationService(), mocks.NewQuestionRepo(t))
+	service = NewMathService(NewTwoGenerationService[int](), mocks.NewQuestionRepo(t))
 
 	results := service.GenerateProblems(criteria)
 
@@ -140,7 +140,7 @@ func TestGenerateProblems(t *testing.T) {
 
 func TestSaveResults_QueryError(t *testing.T) {
 	mockRepo := mocks.NewQuestionRepo(t)
-	service = NewMathService(NewTwoGenerationService(), mockRepo)
+	service = NewMathService(NewTwoGenerationService[int](), mockRepo)
 
 	mockRepo.EXPECT().GetQuestion(mock.Anything).Return(nil)
 	mockRepo.EXPECT().SaveQuestions(mock.Anything).Return(errors.New("any"))
@@ -151,7 +151,7 @@ func TestSaveResults_QueryError(t *testing.T) {
 
 func TestSaveResults_SaveError(t *testing.T) {
 	mockRepo := mocks.NewQuestionRepo(t)
-	service = NewMathService(NewTwoGenerationService(), mockRepo)
+	service = NewMathService(NewTwoGenerationService[int](), mockRepo)
 
 	mockRepo.EXPECT().GetQuestion(mock.Anything).Return(&questions)
 	mockRepo.EXPECT().SaveAnswers(mock.AnythingOfType("*entity.Answers")).Return(errors.New("any")).Times(1)
@@ -162,7 +162,7 @@ func TestSaveResults_SaveError(t *testing.T) {
 
 func TestSaveResults(t *testing.T) {
 	mockRepo := mocks.NewQuestionRepo(t)
-	service = NewMathService(NewTwoGenerationService(), mockRepo)
+	service = NewMathService(NewTwoGenerationService[int](), mockRepo)
 
 	mockRepo.EXPECT().GetQuestion(mock.Anything).Return(nil)
 	mockRepo.EXPECT().SaveQuestions(mock.Anything).Return(nil)
@@ -173,7 +173,7 @@ func TestSaveResults(t *testing.T) {
 }
 
 func TestGenerateProblemsMulti(t *testing.T) {
-	service = NewMathService(NewTwoGenerationService(), mocks.NewQuestionRepo(t))
+	service = NewMathService(NewTwoGenerationService[int](), mocks.NewQuestionRepo(t))
 	totalQuantity := criteria.Quantity + criteria2.Quantity + criteria3.Quantity + criteria4.Quantity + criteria5.Quantity
 
 	results := service.GenerateProblems(criteria, criteria2, criteria3, criteria4, criteria5)
@@ -184,7 +184,7 @@ func TestGenerateProblemsMulti(t *testing.T) {
 }
 
 func TestGenerateFeeds(t *testing.T) {
-	service = NewMathService(NewTwoGenerationService(), mocks.NewQuestionRepo(t))
+	service = NewMathService(NewTwoGenerationService[int](), mocks.NewQuestionRepo(t))
 	totalQuantity := criteria.Quantity + criteria2.Quantity + criteria3.Quantity + criteria4.Quantity + criteria5.Quantity
 
 	results := service.GenerateFeeds(criteria, criteria2, criteria3, criteria4, criteria5)

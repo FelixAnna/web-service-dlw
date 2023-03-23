@@ -1,0 +1,22 @@
+version: "3.9"
+services:
+  date-api:
+    image: yufelix/dlw-date-api:${TAG}
+    build: ../../src/date-api/
+    ports:
+      - "8383:8383"
+  memo-api:
+    image: yufelix/dlw-memo-api:${TAG}
+    build: ../../src/memo-api/
+    ports:
+      - "8282:8282"
+  user-api:
+    image: yufelix/dlw-user-api:${TAG}
+    build: ../../src/user-api/
+    ports:
+      - "8181:8181"
+  finance-api:
+    image: yufelix/dlw-finance-api:${TAG}
+    build: ../../src/finance-api/
+    ports:
+      - "8484:8484"  

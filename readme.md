@@ -134,6 +134,12 @@ microservice helm chart is located in "./dlw-chart" and "./dlw-chart-nossl".
   docker image tag dlw-user-api:$tag yufelix/dlw-user-api:$tag
   docker image push yufelix/dlw-user-api:$tag
 ```
+
+```
+# from devops/docker-compose dir
+docker compose build --push
+```
+
 ```
   ## if you do not have docker, and want to push to acr
     

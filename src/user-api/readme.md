@@ -16,10 +16,11 @@
 ## Docker Guide
 
 ### Build
+cd ..
 
-docker build -t user-api . 
+docker build -t user-api -f user-api/Dockerfile . 
 or
-docker build -t user-api:1.0.0 . 
+docker build -t user-api:1.0.0 -f user-api/Dockerfile . 
 ### Check Image
 
 docker image ls

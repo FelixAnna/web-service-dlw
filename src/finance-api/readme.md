@@ -90,10 +90,11 @@ b. 家庭作业
 ## Docker Guide
 
 ### Build
+cd ..
 
-docker build -t finance-api . 
+docker build -t finance-api -f finance-api/Dockerfile . 
 or
-docker build -t finance-api:1.0.0 . 
+docker build -t finance-api:1.0.0 -f finance-api/Dockerfile . 
 ### Check Image
 
 docker image ls

@@ -12,14 +12,9 @@ ENV CGO_ENABLED=0
 
 WORKDIR /app
 
-COPY go.mod ./
-COPY go.sum ./
-
-RUN go mod download
-
 COPY . ./
+WORKDIR /app/memo-api
 
-RUN go mod tidy
 RUN go build -o /docker-memo-api
 
 ##

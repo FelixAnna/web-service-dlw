@@ -7,10 +7,11 @@
 ## Docker Guide
 
 ### Build
+cd ..
 
-docker build -t date-api . 
+docker build -t date-api -f date-api/Dockerfile . 
 or
-docker build -t date-api:1.0.0 . 
+docker build -t date-api:1.0.0 -f date-api/Dockerfile . 
 ### Check Image
 
 docker image ls

@@ -9,10 +9,11 @@
 ## Docker Guide
 
 ### Build
+cd ..
 
-docker build -t memo-api . 
+docker build -t memo-api -f memo-api/Dockerfile . 
 or
-docker build -t memo-api:1.0.0 . 
+docker build -t memo-api:1.0.0 -f memo-api/Dockerfile . 
 ### Check Image
 
 docker image ls

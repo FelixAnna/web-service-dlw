@@ -89,7 +89,7 @@ jobs:
       containerRegistry: sharedacr
       repository: 'dlw-date-api'
       Dockerfile: 'src/date-api/Dockerfile'
-      buildContext: 'src/date-api'
+      buildContext: 'src'
       tags: '$(imageTag)'
 
   - task: Docker@2
@@ -98,7 +98,7 @@ jobs:
       containerRegistry: sharedacr
       repository: 'dlw-memo-api'
       Dockerfile: 'src/memo-api/Dockerfile'
-      buildContext: 'src/memo-api'
+      buildContext: 'src'
       tags: '$(imageTag)'
 
   - task: Docker@2
@@ -107,7 +107,7 @@ jobs:
       containerRegistry: sharedacr
       repository: 'dlw-finance-api'
       Dockerfile: 'src/finance-api/Dockerfile'
-      buildContext: 'src/finance-api'
+      buildContext: 'src'
       tags: '$(imageTag)'
 
   - task: Docker@2
@@ -116,7 +116,7 @@ jobs:
       containerRegistry: sharedacr
       repository: 'dlw-user-api'
       Dockerfile: 'src/user-api/Dockerfile'
-      buildContext: 'src/user-api'
+      buildContext: 'src'
       tags: '$(imageTag)'
 
 

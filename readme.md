@@ -115,22 +115,22 @@ microservice helm chart is located in "./dlw-chart" and "./dlw-chart-nossl".
   tag=latest
 
   cd src/date-api
-  docker build -t dlw-date-api:$tag -f Dockerfile . 
+  docker build -t dlw-date-api:$tag -f date-api/Dockerfile . 
   docker image tag dlw-date-api:$tag yufelix/dlw-date-api:$tag
   docker image push yufelix/dlw-date-api:$tag
   
   cd ../finance-api
-  docker build -t dlw-finance-api:$tag -f Dockerfile . 
+  docker build -t dlw-finance-api:$tag -f finance-api/Dockerfile . 
   docker image tag dlw-finance-api:$tag yufelix/dlw-finance-api:$tag
   docker image push yufelix/dlw-finance-api:$tag
 
   cd ../memo-api
-  docker build -t dlw-memo-api:$tag -f Dockerfile . 
+  docker build -t dlw-memo-api:$tag -f memo-api/Dockerfile . 
   docker image tag dlw-memo-api:$tag yufelix/dlw-memo-api:$tag
   docker image push yufelix/dlw-memo-api:$tag
 
   cd ../user-api
-  docker build -t dlw-user-api:$tag -f Dockerfile . 
+  docker build -t dlw-user-api:$tag -f user-api/Dockerfile . 
   docker image tag dlw-user-api:$tag yufelix/dlw-user-api:$tag
   docker image push yufelix/dlw-user-api:$tag
 ```

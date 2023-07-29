@@ -68,9 +68,9 @@ docker-build-date:
   stage: build
   needs: ['test']
   script:    
-    - cd src/date-api
+    - cd src
 
-    - docker build -t dlw-date-api:$imageTag -f Dockerfile . 
+    - docker build -t dlw-date-api:$imageTag -f date-api/Dockerfile . 
 
     - docker image tag dlw-date-api:$imageTag hssdevacr.azurecr.io/dlw-date-api:$imageTag
     - docker image push hssdevacr.azurecr.io/dlw-date-api:$imageTag
@@ -79,9 +79,9 @@ docker-build-memo:
   stage: build
   needs: ['test']
   script:    
-    - cd src/memo-api
+    - cd src
 
-    - docker build -t dlw-memo-api:$imageTag -f Dockerfile . 
+    - docker build -t dlw-memo-api:$imageTag -f memo-api/Dockerfile . 
 
     - docker image tag dlw-memo-api:$imageTag hssdevacr.azurecr.io/dlw-memo-api:$imageTag
     - docker image push hssdevacr.azurecr.io/dlw-memo-api:$imageTag
@@ -90,9 +90,9 @@ docker-build-finance:
   stage: build
   needs: ['test']
   script:    
-    - cd src/finance-api
+    - cd src
 
-    - docker build -t dlw-finance-api:$imageTag -f Dockerfile . 
+    - docker build -t dlw-finance-api:$imageTag -f finance-api/Dockerfile . 
 
     - docker image tag dlw-finance-api:$imageTag hssdevacr.azurecr.io/dlw-finance-api:$imageTag
     - docker image push hssdevacr.azurecr.io/dlw-finance-api:$imageTag
@@ -101,9 +101,9 @@ docker-build-user:
   stage: build
   needs: ['test']
   script:    
-    - cd src/user-api
+    - cd src
 
-    - docker build -t dlw-user-api:$imageTag -f Dockerfile . 
+    - docker build -t dlw-user-api:$imageTag -f user-api/Dockerfile . 
 
     - docker image tag dlw-user-api:$imageTag hssdevacr.azurecr.io/dlw-user-api:$imageTag
     - docker image push hssdevacr.azurecr.io/dlw-user-api:$imageTag

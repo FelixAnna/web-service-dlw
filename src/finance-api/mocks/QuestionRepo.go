@@ -3,7 +3,7 @@
 package mocks
 
 import (
-	entity "github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem/entity"
+	entity "github.com/FelixAnna/web-service-dlw/finance-api/mathematics/problem/entity"
 	mock "github.com/stretchr/testify/mock"
 )
 

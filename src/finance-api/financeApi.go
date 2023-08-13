@@ -10,7 +10,7 @@ import (
 	"github.com/FelixAnna/web-service-dlw/common/middleware"
 	"github.com/FelixAnna/web-service-dlw/common/snowflake"
 	"github.com/FelixAnna/web-service-dlw/finance-api/di"
-	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals"
+	"github.com/FelixAnna/web-service-dlw/finance-api/mathematics"
 	"github.com/FelixAnna/web-service-dlw/finance-api/zdj"
 
 	"github.com/gin-gonic/gin"
@@ -30,7 +30,7 @@ func main() {
 
 type ApiBoot struct {
 	ZdjApi               *zdj.ZdjApi
-	MathApi              *mathematicals.MathApi
+	MathApi              *mathematics.MathApi
 	ErrorHandler         *middleware.ErrorHandlingMiddleware
 	AuthorizationHandler *middleware.AuthorizationMiddleware
 	Registry             *mesh.Registry

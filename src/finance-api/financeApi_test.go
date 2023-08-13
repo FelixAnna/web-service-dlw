@@ -14,8 +14,8 @@ import (
 
 	"github.com/FelixAnna/web-service-dlw/common/snowflake"
 	"github.com/FelixAnna/web-service-dlw/finance-api/di"
-	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem"
-	mathEntity "github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem/entity"
+	"github.com/FelixAnna/web-service-dlw/finance-api/mathematics/problem"
+	mathEntity "github.com/FelixAnna/web-service-dlw/finance-api/mathematics/problem/entity"
 	"github.com/FelixAnna/web-service-dlw/finance-api/zdj/entity"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"

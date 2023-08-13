@@ -13,9 +13,9 @@ import (
 	"github.com/FelixAnna/web-service-dlw/common/mesh"
 	"github.com/FelixAnna/web-service-dlw/common/middleware"
 	"github.com/FelixAnna/web-service-dlw/common/mocks"
-	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals"
-	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem"
-	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem/repositories"
+	"github.com/FelixAnna/web-service-dlw/finance-api/mathematics"
+	"github.com/FelixAnna/web-service-dlw/finance-api/mathematics/problem"
+	"github.com/FelixAnna/web-service-dlw/finance-api/mathematics/problem/repositories"
 	"github.com/FelixAnna/web-service-dlw/finance-api/zdj"
 	"github.com/FelixAnna/web-service-dlw/finance-api/zdj/repository"
 )
@@ -34,13 +34,13 @@ func InitializeZdjApi() (*zdj.ZdjApi, error) {
 	return zdjApi, nil
 }
 
-func InitializeMathApi() *mathematicals.MathApi {
+func InitializeMathApi() *mathematics.MathApi {
 	twoGenerationService := problem.NewTwoGenerationService()
 	awsHelper := aws.ProvideAwsHelper()
 	awsService := aws.ProvideAWSService(awsHelper)
 	mongoQuestionRepo := repositories.ProvideMongoQuestionRepo(awsService)
 	mathService := problem.NewMathService(twoGenerationService, mongoQuestionRepo)
-	mathApi := mathematicals.ProvideMathApi(mathService)
+	mathApi := mathematics.ProvideMathApi(mathService)
 	return mathApi
 }
 
@@ -51,13 +51,13 @@ func InitializeMockApi() (*zdj.ZdjApi, error) {
 	return zdjApi, nil
 }
 
-func InitializeMockMathApi() *mathematicals.MathApi {
+func InitializeMockMathApi() *mathematics.MathApi {
 	twoGenerationService := problem.NewTwoGenerationService()
 	mockAwsHelper := mocks.ProvideMockAwsHelper()
 	awsService := aws.ProvideAWSService(mockAwsHelper)
 	mongoQuestionRepo := repositories.ProvideMongoQuestionRepo(awsService)
 	mathService := problem.NewMathService(twoGenerationService, mongoQuestionRepo)
-	mathApi := mathematicals.ProvideMathApi(mathService)
+	mathApi := mathematics.ProvideMathApi(mathService)
 	return mathApi
 }
 

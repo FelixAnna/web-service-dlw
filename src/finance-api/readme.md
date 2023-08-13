@@ -56,7 +56,7 @@ b. 家庭作业
         "Size":3
     }'
     ```
-3. generate mathematicals problems:
+3. generate mathematics problems:
     ```
     curl --location --request POST 'localhost:8484/homework/math/multiple' \
     --header 'Content-Type: application/json' \

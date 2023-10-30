@@ -6,20 +6,25 @@ import (
 	"net/http"
 
 	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem"
+	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem/entity"
 	"github.com/gin-gonic/gin"
 )
 
-type MathApi struct {
-	mathService *problem.MathService
+type MathApi[number entity.Number] struct {
+	mathService *problem.MathService[number]
 }
 
-//provide for wire
-func ProvideMathApi(mathService *problem.MathService) *MathApi {
-	return &MathApi{mathService: mathService}
+// provide for wire
+func ProvideMathApi(mathService *problem.MathService[int]) *MathApi[int] {
+	return &MathApi[int]{mathService: mathService}
 }
 
-func (api *MathApi) GetQuestions(c *gin.Context) {
-	var criteria problem.Criteria
+func ProvideMathApi2(mathService *problem.MathService[float32]) *MathApi[float32] {
+	return &MathApi[float32]{mathService: mathService}
+}
+
+func (api *MathApi[number]) GetQuestions(c *gin.Context) {
+	var criteria problem.Criteria[number]
 	if err := c.BindJSON(&criteria); err != nil {
 		log.Println(err)
 		c.String(http.StatusBadRequest, err.Error())
@@ -30,8 +35,8 @@ func (api *MathApi) GetQuestions(c *gin.Context) {
 	c.JSON(http.StatusOK, results)
 }
 
-func (api *MathApi) GetAllQuestions(c *gin.Context) {
-	var criterias []problem.Criteria
+func (api *MathApi[number]) GetAllQuestions(c *gin.Context) {
+	var criterias []problem.Criteria[number]
 	if err := c.BindJSON(&criterias); err != nil {
 		log.Println(err)
 		c.String(http.StatusBadRequest, err.Error())
@@ -43,8 +48,8 @@ func (api *MathApi) GetAllQuestions(c *gin.Context) {
 	c.JSON(http.StatusOK, results)
 }
 
-func (api *MathApi) GetAllQuestionFeeds(c *gin.Context) {
-	var criterias []problem.Criteria
+func (api *MathApi[number]) GetAllQuestionFeeds(c *gin.Context) {
+	var criterias []problem.Criteria[number]
 	if err := c.BindJSON(&criterias); err != nil {
 		log.Println(err)
 		c.String(http.StatusBadRequest, err.Error())
@@ -55,7 +60,7 @@ func (api *MathApi) GetAllQuestionFeeds(c *gin.Context) {
 
 	c.JSON(http.StatusOK, results)
 }
-func (api *MathApi) SaveResults(c *gin.Context) {
+func (api *MathApi[number]) SaveResults(c *gin.Context) {
 	userId, _ := c.Get("userId")
 	var request problem.SaveAnswersRequest
 	if err := c.BindJSON(&request); err != nil {

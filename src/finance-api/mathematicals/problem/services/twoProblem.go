@@ -7,6 +7,7 @@ import (
 )
 
 var ProblemServiceSet = wire.NewSet(NewTwoProblem[int], wire.Bind(new(ProblemService[int]), new(*TwoProblem[int])))
+var ProblemServiceSetFloat = wire.NewSet(NewTwoProblem[float32], wire.Bind(new(ProblemService[float32]), new(*TwoProblem[float32])))
 
 type TwoProblem[number entity.Number] struct {
 	Stratergy stratergy.Stratergy[number]

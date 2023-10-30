@@ -7,10 +7,10 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var twoMultiplyStratergy *TwoMultiplyStratergy
+var twoMultiplyStratergy *TwoMultiplyStratergy[int]
 
 func init() {
-	twoMultiplyStratergy = NewTwoMultiplyStratergy(data.CreateRandomService())
+	twoMultiplyStratergy = NewTwoMultiplyStratergy[int](data.CreateRandomService[int]())
 }
 
 func TestNewTwoMultiplyStratergy(t *testing.T) {

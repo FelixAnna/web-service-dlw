@@ -10,7 +10,7 @@ import (
 var twoDivideStratergy *TwoDivideStratergy[int]
 
 func init() {
-	twoDivideStratergy = NewTwoDivideStratergy[int](data.CreateRandomService())
+	twoDivideStratergy = NewTwoDivideStratergy[int](data.CreateRandomService[int]())
 }
 
 func TestNewTwoDivideStratergy(t *testing.T) {

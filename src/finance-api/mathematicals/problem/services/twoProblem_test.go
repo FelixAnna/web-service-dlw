@@ -8,22 +8,22 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var twoProblem *TwoProblem
-var dataService data.DataService
+var twoProblem *TwoProblem[int]
+var dataService data.DataService[int]
 
 func init() {
-	dataService = data.CreateRandomService()
+	dataService = data.CreateRandomService[int]()
 }
 
 func TestCreateRandomService(t *testing.T) {
-	twoProblem = NewTwoProblem(stratergy.NewTwoMinusStratergy(dataService))
+	twoProblem = NewTwoProblem[int](stratergy.NewTwoMinusStratergy(dataService))
 
 	assert.NotNil(t, twoProblem)
 	assert.NotNil(t, twoProblem.Stratergy)
 }
 
 func TestGenerateProblemPlus(t *testing.T) {
-	twoProblem = NewTwoProblem(stratergy.NewTwoPlusStratergy(dataService))
+	twoProblem = NewTwoProblem[int](stratergy.NewTwoPlusStratergy(dataService))
 
 	problem := twoProblem.GenerateProblem(100, 200)
 	assert.NotNil(t, problem)
@@ -34,7 +34,7 @@ func TestGenerateProblemPlus(t *testing.T) {
 }
 
 func TestGenerateProblemMinus(t *testing.T) {
-	twoProblem = NewTwoProblem(stratergy.NewTwoMinusStratergy(dataService))
+	twoProblem = NewTwoProblem[int](stratergy.NewTwoMinusStratergy(dataService))
 
 	problem := twoProblem.GenerateProblem(100, 200)
 	assert.NotNil(t, problem)
@@ -45,7 +45,7 @@ func TestGenerateProblemMinus(t *testing.T) {
 }
 
 func TestGenerateProblemMultiply(t *testing.T) {
-	twoProblem = NewTwoProblem(stratergy.NewTwoMultiplyStratergy(dataService))
+	twoProblem = NewTwoProblem[int](stratergy.NewTwoMultiplyStratergy(dataService))
 
 	problem := twoProblem.GenerateProblem(100, 200)
 	assert.NotNil(t, problem)
@@ -55,7 +55,7 @@ func TestGenerateProblemMultiply(t *testing.T) {
 	assert.True(t, problem.A*problem.B == problem.C)
 }
 func TestGenerateProblemDivide(t *testing.T) {
-	twoProblem = NewTwoProblem(stratergy.NewTwoDivideStratergy(dataService))
+	twoProblem = NewTwoProblem[int](stratergy.NewTwoDivideStratergy(dataService))
 
 	problem := twoProblem.GenerateProblem(100, 200)
 	assert.NotNil(t, problem)

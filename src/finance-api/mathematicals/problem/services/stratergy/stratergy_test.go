@@ -11,7 +11,7 @@ import (
 var twoNumStratergy *TwoNumStratergy[int]
 
 func init() {
-	twoNumStratergy = NewTwoNumStratergy[int](data.CreateRandomService())
+	twoNumStratergy = NewTwoNumStratergy[int](data.CreateRandomService[int]())
 }
 
 func TestNewTwoNumStratergy(t *testing.T) {

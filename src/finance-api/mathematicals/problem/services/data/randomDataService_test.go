@@ -10,7 +10,7 @@ import (
 var service DataService[int]
 
 func init() {
-	service = CreateRandomService()
+	service = CreateRandomService[int]()
 }
 func TestCreateRandomService(t *testing.T) {
 	assert.NotNil(t, service)

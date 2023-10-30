@@ -19,10 +19,10 @@ type TwoGenerationService[number entity.Number] struct {
 
 func NewTwoGenerationService[number entity.Number]() *TwoGenerationService[number] {
 	return &TwoGenerationService[number]{
-		TwoPlusService:     di.InitializeTwoPlusService(),
-		TwoMinusService:    di.InitializeTwoMinusService(),
-		TwoMultiplyService: di.InitializeTwoMultiplyService(),
-		TwoDivideService:   di.InitializeTwoDivideService(),
+		TwoPlusService:     di.InitializeTwoPlusService[number](),
+		TwoMinusService:    di.InitializeTwoMinusService[number](),
+		TwoMultiplyService: di.InitializeTwoMultiplyService[number](),
+		TwoDivideService:   di.InitializeTwoDivideService[number](),
 	}
 }
 

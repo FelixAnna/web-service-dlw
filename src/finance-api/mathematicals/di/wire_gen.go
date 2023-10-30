@@ -7,6 +7,7 @@
 package di
 
 import (
+	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem/entity"
 	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem/services"
 	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem/services/data"
 	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem/services/stratergy"
@@ -14,30 +15,30 @@ import (
 
 // Injectors from wire.go:
 
-func InitializeTwoPlusService() services.ProblemService {
-	randomService := data.CreateRandomService()
-	twoPlusStratergy := stratergy.NewTwoPlusStratergy(randomService)
-	twoProblem := services.NewTwoProblem(twoPlusStratergy)
+func InitializeTwoPlusService[number entity.Number]() services.ProblemService[number] {
+	randomService := data.CreateRandomService[number]()
+	twoPlusStratergy := stratergy.NewTwoPlusStratergy[number](randomService)
+	twoProblem := services.NewTwoProblem[number](twoPlusStratergy)
 	return twoProblem
 }
 
-func InitializeTwoMinusService() services.ProblemService {
-	randomService := data.CreateRandomService()
-	twoMinusStratergy := stratergy.NewTwoMinusStratergy(randomService)
-	twoProblem := services.NewTwoProblem(twoMinusStratergy)
+func InitializeTwoMinusService[number entity.Number]() services.ProblemService[number] {
+	randomService := data.CreateRandomService[number]()
+	twoMinusStratergy := stratergy.NewTwoMinusStratergy[number](randomService)
+	twoProblem := services.NewTwoProblem[number](twoMinusStratergy)
 	return twoProblem
 }
 
-func InitializeTwoMultiplyService() services.ProblemService {
-	randomService := data.CreateRandomService()
-	twoMultiplyStratergy := stratergy.NewTwoMultiplyStratergy(randomService)
-	twoProblem := services.NewTwoProblem(twoMultiplyStratergy)
+func InitializeTwoMultiplyService[number entity.Number]() services.ProblemService[number] {
+	randomService := data.CreateRandomService[number]()
+	twoMultiplyStratergy := stratergy.NewTwoMultiplyStratergy[number](randomService)
+	twoProblem := services.NewTwoProblem[number](twoMultiplyStratergy)
 	return twoProblem
 }
 
-func InitializeTwoDivideService() services.ProblemService {
-	randomService := data.CreateRandomService()
-	twoDivideStratergy := stratergy.NewTwoDivideStratergy(randomService)
-	twoProblem := services.NewTwoProblem(twoDivideStratergy)
+func InitializeTwoDivideService[number entity.Number]() services.ProblemService[number] {
+	randomService := data.CreateRandomService[number]()
+	twoDivideStratergy := stratergy.NewTwoDivideStratergy[number](randomService)
+	twoProblem := services.NewTwoProblem[number](twoDivideStratergy)
 	return twoProblem
 }

@@ -7,6 +7,7 @@ import (
 )
 
 var TwoPlusStratergySet = wire.NewSet(NewTwoPlusStratergy[int], wire.Bind(new(Stratergy[int]), new(*TwoPlusStratergy[int])))
+var TwoPlusStratergySetFloat = wire.NewSet(NewTwoPlusStratergy[float32], wire.Bind(new(Stratergy[float32]), new(*TwoPlusStratergy[float32])))
 
 type TwoPlusStratergy[number entity.Number] struct {
 	*TwoNumStratergy[number]

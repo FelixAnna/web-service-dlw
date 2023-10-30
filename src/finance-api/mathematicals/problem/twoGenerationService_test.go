@@ -168,7 +168,7 @@ func TestGenerateProblemsNoDuplocates(t *testing.T) {
 			Op: '-',
 		}).Times(MaxGenerateTimes)
 
-	GenerateProblems(criteria, problemService, &problems)
+	GenerateProblems[int](criteria, problemService, &problems)
 
 	assert.Equal(t, len(problems), 1)
 }

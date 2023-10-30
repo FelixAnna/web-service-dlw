@@ -9,7 +9,8 @@ import (
 	"github.com/google/wire"
 )
 
-var RandomServiceSet = wire.NewSet(CreateRandomService, wire.Bind(new(DataService[int]), new(*RandomService[int])))
+var RandomServiceSet = wire.NewSet(CreateRandomService[int], wire.Bind(new(DataService[int]), new(*RandomService[int])))
+var RandomServiceSetFloat = wire.NewSet(CreateRandomService[float32], wire.Bind(new(DataService[float32]), new(*RandomService[float32])))
 
 var r1 *rand.Rand
 
@@ -20,8 +21,8 @@ func init() {
 
 type RandomService[number entity.Number] struct{}
 
-func CreateRandomService() *RandomService[int] {
-	return &RandomService[int]{}
+func CreateRandomService[number entity.Number]() *RandomService[number] {
+	return &RandomService[number]{}
 }
 
 func (rd *RandomService[number]) GetData(criteria ...interface{}) number {

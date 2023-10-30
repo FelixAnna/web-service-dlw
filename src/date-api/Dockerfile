@@ -37,7 +37,6 @@ EXPOSE 8383
 
 # Create a group and user
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
-USER appuser
 
 # Tell docker that all future commands should run as the appuser user
 USER appuser

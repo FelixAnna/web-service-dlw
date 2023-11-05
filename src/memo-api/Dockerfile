@@ -3,7 +3,7 @@
 ##
 ## Build
 ##
-FROM golang:1.20.1-alpine3.16 AS build
+FROM golang:1.21.1-alpine3.16 AS build
 # RUN apk add build-base
 
 # disable cgo : CGO_ENABLED = 0
@@ -20,7 +20,7 @@ RUN go build -o /docker-memo-api
 ##
 ## Deploy
 ##
-FROM alpine:3.17.0
+FROM alpine:3.18.0
 
 #RUN apk update \
 #   && rm -rf /var/lib/apt/lists/*

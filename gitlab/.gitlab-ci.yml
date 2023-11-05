@@ -46,7 +46,7 @@ after_script:
 
 test:
   stage: test
-  image: golang:1.19.3-alpine3.16
+  image: golang:1.21.3-alpine3.18
   before_script:
     - export CGO_ENABLED=0
   script:

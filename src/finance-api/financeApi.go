@@ -30,7 +30,8 @@ func main() {
 
 type ApiBoot struct {
 	ZdjApi               *zdj.ZdjApi
-	MathApi              *mathematicals.MathApi
+	MathApi              *mathematicals.MathApi[int]
+	MathApiFloat         *mathematicals.MathApi[float32]
 	ErrorHandler         *middleware.ErrorHandlingMiddleware
 	AuthorizationHandler *middleware.AuthorizationMiddleware
 	Registry             *mesh.Registry
@@ -46,8 +47,9 @@ func initialDependency() {
 	}
 
 	apiBoot = &ApiBoot{
-		ZdjApi:               zdjApi,
-		MathApi:              di.InitializeMathApi(),
+		ZdjApi:  zdjApi,
+		MathApi: di.InitializeMathApi(),
+		//MathApiFloat:         di.InitializeMathApi(),
 		AuthorizationHandler: di.InitialAuthorizationMiddleware(),
 		ErrorHandler:         di.InitialErrorMiddleware(),
 		Registry:             di.InitialRegistry(),
@@ -90,5 +92,13 @@ func defineRoutes(router *gin.Engine) {
 		mathGroupRouter.POST("/multiple", apiBoot.MathApi.GetAllQuestions)
 		mathGroupRouter.POST("/save", authorizationHandler, apiBoot.MathApi.SaveResults)
 		mathGroupRouter.POST("/multiple/feeds", apiBoot.MathApi.GetAllQuestionFeeds)
+	}
+
+	math2GroupRouter := router.Group("/homework/math2")
+	{
+		math2GroupRouter.POST("/", apiBoot.MathApi.GetQuestions)
+		math2GroupRouter.POST("/multiple", apiBoot.MathApi.GetAllQuestions)
+		math2GroupRouter.POST("/save", authorizationHandler, apiBoot.MathApi.SaveResults)
+		math2GroupRouter.POST("/multiple/feeds", apiBoot.MathApi.GetAllQuestionFeeds)
 	}
 }

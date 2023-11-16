@@ -24,8 +24,14 @@ func InitializeZdjApi() (*zdj.ZdjApi, error) {
 	return &zdj.ZdjApi{}, nil
 }
 
-func InitializeMathApi() *mathematicals.MathApi {
-	wire.Build(mathematicals.ProvideMathApi, problem.NewMathService, problem.NewTwoGenerationService, repositories.MongoRepoSet, aws.ProvideAWSService, aws.AwsSet) //sql
+func InitializeMathApi() *mathematicals.MathApi[int] {
+	wire.Build(mathematicals.ProvideMathApi, problem.NewMathService, problem.ProvideTwoGenerationService, repositories.MongoRepoSet, aws.ProvideAWSService, aws.AwsSet) //sql
+	//wire.Build(zdj.ProvideZdjApi, repository.MemoryRepoSet) //InMemory
+	return &mathematicals.MathApi{}
+}
+
+func InitializeMathApi2() *mathematicals.MathApi[float32] {
+	wire.Build(mathematicals.ProvideMathApi2, problem.NewMathService, problem.ProvideTwoGenerationService, repositories.MongoRepoSet, aws.ProvideAWSService, aws.AwsSet) //sql
 	//wire.Build(zdj.ProvideZdjApi, repository.MemoryRepoSet) //InMemory
 	return &mathematicals.MathApi{}
 }
@@ -37,7 +43,7 @@ func InitializeMockApi() (*zdj.ZdjApi, error) {
 }
 
 func InitializeMockMathApi() *mathematicals.MathApi {
-	wire.Build(mathematicals.ProvideMathApi, problem.NewMathService, problem.NewTwoGenerationService, repositories.MongoRepoSet, aws.ProvideAWSService, aws.AwsMockSet) //sql
+	wire.Build(mathematicals.ProvideMathApi, problem.NewMathService, problem.ProvideTwoGenerationService2, repositories.MongoRepoSet, aws.ProvideAWSService, aws.AwsMockSet) //sql
 	//wire.Build(zdj.ProvideZdjApi, repository.MemoryRepoSet) //InMemory
 	return &mathematicals.MathApi{}
 }

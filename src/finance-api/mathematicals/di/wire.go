@@ -4,6 +4,8 @@
 package di
 
 import (
+	"reflect"
+
 	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem/entity"
 	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem/services"
 	"github.com/FelixAnna/web-service-dlw/finance-api/mathematicals/problem/services/data"
@@ -12,11 +14,13 @@ import (
 )
 
 func InitializeTwoPlusService[number entity.Number]() services.ProblemService[number] {
-	var zero number
-	switch zero.(type) {
-	case int:
+	var zero number = *new(number)
+	v := reflect.ValueOf(zero)
+
+	switch v.Kind() {
+	case reflect.Int:
 		wire.Build(services.ProblemServiceSet, stratergy.TwoPlusStratergySet, data.RandomServiceSet)
-	case float32:
+	case reflect.Float32:
 		wire.Build(services.ProblemServiceSetFloat, stratergy.TwoPlusStratergySetFloat, data.RandomServiceSetFloat)
 	default:
 		panic("Invalid type")
@@ -25,10 +29,12 @@ func InitializeTwoPlusService[number entity.Number]() services.ProblemService[nu
 }
 
 func InitializeTwoMinusService[number entity.Number]() services.ProblemService[number] {
-	switch (number); {
-	case int:
+	var zero number = *new(number)
+	v := reflect.ValueOf(zero)
+	switch v.Kind() {
+	case reflect.Int:
 		wire.Build(services.ProblemServiceSet, stratergy.TwoMinusStratergySet, data.RandomServiceSet)
-	case float32:
+	case reflect.Float32:
 		wire.Build(services.ProblemServiceSetFloat, stratergy.TwoMinusStratergySetFloat, data.RandomServiceSetFloat)
 	default:
 		panic("Invalid type")
@@ -37,10 +43,12 @@ func InitializeTwoMinusService[number entity.Number]() services.ProblemService[n
 }
 
 func InitializeTwoMultiplyService[number entity.Number]() services.ProblemService[number] {
-	switch (number); {
-	case int:
+	var zero number = *new(number)
+	v := reflect.ValueOf(zero)
+	switch v.Kind() {
+	case reflect.Int:
 		wire.Build(services.ProblemServiceSet, stratergy.TwoMultiplyStratergySet, data.RandomServiceSet)
-	case float32:
+	case reflect.Float32:
 		wire.Build(services.ProblemServiceSetFloat, stratergy.TwoMultiplyStratergySetFloat, data.RandomServiceSetFloat)
 	default:
 		panic("Invalid type")
@@ -49,10 +57,12 @@ func InitializeTwoMultiplyService[number entity.Number]() services.ProblemServic
 }
 
 func InitializeTwoDivideService[number entity.Number]() services.ProblemService[number] {
-	switch (number); {
-	case int:
+	var zero number = *new(number)
+	v := reflect.ValueOf(zero)
+	switch v.Kind() {
+	case reflect.Int:
 		wire.Build(services.ProblemServiceSet, stratergy.TwoDivideStratergySet, data.RandomServiceSet)
-	case float32:
+	case reflect.Float32:
 		wire.Build(services.ProblemServiceSetFloat, stratergy.TwoDivideStratergySetFloat, data.RandomServiceSetFloat)
 	default:
 		panic("Invalid type")

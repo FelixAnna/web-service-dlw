@@ -34,8 +34,8 @@ func InitializeZdjApi() (*zdj.ZdjApi, error) {
 	return zdjApi, nil
 }
 
-func InitializeMathApi() *mathematicals.MathApi {
-	twoGenerationService := problem.NewTwoGenerationService()
+func InitializeMathApi() *mathematicals.MathApi[int] {
+	twoGenerationService := problem.NewTwoGenerationService[int]()
 	awsHelper := aws.ProvideAwsHelper()
 	awsService := aws.ProvideAWSService(awsHelper)
 	mongoQuestionRepo := repositories.ProvideMongoQuestionRepo(awsService)
@@ -51,8 +51,8 @@ func InitializeMockApi() (*zdj.ZdjApi, error) {
 	return zdjApi, nil
 }
 
-func InitializeMockMathApi() *mathematicals.MathApi {
-	twoGenerationService := problem.NewTwoGenerationService()
+func InitializeMockMathApi() *mathematicals.MathApi[int] {
+	twoGenerationService := problem.NewTwoGenerationService[int]()
 	mockAwsHelper := mocks.ProvideMockAwsHelper()
 	awsService := aws.ProvideAWSService(mockAwsHelper)
 	mongoQuestionRepo := repositories.ProvideMongoQuestionRepo(awsService)

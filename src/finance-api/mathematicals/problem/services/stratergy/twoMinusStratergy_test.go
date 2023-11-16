@@ -10,7 +10,7 @@ import (
 var twoMinusStratergy *TwoMinusStratergy[int]
 
 func init() {
-	twoMinusStratergy = NewTwoMinusStratergy[int](data.CreateRandomService())
+	twoMinusStratergy = NewTwoMinusStratergy[int](data.CreateRandomService[int]())
 }
 
 func TestNewTwoMinusStratergy(t *testing.T) {

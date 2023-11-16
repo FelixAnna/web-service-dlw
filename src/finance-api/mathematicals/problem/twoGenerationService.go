@@ -17,6 +17,14 @@ type TwoGenerationService[number entity.Number] struct {
 	TwoDivideService   services.ProblemService[number]
 }
 
+func ProvideTwoGenerationService() *TwoGenerationService[int] {
+	return NewTwoGenerationService[int]()
+}
+
+func ProvideTwoGenerationService2() *TwoGenerationService[float32] {
+	return NewTwoGenerationService[float32]()
+}
+
 func NewTwoGenerationService[number entity.Number]() *TwoGenerationService[number] {
 	return &TwoGenerationService[number]{
 		TwoPlusService:     di.InitializeTwoPlusService[number](),

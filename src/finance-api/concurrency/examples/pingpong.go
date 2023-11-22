@@ -10,7 +10,7 @@ type Ball struct {
 	players []string
 }
 
-func execute() *Ball {
+func execute(seconds int) *Ball {
 	table := make(chan *Ball)
 
 	go player("ping", table)
@@ -18,7 +18,7 @@ func execute() *Ball {
 
 	table <- new(Ball)
 
-	time.Sleep(1 * time.Second)
+	time.Sleep(time.Second * time.Duration(seconds))
 
 	return <-table
 }

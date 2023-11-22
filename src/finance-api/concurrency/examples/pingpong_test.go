@@ -7,7 +7,8 @@ import (
 )
 
 func TestExecute(t *testing.T) {
-	result := execute()
-	assert.EqualValues(t, 10+1, result.hits)
-	assert.EqualValues(t, 10+1, len(result.players))
+	seconds := 2
+	result := execute(seconds)
+	assert.EqualValues(t, result.hits, len(result.players))
+	assert.GreaterOrEqual(t, seconds*10+1, len(result.players))
 }

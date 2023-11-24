@@ -1,6 +1,7 @@
 package examples
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -14,9 +15,9 @@ func TestExecute(t *testing.T) {
 }
 
 func TestFactory(t *testing.T) {
-	seconds := 1
+	seconds := 2
 	result := mine(seconds)
 
-	println(result)
+	fmt.Printf("%f", result)
 	assert.GreaterOrEqual(t, result, float32(0))
 }

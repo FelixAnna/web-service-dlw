@@ -1,7 +1,10 @@
 package examples
 
 import (
+	"fmt"
 	"math/rand"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
@@ -18,7 +21,7 @@ type Wallet struct {
 }
 
 func (wallet *Wallet) GetTotal() float32 {
-	if wallet.money == nil || len(wallet.money) == 0 {
+	if wallet == nil || wallet.money == nil || len(wallet.money) == 0 {
 		return 0
 	}
 
@@ -28,6 +31,23 @@ func (wallet *Wallet) GetTotal() float32 {
 	}
 
 	return total
+}
+
+func (wallet *Wallet) String() string {
+	if wallet == nil || wallet.money == nil || len(wallet.money) == 0 {
+		return ""
+	}
+
+	var builder *strings.Builder = &strings.Builder{}
+	builder.Grow(len(wallet.money) * (8 + 16 + 8))
+	for _, money := range wallet.money {
+		builder.WriteString(money.id.String())
+		builder.WriteString(":")
+		builder.WriteString(strconv.FormatFloat(float64(money.value), 'f', 6, 64))
+		builder.WriteString(";\n")
+	}
+
+	return builder.String()
 }
 
 func mine(n int) (total float32) {
@@ -43,6 +63,7 @@ func mine(n int) (total float32) {
 
 	wallet := <-walletChan
 
+	println(wallet.String())
 	total = wallet.GetTotal()
 	return
 }
@@ -65,7 +86,7 @@ func worker(name string, walletChan chan *Wallet) {
 			id:        uuid.New(),
 		}
 
-		println("Mined:", money.value, " by:", name)
+		fmt.Printf("Mined: %f by: %s\n", money.value, name)
 		w.money = append(w.money, money)
 
 		walletChan <- w

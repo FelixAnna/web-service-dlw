@@ -16,7 +16,8 @@ func TestExecute(t *testing.T) {
 
 func TestFactory(t *testing.T) {
 	seconds := 2
-	result := mine(seconds)
+	workers := []string{"Sam", "Alice", "Jack", "Helm"}
+	result := mine(seconds, workers)
 
 	fmt.Printf("%f", result)
 	assert.GreaterOrEqual(t, result, float32(0))

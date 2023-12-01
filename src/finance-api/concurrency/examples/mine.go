@@ -50,12 +50,15 @@ func (wallet *Wallet) String() string {
 	return builder.String()
 }
 
-func mine(n int) (total float32) {
+func mine(n int, workers []string) (total float32) {
 	walletChan := make(chan *Wallet)
 
-	go worker("Sam", walletChan)
-	go worker("Mike", walletChan)
-	go worker("Alice", walletChan)
+	rand.New(rand.NewSource(int64(time.Now().Second())))
+
+	for _, work := range workers {
+		//if only have one worker, then there will be not switch between goroutines, so the worker only mine once (and wait until timeout)
+		go worker(work, walletChan)
+	}
 
 	walletChan <- new(Wallet)
 
@@ -75,7 +78,8 @@ func worker(name string, walletChan chan *Wallet) {
 		time.Sleep(time.Millisecond * time.Duration(200))
 		value := rand.Int31n(10000)
 
-		if value < 5000 {
+		fmt.Println("Entered")
+		if value < 1000 {
 			walletChan <- w
 			continue
 		}
@@ -85,7 +89,6 @@ func worker(name string, walletChan chan *Wallet) {
 			value:     float32(value) / 100,
 			id:        uuid.New(),
 		}
-
 		fmt.Printf("Mined: %f by: %s\n", money.value, name)
 		w.money = append(w.money, money)
 

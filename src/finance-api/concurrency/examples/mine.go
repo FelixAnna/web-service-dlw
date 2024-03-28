@@ -56,7 +56,8 @@ func mine(n int, workers []string) (total float32) {
 	rand.New(rand.NewSource(int64(time.Now().Second())))
 
 	for _, work := range workers {
-		//if only have one worker, then there will be not switch between goroutines, so the worker only mine once (and wait until timeout)
+		// if only have one worker, then there will be not switch between goroutines,
+		// so the worker only mine once (and wait until timeout)
 		go worker(work, walletChan)
 	}
 

@@ -55,7 +55,7 @@ variable "backendDNS" {
 variable "frontendDNS" {
     type = string
     description = "(optional) dns record to binding to gateway ipaddress"
-    default = "www.metadlw.com"
+    default = "dev.metadlw.com"
 }
 
 variable "tags" {

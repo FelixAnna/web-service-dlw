@@ -127,7 +127,7 @@ resource "azurerm_key_vault_certificate" "sslcert" {
         ]
 
         subject_alternative_names {
-            dns_names = ["internal.metadlw.com", "www.metadlw.com"]
+            dns_names = ["internal.metadlw.com", "dev.metadlw.com"]
         }
 
         subject            = "CN=metadlw.com"

@@ -229,7 +229,7 @@ kind: Ingress
 metadata:
   name: {{ $.Release.Name }}-ingress
   annotations:
-    kubernetes.io/ingress.class: {{$.Values.ingress.ingressClassName}}
+    spec.ingressClassName: {{$.Values.ingress.ingressClassName}}
   {{ if eq $.Values.ingress.ingressClassName "nginx" }}
     nginx.ingress.kubernetes.io/rewrite-target: /$1 # for nginx only
     nginx.ingress.kubernetes.io/proxy-buffering: "on"

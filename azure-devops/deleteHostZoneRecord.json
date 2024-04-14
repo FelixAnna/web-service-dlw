@@ -4,13 +4,13 @@
     {
       "Action": "DELETE",
       "ResourceRecordSet": {
-        "Name": "www.metadlw.com",
+        "Name": "dev.metadlw.com",
         "Type": "CNAME",
-		"TTL": 10,
-		"ResourceRecords": [
-		  {
-			"Value": "dlwendpoint.azureedge.net"
-		  }]
+        "TTL": 10,
+        "ResourceRecords": [
+          {
+            "Value": "dlwendpoint.azureedge.net"
+          }]
       }
     }
   ]

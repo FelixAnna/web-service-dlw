@@ -1,7 +1,7 @@
 terraform {
   # need setup backend in azure storage account first
   backend "azurerm" {
-    resource_group_name  = "configuration-rg"
+    resource_group_name  = "felix-configuration-rg"
     storage_account_name = "configstoragefelix"
     container_name       = "tfstate"
     key                  = "dev.terraform.tfstate"

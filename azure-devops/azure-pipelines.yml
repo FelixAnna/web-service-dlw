@@ -137,7 +137,7 @@ jobs:
       backendType: azurerm
       backendServiceArm: 'azure resource manager'
       backendAzureRmSubscriptionId: '$(ARM_SUBSCRIPTION_ID)'
-      backendAzureRmResourceGroupName: 'configuration-rg'
+      backendAzureRmResourceGroupName: 'felix-configuration-rg'
       backendAzureRmStorageAccountName: configstoragefelix
       backendAzureRmContainerName: tfstate
       backendAzureRmKey: 'dlw-$(env).nginx.tfstate'
@@ -152,7 +152,7 @@ jobs:
       runAzLogin: true
       backendServiceArm: 'azure resource manager'
       backendAzureRmSubscriptionId: '$(ARM_SUBSCRIPTION_ID)'
-      backendAzureRmResourceGroupName: 'configuration-rg'
+      backendAzureRmResourceGroupName: 'felix-configuration-rg'
       backendAzureRmStorageAccountName: configstoragefelix
       backendAzureRmContainerName: tfstate
       backendAzureRmKey: 'dlw-$(env).nginx.tfstate'

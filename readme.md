@@ -145,13 +145,13 @@ docker compose build --push
     
   tag=latest
   cd src/date-api
-  az acr build -t dlw-date-api:$tag -f Dockerfile -r hssdevacr -g configuration-rg .
+  az acr build -t dlw-date-api:$tag -f Dockerfile -r hssdevacr -g felix-configuration-rg .
   cd ../finance-api
-  az acr build -t dlw-finance-api:$tag -f Dockerfile -r hssdevacr -g configuration-rg .
+  az acr build -t dlw-finance-api:$tag -f Dockerfile -r hssdevacr -g felix-configuration-rg .
   cd ../memo-api
-  az acr build -t dlw-memo-api:$tag -f Dockerfile -r hssdevacr -g configuration-rg .
+  az acr build -t dlw-memo-api:$tag -f Dockerfile -r hssdevacr -g felix-configuration-rg .
   cd ../user-api
-  az acr build -t dlw-user-api:$tag -f Dockerfile -r hssdevacr -g configuration-rg .
+  az acr build -t dlw-user-api:$tag -f Dockerfile -r hssdevacr -g felix-configuration-rg .
 
  ```
 

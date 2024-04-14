@@ -36,10 +36,10 @@ jobs:
   timeoutInMinutes: 10
 
   steps:
-  - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
-    displayName: 'Use Terraform latest'
+  - task: TerraformInstaller@1    
+    displayName: install terraform
 
-  - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
+  - task: TerraformCLI@1
     displayName: 'terraform initial'
     inputs:
       command: init
@@ -52,7 +52,7 @@ jobs:
       backendAzureRmContainerName: tfstate
       backendAzureRmKey: 'dlw-$(env).nginx.tfstate'
 
-  - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
+  - task: TerraformCLI@1
     displayName: 'terraform plan'
     inputs:
       command: plan
@@ -70,7 +70,7 @@ jobs:
       providerServiceAws: 'aws connection'
       providerAwsRegion: '$(AWS_DEFAULT_REGION)'
 
-  - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
+  - task: TerraformCLI@1
     displayName: 'terraform apply'
     inputs:
       command: apply

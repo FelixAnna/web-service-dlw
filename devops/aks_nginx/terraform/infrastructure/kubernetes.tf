@@ -7,7 +7,7 @@ resource "azurerm_kubernetes_cluster" "dlwCluster" {
   tags = var.tags
 
   dns_prefix          = "dlw-${random_pet.prefix.id}"
-  kubernetes_version  = "1.24"
+  kubernetes_version  = "1.28.5"
 
   default_node_pool {
     name            = "default"

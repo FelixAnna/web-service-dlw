@@ -135,7 +135,7 @@ jobs:
       command: init
       workingDirectory: 'devops/aks_nginx/terraform/profiles/$(env)'
       backendType: azurerm
-      backendServiceArm: 'azure resource manager'
+      backendServiceArm: 'dlw-azure-connection'
       backendAzureRmSubscriptionId: '$(ARM_SUBSCRIPTION_ID)'
       backendAzureRmResourceGroupName: 'felix-configuration-rg'
       backendAzureRmStorageAccountName: configstoragefelix
@@ -147,10 +147,10 @@ jobs:
     inputs:
       command: plan
       workingDirectory: 'devops/aks_nginx/terraform/profiles/$(env)'
-      environmentServiceName: 'azure resource manager'
+      environmentServiceName: 'dlw-azure-connection'
       providerAzureRmSubscriptionId: '$(ARM_SUBSCRIPTION_ID)'
       runAzLogin: true
-      backendServiceArm: 'azure resource manager'
+      backendServiceArm: 'dlw-azure-connection'
       backendAzureRmSubscriptionId: '$(ARM_SUBSCRIPTION_ID)'
       backendAzureRmResourceGroupName: 'felix-configuration-rg'
       backendAzureRmStorageAccountName: configstoragefelix
@@ -165,7 +165,7 @@ jobs:
     inputs:
       command: apply
       workingDirectory: 'devops/aks_nginx/terraform/profiles/$(env)'
-      environmentServiceName: 'azure resource manager'
+      environmentServiceName: 'dlw-azure-connection'
       providerAzureRmSubscriptionId: '$(ARM_SUBSCRIPTION_ID)'
       runAzLogin: true
       commandOptions: '-auto-approve'
@@ -181,7 +181,7 @@ jobs:
   - task: AzureCLI@2
     displayName: 'Replace Keys & Tags'
     inputs:
-      azureSubscription: 'azure resource manager'
+      azureSubscription: 'dlw-azure-connection'
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
@@ -194,7 +194,7 @@ jobs:
   - task: AzureCLI@2
     displayName: 'Deploy Basic Charts'
     inputs:
-      azureSubscription: 'azure resource manager'
+      azureSubscription: 'dlw-azure-connection'
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
@@ -205,7 +205,7 @@ jobs:
   - task: AzureCLI@2
     displayName: 'Deploy Main Charts'
     inputs:
-      azureSubscription: 'azure resource manager'
+      azureSubscription: 'dlw-azure-connection'
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |

@@ -33,7 +33,7 @@ jobs:
   # - task: AzureCLI@2
   #   displayName: 'Ensure Bypass CNAME Check For CustomDomain Deletion Registered'
   #   inputs:
-  #     azureSubscription: 'azure resource manager'
+  #     azureSubscription: 'dlw-azure-connection'
   #     scriptType: bash
   #     scriptLocation: inlineScript
   #     inlineScript: |
@@ -54,7 +54,7 @@ jobs:
   - task: AzureCLI@2
     displayName: 'Uninstall All Services'
     inputs:
-      azureSubscription: 'azure resource manager'
+      azureSubscription: 'dlw-azure-connection'
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
@@ -77,7 +77,7 @@ jobs:
       command: init
       workingDirectory: 'devops/aks_nginx/terraform/profiles/$(env)'
       backendType: azurerm
-      backendServiceArm: 'azure resource manager'
+      backendServiceArm: 'dlw-azure-connection'
       backendAzureRmSubscriptionId: '$(ARM_SUBSCRIPTION_ID)'
       backendAzureRmResourceGroupName: 'felix-configuration-rg'
       backendAzureRmStorageAccountName: configstoragefelix
@@ -90,7 +90,7 @@ jobs:
     inputs:
       command: destroy
       workingDirectory: 'devops/aks_nginx/terraform/profiles/$(env)'
-      environmentServiceName: 'azure resource manager'
+      environmentServiceName: 'dlw-azure-connection'
       providerAzureRmSubscriptionId: '$(ARM_SUBSCRIPTION_ID)'
       runAzLogin: true
       commandOptions: '-auto-approve'

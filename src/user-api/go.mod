@@ -1,6 +1,6 @@
 module github.com/FelixAnna/web-service-dlw/user-api
 
-go 1.21
+go 1.22
 
 require (
 	github.com/FelixAnna/web-service-dlw/common v0.0.0-20221108131911-e1839d512525
@@ -13,14 +13,17 @@ require (
 
 replace github.com/FelixAnna/web-service-dlw/common => ../common
 
+// replace cloud.google.com/go/compute/metadata => cloud.google.com/go v0.34.0
+
 require (
 	github.com/google/wire v0.6.0
 	github.com/stretchr/testify v1.9.0
 	go.mongodb.org/mongo-driver v1.15.0
 )
 
+require cloud.google.com/go/compute/metadata v0.3.0 // indirect
+
 require (
-	cloud.google.com/go/compute/metadata v0.3.0 // indirect
 	dario.cat/mergo v1.0.0 // indirect
 	github.com/Microsoft/go-winio v0.6.2 // indirect
 	github.com/ProtonMail/go-crypto v1.0.0 // indirect

@@ -1,14 +1,27 @@
 tag=$1
 app=$2  # microservice/deployment name
+force=$3
+
+
+if [ "$tag" == '' ];
+then
+    tag=latest
+fi
 
 if [ "$app" == '' ];
 then
     app=dlw
 fi
 
-if [ "$tag" == '' ];
-then
-    tag=latest
+if [ "$force" == '-f' ];
+then    
+  echo "deleting cluster  ..."
+  if [ $(kind get clusters | grep dlw) == "$app-cluster" ];
+  then
+    kind delete clusters $app-cluster
+    kind create cluster --config $app-cluster.yml
+  fi
+  echo "cluster deleted"
 fi
 
 ns="${app}ns"
@@ -19,16 +32,12 @@ ns="${app}ns"
 source d:/code/config.sh
 echo $AWS_ACCESS_KEY_ID
 
-kind delete clusters $app-cluster
-
-kind create cluster --config $app-cluster.yml
-
 echo "install nginx  ..."
 echo "(if you need kong, please uninstall nginx, then follow readme.md)"
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
 
 echo "install metrics server ..."
-kubectl apply -f ../components/metrics/metrics.yaml
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
 
 echo "wait for nginx controller up before install services ..."
 kubectl wait --namespace ingress-nginx \

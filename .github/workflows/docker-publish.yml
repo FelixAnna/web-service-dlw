@@ -1,4 +1,4 @@
-name: continuous integration - build and push images
+name: build and push images
 
 on:
   push:

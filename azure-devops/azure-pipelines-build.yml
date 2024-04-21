@@ -37,9 +37,9 @@ jobs:
 
   steps:
   - task: GoTool@0
-    displayName: 'Use Go 1.21.3'
+    displayName: 'Use Go 1.22'
     inputs:
-      version: 1.21.3
+      version: 1.22.2
 
   - task: Go@0
     displayName: 'Run Test Cases - Common'

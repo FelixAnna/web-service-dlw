@@ -13,7 +13,7 @@ require (
 
 replace github.com/FelixAnna/web-service-dlw/common => ../common
 
-// replace cloud.google.com/go/compute/metadata => cloud.google.com/go v0.34.0
+replace cloud.google.com/go/compute/metadata => cloud.google.com/go/compute/metadata v0.2.3
 
 require (
 	github.com/google/wire v0.6.0
@@ -21,9 +21,9 @@ require (
 	go.mongodb.org/mongo-driver v1.15.0
 )
 
-require cloud.google.com/go/compute/metadata v0.3.0 // indirect
-
 require (
+	cloud.google.com/go/compute v1.25.1 // indirect
+	cloud.google.com/go/compute/metadata v0.3.0 // indirect
 	dario.cat/mergo v1.0.0 // indirect
 	github.com/Microsoft/go-winio v0.6.2 // indirect
 	github.com/ProtonMail/go-crypto v1.0.0 // indirect

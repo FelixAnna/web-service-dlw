@@ -3,7 +3,11 @@ To work with kind, you need docker installed first, kind create docker container
 
 ## **All-In-One** (provisioning infrastructure + deploy microservice)
 ```
+## create or update if exists
 sh kind_provisioning.sh 2.1.1
+
+## force re-create
+sh kind_provisioning.sh latest dlw -f
 ```
 
 

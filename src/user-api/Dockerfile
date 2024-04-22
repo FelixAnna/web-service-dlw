@@ -21,7 +21,7 @@ RUN go build -o /docker-user-api
 ##
 ## Deploy
 ##
-FROM alpine:3.18.0
+FROM alpine:latest
 
 #RUN apk update \
 #   && rm -rf /var/lib/apt/lists/*

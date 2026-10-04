@@ -16,8 +16,7 @@ fi
 if [ "$force" == '-f' ];
 then    
   echo "deleting cluster  ..."
-  if [ $(kind get clusters | grep dlw) == "$app-cluster" ];
-  then
+  if kind get clusters | grep -qx "$app-cluster"; then
     kind delete clusters $app-cluster
     kind create cluster --config $app-cluster.yml
   fi

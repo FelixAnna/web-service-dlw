@@ -11,7 +11,7 @@ sh kind_provisioning.sh latest dlw -f
 ```
 
 
-*if you still want manual install, please following blow instructions.*
+*if you still want to manual install, please following blow instructions.*
 
 ## install kind
 install kind with go: [install kind with go](https://kind.sigs.k8s.io/docs/user/quick-start/#installing-with-go-get--go-install)

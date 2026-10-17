@@ -19,4 +19,4 @@ services:
     image: yufelix/dlw-finance-api:${TAG}
     build: ../../src/finance-api/
     ports:
-      - "8484:8484"  
+      - "8484:8484"

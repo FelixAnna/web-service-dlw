@@ -27,7 +27,8 @@ kind create cluster --config dlw-cluster.yml
 kind don't support Loadbalance type service, so please use below nginx for kind:
 
 ```
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+# Upstream: https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+curl -fsSL https://gitee.com/mirrors/ingress-nginx/raw/main/deploy/static/provider/kind/deploy.yaml | sed 's#registry.k8s.io/#k8s.m.daocloud.io/#g' | kubectl apply -f -
 ```
 
 ## enable ingress kong (skip nginx) (with 2 kind special changes)

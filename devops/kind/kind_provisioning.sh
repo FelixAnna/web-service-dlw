@@ -13,11 +13,13 @@ then
     app=dlw
 fi
 
+cluster_name="desktop" #"${app}-cluster"
+
 if [ "$force" == '-f' ];
 then    
   echo "deleting cluster  ..."
-  if kind get clusters | grep -qx "$app-cluster"; then
-    kind delete clusters $app-cluster
+  if kind get clusters | grep -qx "$cluster_name"; then
+    kind delete clusters $cluster_name
     kind create cluster --config $app-cluster.yml
   fi
   echo "cluster deleted"
@@ -33,7 +35,8 @@ echo $AWS_ACCESS_KEY_ID
 
 echo "install nginx  ..."
 echo "(if you need kong, please uninstall nginx, then follow readme.md)"
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+# Upstream: https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+curl -fsSL https://gitee.com/mirrors/ingress-nginx/raw/main/deploy/static/provider/kind/deploy.yaml | sed 's#registry.k8s.io/#k8s.m.daocloud.io/#g' | kubectl apply -f -
 
 echo "install metrics server ..."
 kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
@@ -53,10 +56,10 @@ echo "load images ..."
 # docker pull $ACR/$app-finance-api:$tag
 # docker pull $ACR/$app-user-api:$tag
 
-# kind load docker-image $ACR/$app-date-api:$tag --namen $app-cluster
-# kind load docker-image $ACR/$app-memo-api:$tag --name $app-cluster
-# kind load docker-image $ACR/$app-finance-api:$tag --name $app-cluster
-# kind load docker-image $ACR/$app-user-api:$tag --name $app-cluster
+# kind load docker-image $ACR/$app-date-api:$tag --namen $cluster_name
+# kind load docker-image $ACR/$app-memo-api:$tag --name $cluster_name
+# kind load docker-image $ACR/$app-finance-api:$tag --name $cluster_name
+# kind load docker-image $ACR/$app-user-api:$tag --name $cluster_name
 
 
 ACR="yufelix"
@@ -65,10 +68,10 @@ docker pull $ACR/$app-memo-api:$tag
 docker pull $ACR/$app-finance-api:$tag
 docker pull $ACR/$app-user-api:$tag
 
-kind load docker-image $ACR/$app-date-api:$tag --name $app-cluster
-kind load docker-image $ACR/$app-memo-api:$tag --name $app-cluster
-kind load docker-image $ACR/$app-finance-api:$tag --name $app-cluster
-kind load docker-image $ACR/$app-user-api:$tag --name $app-cluster
+kind load docker-image $ACR/$app-date-api:$tag --name $cluster_name
+kind load docker-image $ACR/$app-memo-api:$tag --name $cluster_name
+kind load docker-image $ACR/$app-finance-api:$tag --name $cluster_name
+kind load docker-image $ACR/$app-user-api:$tag --name $cluster_name
 
 
 echo "install services ..."
